@@ -1,11 +1,12 @@
 name: Deploy FTP-n
 
-# Csak akkor fut, ha a public/ mappában történt változás a main branch-en.
+# Csak akkor fut, ha a public/ mappa vagy ez a workflow változik a main branch-en.
 on:
   push:
     branches: [main]
     paths:
       - 'public/**'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch: # kézzel is indítható a GitHub "Actions" fülén
 
 jobs:
