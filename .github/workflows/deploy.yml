@@ -32,6 +32,7 @@ jobs:
           rsync -a --exclude README.md --exclude api/config.php apps/idopontfoglalo/ dist/foglalas/
 
       # Az adatbázis-jelszó csak a repó secretjeiben él; a config.php itt készül.
+      # A DiMánál a MySQL külön szerveren van (172.30.50.11), nem localhoston.
       - name: config.php a secretekből
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -50,7 +51,7 @@ jobs:
           fi
           php -r '
             $c = [
-              "db" => ["host" => getenv("DB_HOST") ?: "localhost", "name" => getenv("DB_NAME"), "user" => getenv("DB_USER"), "pass" => getenv("DB_PASS"), "charset" => "utf8mb4"],
+              "db" => ["host" => getenv("DB_HOST") ?: "172.30.50.11", "name" => getenv("DB_NAME"), "user" => getenv("DB_USER"), "pass" => getenv("DB_PASS"), "charset" => "utf8mb4"],
               "session_name" => "idopont_myai_foglalas",
               "smtp" => ["host" => getenv("SMTP_HOST") ?: "", "port" => (int) (getenv("SMTP_PORT") ?: 465), "username" => getenv("SMTP_USER") ?: "", "password" => getenv("SMTP_PASS") ?: "", "from" => getenv("SMTP_FROM") ?: ""],
             ];
