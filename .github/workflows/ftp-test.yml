@@ -47,7 +47,7 @@ jobs:
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" -e "
             set ftp:ssl-force true;
             set ssl:verify-certificate no;
-            pwd; find -d 3 /;
+            echo \"== gyoker ==\"; cls -la /; echo \"== www ==\"; cls -la /www/; echo \"== www/my-ai.hu ==\"; cls -la /www/my-ai.hu/;
             bye" > listing.txt 2>&1 || true
           echo "::notice title=FTP könyvtárszerkezet::$(head -c 3500 listing.txt | sed ':a;N;$!ba;s/\n/%0A/g')"
 
