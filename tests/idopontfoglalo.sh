@@ -36,7 +36,11 @@ check "a foglalási oldal betölt, benne a beállításokkal" 'curl -s "$BASE/" 
 check "az admin oldal betölt" 'curl -s "$BASE/admin/" | grep -q "admin.js"'
 check "a manifest érvényes JSON" 'curl -s "$BASE/manifest.php" | jq -e ".name == \"Teszt Gumiszerviz\"" >/dev/null'
 check "az ikon PNG" 'curl -s "$BASE/icon.php?s=192" | head -c 8 | od -An -tx1 | grep -q "89 50 4e 47"'
-check "a maskable ikon PNG" 'curl -s "$BASE/icon.php?s=512&m=1" | head -c 8 | od -An -tx1 | grep -q "89 50 4e 47"'
+for spec in "s=512" "s=512&m=1" "s=180"; do
+  resp=$(curl -s -D - -o "$JAR.icon" "$BASE/icon.php?$spec" | tr -d '\r' | grep -i '^content-type' )
+  if head -c 8 "$JAR.icon" | od -An -tx1 | grep -q "89 50 4e 47"; then pass "ikon PNG ($spec)"
+  else fail "ikon PNG ($spec): $resp — $(head -c 300 "$JAR.icon" | tr '\n' ' ')"; fi
+done
 
 echo "== Nyilvános API"
 cfg=$(api_get config)
