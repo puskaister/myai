@@ -1,0 +1,28 @@
+name: Deploy FTP-n
+
+# Csak akkor fut, ha a public/ mappában történt változás a main branch-en.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+  workflow_dispatch: # kézzel is indítható a GitHub "Actions" fülén
+
+jobs:
+  ftp-deploy:
+    name: FTP feltöltés a tárhelyre
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kód letöltése
+        uses: actions/checkout@v4
+
+      - name: Feltöltés FTP-n
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 195.228.152.223
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          security: loose # IP-re csatlakozunk, a tanúsítvány a domainre szól
+          local-dir: ./public/
+          server-dir: ./
