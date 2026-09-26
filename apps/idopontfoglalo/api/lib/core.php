@@ -46,7 +46,8 @@ function db(): mysqli {
         $config['db']['name']
     );
     if (!$ok) {
-        error_log('[idopontfoglalo] DB kapcsolódási hiba: ' . mysqli_connect_error());
+        $GLOBALS['db_connect_error'] = (string) mysqli_connect_error();
+        error_log('[idopontfoglalo] DB kapcsolódási hiba: ' . $GLOBALS['db_connect_error']);
         throw new AppError('Nem sikerült csatlakozni az adatbázishoz.', 500);
     }
     $conn->set_charset($config['db']['charset'] ?? 'utf8mb4');

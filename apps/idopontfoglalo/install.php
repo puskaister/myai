@@ -79,7 +79,12 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
       <p>Hiányzik az <code>api/config.php</code>. Másold át az <code>api/config.example.php</code> fájlt ezen a néven, és írd bele az adatbázis adatait. GitHub-os deploynál ezt a workflow a secretekből automatikusan elkészíti.</p>
     <?php elseif ($state === 'nodb'): ?>
       <p class="alert"><?= h($error) ?></p>
-      <p>Ellenőrizd az adatbázis adatait az <code>api/config.php</code>-ban.</p>
+      <?php // Csak telepítés előtt látszik; jelszót nem tartalmaz (pl. "Access denied for user …", "Unknown database …"). ?>
+      <?php if (!empty($GLOBALS['db_connect_error'])): ?>
+        <p>MySQL üzenet: <code><?= h($GLOBALS['db_connect_error']) ?></code></p>
+      <?php endif; ?>
+      <p>Adatbázis: <code><?= h((string) app_config()['db']['name']) ?></code>, felhasználó: <code><?= h((string) app_config()['db']['user']) ?></code>, szerver: <code><?= h((string) app_config()['db']['host']) ?></code></p>
+      <p>Ellenőrizd ezeket a GitHub secretekben (<code>DB_NAME</code>, <code>DB_USER</code>, <code>DB_PASS</code>, <code>DB_HOST</code>), majd futtasd újra a deployt.</p>
     <?php elseif ($state === 'installed'): ?>
       <p>A rendszer már telepítve van.</p>
       <p><a class="btn" href="admin/">Admin felület</a> <a class="btn ghost" href="./">Foglalási oldal</a></p>
