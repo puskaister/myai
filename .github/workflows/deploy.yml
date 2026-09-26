@@ -25,5 +25,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           security: loose # IP-re csatlakozunk, a tanúsítvány a domainre szól
+          timeout: 120000 # ms, a lassú FTP válaszok miatt
           local-dir: ./public/
           server-dir: ./ # az FTP felhasználó kezdőkönyvtára már a /www/my-ai.hu
