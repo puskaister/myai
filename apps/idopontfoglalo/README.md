@@ -13,13 +13,23 @@ Mindent az admin felületről lehet a céghez igazítani, kódolás nélkül: n�
 | `/admin/` | Admin felület |
 | `/install.php` | Egyszeri telepítő |
 
-## Új cég telepítése
+## Új cég a my-ai.hu-n
 
-1. Hozz létre egy MySQL adatbázist a tárhelyen.
+Minden cég ugyanabba az adatbázisba kerül, saját táblanév-előtaggal (pl. `gumipont_bookings`).
+
+1. Vegyél fel egy sort a `deploy/idopontfoglalo.json`-ba, pl. `{ "dir": "gumipont", "prefix": "gumipont_" }`.
+2. Push. A deploy elkészíti a `my-ai.hu/gumipont/` mappát a saját `config.php`-jával. Az adatbázis-adatok a `DB_NAME`, `DB_USER` és `DB_PASS` secretekből jönnek, DiMán a host `172.30.50.11`.
+3. Nyisd meg a `https://my-ai.hu/gumipont/install.php` oldalt, és folytasd az alábbi 4. lépéssel.
+
+## Új cég saját tárhelyen
+
+1. Hozz létre egy MySQL adatbázist a cég tárhelyén. Ha a cégnek is van hozzáférése a tárhelyhez, mindenképp saját adatbázist kapjon, ne a közöset.
 2. Töltsd fel a mappa tartalmát a cég webhelyére (akár almappába, pl. `/foglalas`).
-3. Hozd létre az `api/config.php`-t az `api/config.example.php` alapján. A GitHub-os deploy ezt a repó secretjeiből maga elkészíti: `DB_NAME`, `DB_USER`, `DB_PASS`, opcionálisan `DB_HOST`.
+3. Hozd létre az `api/config.php`-t az `api/config.example.php` alapján.
 4. Nyisd meg az `install.php`-t. Add meg a cég nevét, válassz kiinduló csomagot (gumiszerviz, fodrászat, rendelő, általános), és hozd létre az admin fiókot. Ellenőrzésképp az adatbázis jelszavát kéri, hogy idegen ne tudja elsőként telepíteni.
 5. Az admin felületen szabd testre.
+
+Ha ugyanabban az adatbázisban már van egy előtag nélküli telepítés, az előtagos telepítő felajánlja az átvételét. Ilyenkor a táblákat átnevezi, az adatok megmaradnak.
 
 Az `uploads/` mappának írhatónak kell lennie (logó, ikon-gyorsítótár).
 

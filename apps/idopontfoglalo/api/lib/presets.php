@@ -90,7 +90,7 @@ function apply_preset(string $key, string $businessName, string $adminEmail): vo
 
     foreach ($preset['services'] as $i => [$name, $desc, $duration, $price]) {
         q_exec(
-            'INSERT INTO services (name, description, duration_min, price, active, sort) VALUES (?, ?, ?, ?, 1, ?)',
+            'INSERT INTO {services} (name, description, duration_min, price, active, sort) VALUES (?, ?, ?, ?, 1, ?)',
             [$name, $desc, $duration, $price, $i]
         );
     }

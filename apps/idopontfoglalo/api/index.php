@@ -35,10 +35,10 @@ function client_ip(): string {
 
 // Egyszerű, adatbázis-alapú számláló: $max kérés / $window másodperc kulcsonként.
 function rate_limit(string $key, int $max, int $window): void {
-    q_exec('DELETE FROM rate_limits WHERE created_at < ?', [date('Y-m-d H:i:s', time() - 86400)]);
-    $row = q_one('SELECT COUNT(*) AS n FROM rate_limits WHERE k = ? AND created_at > ?', [$key, date('Y-m-d H:i:s', time() - $window)]);
+    q_exec('DELETE FROM {rate_limits} WHERE created_at < ?', [date('Y-m-d H:i:s', time() - 86400)]);
+    $row = q_one('SELECT COUNT(*) AS n FROM {rate_limits} WHERE k = ? AND created_at > ?', [$key, date('Y-m-d H:i:s', time() - $window)]);
     if ((int) ($row['n'] ?? 0) >= $max) throw new AppError('Túl sok próbálkozás, kérjük, próbáld újra később.', 429);
-    q_exec('INSERT INTO rate_limits (k) VALUES (?)', [$key]);
+    q_exec('INSERT INTO {rate_limits} (k) VALUES (?)', [$key]);
 }
 
 function start_session(): void {
@@ -56,7 +56,7 @@ function start_session(): void {
 
 function current_admin(): ?array {
     if (empty($_SESSION['admin_id'])) return null;
-    return q_one('SELECT id, name, email FROM admins WHERE id = ?', [(int) $_SESSION['admin_id']]);
+    return q_one('SELECT id, name, email FROM {admins} WHERE id = ?', [(int) $_SESSION['admin_id']]);
 }
 
 function require_admin(): array {
@@ -66,20 +66,20 @@ function require_admin(): array {
 }
 
 function find_service(int $id, bool $activeOnly = true): array {
-    $s = q_one('SELECT * FROM services WHERE id = ?' . ($activeOnly ? ' AND active = 1' : ''), [$id]);
+    $s = q_one('SELECT * FROM {services} WHERE id = ?' . ($activeOnly ? ' AND active = 1' : ''), [$id]);
     if (!$s) throw new AppError('Ismeretlen szolgáltatás.');
     return $s;
 }
 
 function find_booking_by_token(string $token): array {
     if (!preg_match('/^[a-f0-9]{32}$/', $token)) throw new AppError('Érvénytelen foglalási azonosító.', 404);
-    $b = q_one('SELECT * FROM bookings WHERE token = ?', [$token]);
+    $b = q_one('SELECT * FROM {bookings} WHERE token = ?', [$token]);
     if (!$b) throw new AppError('A foglalás nem található.', 404);
     return $b;
 }
 
 function find_booking(int $id): array {
-    $b = q_one('SELECT * FROM bookings WHERE id = ?', [$id]);
+    $b = q_one('SELECT * FROM {bookings} WHERE id = ?', [$id]);
     if (!$b) throw new AppError('A foglalás nem található.', 404);
     return $b;
 }
@@ -137,7 +137,7 @@ function booking_fields_from_input(array $in, array $settings, bool $asAdmin): a
 // Foglalás-ütközés elleni zár: két egyidejű kérés ne kaphassa meg ugyanazt
 // az utolsó szabad helyet.
 function with_booking_lock(callable $fn) {
-    $name = 'idopont_' . substr(md5((string) (app_config()['db']['name'] ?? '')), 0, 16);
+    $name = 'idopont_' . substr(md5((app_config()['db']['name'] ?? '') . '|' . table_prefix()), 0, 16);
     $row = q_one('SELECT GET_LOCK(?, 10) AS l', [$name]);
     if ((int) ($row['l'] ?? 0) !== 1) throw new AppError('A rendszer most foglalt, kérjük, próbáld újra.', 503);
     try {
@@ -272,7 +272,7 @@ try {
     switch ($route) {
         // ------------------------------------------------------------- nyilvános
         case 'config':
-            $services = q_all('SELECT id, name, description, duration_min, price FROM services WHERE active = 1 ORDER BY sort, id');
+            $services = q_all('SELECT id, name, description, duration_min, price FROM {services} WHERE active = 1 ORDER BY sort, id');
             respond(['settings' => public_settings(), 'services' => $services]);
 
         case 'days': {
@@ -315,7 +315,7 @@ try {
                 $status = $settings['rules']['approval'] === 'manual' ? 'pending' : 'confirmed';
                 $token = bin2hex(random_bytes(16));
                 q_exec(
-                    'INSERT INTO bookings (service_id, service_name, start_at, end_at, status, name, email, phone, note, fields, token, source, ip)
+                    'INSERT INTO {bookings} (service_id, service_name, start_at, end_at, status, name, email, phone, note, fields, token, source, ip)
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                     [(int) $service['id'], $service['name'], $start, $end, $status, $name, $email, $phone, $note, $fieldsJson, $token, 'online', client_ip()]
                 );
@@ -334,7 +334,7 @@ try {
             $in = input();
             $b = find_booking_by_token((string) ($in['token'] ?? ''));
             if (!public_booking($b)['can_cancel']) throw new AppError('Ez a foglalás már nem mondható le online. Kérjük, hívj minket telefonon.', 409);
-            q_exec("UPDATE bookings SET status = 'cancelled', updated_at = NOW() WHERE id = ?", [(int) $b['id']]);
+            q_exec("UPDATE {bookings} SET status = 'cancelled', updated_at = NOW() WHERE id = ?", [(int) $b['id']]);
             $b = find_booking((int) $b['id']);
             notify_booking($b, 'cancelled_customer');
             respond(['ok' => true, 'booking' => public_booking($b)]);
@@ -368,7 +368,7 @@ try {
             if (!$isPost) throw new AppError('Method not allowed', 405);
             rate_limit('login:' . client_ip(), 10, 900);
             $in = input();
-            $admin = q_one('SELECT * FROM admins WHERE email = ?', [str_in($in, 'email', 190)]);
+            $admin = q_one('SELECT * FROM {admins} WHERE email = ?', [str_in($in, 'email', 190)]);
             if (!$admin || !password_verify((string) ($in['password'] ?? ''), (string) $admin['password_hash'])) {
                 throw new AppError('Hibás email cím vagy jelszó.', 401);
             }
@@ -392,13 +392,13 @@ try {
             if (!valid_date($from) || !valid_date($to)) throw new AppError('Hibás dátum.');
             $rows = q_all(
                 'SELECT id, service_id, service_name, start_at, end_at, status, name, email, phone, note, fields, admin_note, token, source, created_at
-                 FROM bookings WHERE start_at >= ? AND start_at <= ? ORDER BY start_at, id',
+                 FROM {bookings} WHERE start_at >= ? AND start_at <= ? ORDER BY start_at, id',
                 [$from . ' 00:00:00', $to . ' 23:59:59']
             );
             foreach ($rows as &$r) $r['fields'] = json_decode((string) $r['fields'], true) ?: new stdClass();
             unset($r);
             $pending = q_all(
-                "SELECT id, service_name, start_at, end_at, name, phone FROM bookings
+                "SELECT id, service_name, start_at, end_at, name, phone FROM {bookings}
                  WHERE status = 'pending' AND start_at >= ? ORDER BY start_at LIMIT 50",
                 [date('Y-m-d 00:00:00')]
             );
@@ -415,7 +415,7 @@ try {
         case 'admin/search': {
             $term = '%' . str_in($_GET, 'q', 100) . '%';
             $rows = q_all(
-                'SELECT id, service_name, start_at, end_at, status, name, email, phone FROM bookings
+                'SELECT id, service_name, start_at, end_at, status, name, email, phone FROM {bookings}
                  WHERE name LIKE ? OR email LIKE ? OR phone LIKE ? OR fields LIKE ? ORDER BY start_at DESC LIMIT 50',
                 [$term, $term, $term, $term]
             );
@@ -437,7 +437,7 @@ try {
             $status = (string) ($in['status'] ?? '');
             if (!in_array($status, ['pending', 'confirmed', 'rejected', 'cancelled', 'completed', 'noshow'], true)) throw new AppError('Ismeretlen állapot.');
             $adminNote = array_key_exists('admin_note', $in) ? str_in($in, 'admin_note', 2000) : (string) $b['admin_note'];
-            q_exec('UPDATE bookings SET status = ?, admin_note = ?, updated_at = NOW() WHERE id = ?', [$status, $adminNote, (int) $b['id']]);
+            q_exec('UPDATE {bookings} SET status = ?, admin_note = ?, updated_at = NOW() WHERE id = ?', [$status, $adminNote, (int) $b['id']]);
             $updated = find_booking((int) $b['id']);
             if (!empty($in['notify']) && $status !== $b['status']) {
                 $event = ['confirmed' => 'confirmed', 'rejected' => 'rejected', 'cancelled' => 'cancelled_admin'][$status] ?? null;
@@ -470,13 +470,13 @@ try {
                 }
                 if ($existing) {
                     q_exec(
-                        'UPDATE bookings SET service_id = ?, service_name = ?, start_at = ?, end_at = ?, name = ?, email = ?, phone = ?, note = ?, fields = ?, admin_note = ?, updated_at = NOW() WHERE id = ?',
+                        'UPDATE {bookings} SET service_id = ?, service_name = ?, start_at = ?, end_at = ?, name = ?, email = ?, phone = ?, note = ?, fields = ?, admin_note = ?, updated_at = NOW() WHERE id = ?',
                         [(int) $service['id'], $service['name'], $start, $end, $name, $email, $phone, $note, $fieldsJson, $adminNote, (int) $existing['id']]
                     );
                     return find_booking((int) $existing['id']);
                 }
                 q_exec(
-                    'INSERT INTO bookings (service_id, service_name, start_at, end_at, status, name, email, phone, note, fields, admin_note, token, source, ip)
+                    'INSERT INTO {bookings} (service_id, service_name, start_at, end_at, status, name, email, phone, note, fields, admin_note, token, source, ip)
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                     [(int) $service['id'], $service['name'], $start, $end, 'confirmed', $name, $email, $phone, $note, $fieldsJson, $adminNote, bin2hex(random_bytes(16)), 'admin', client_ip()]
                 );
@@ -489,7 +489,7 @@ try {
 
         case 'admin/booking/delete':
             if (!$isPost) throw new AppError('Method not allowed', 405);
-            q_exec('DELETE FROM bookings WHERE id = ?', [(int) (input()['id'] ?? 0)]);
+            q_exec('DELETE FROM {bookings} WHERE id = ?', [(int) (input()['id'] ?? 0)]);
             respond(['ok' => true]);
 
         case 'admin/settings':
@@ -501,8 +501,8 @@ try {
             }
             respond([
                 'settings' => get_settings(),
-                'services' => q_all('SELECT * FROM services ORDER BY sort, id'),
-                'admins'   => q_all('SELECT id, name, email, created_at FROM admins ORDER BY id'),
+                'services' => q_all('SELECT * FROM {services} ORDER BY sort, id'),
+                'admins'   => q_all('SELECT id, name, email, created_at FROM {admins} ORDER BY id'),
                 'me'       => current_admin(),
                 'base_url' => app_base_url(),
             ]);
@@ -515,23 +515,23 @@ try {
             $duration = max(5, min(1440, (int) ($in['duration_min'] ?? 30)));
             $values = [$name, str_in($in, 'description', 2000), $duration, str_in($in, 'price', 60), !empty($in['active']) ? 1 : 0];
             if (!empty($in['id'])) {
-                q_exec('UPDATE services SET name = ?, description = ?, duration_min = ?, price = ?, active = ? WHERE id = ?', array_merge($values, [(int) $in['id']]));
+                q_exec('UPDATE {services} SET name = ?, description = ?, duration_min = ?, price = ?, active = ? WHERE id = ?', array_merge($values, [(int) $in['id']]));
             } else {
-                $max = q_one('SELECT COALESCE(MAX(sort), -1) + 1 AS s FROM services');
-                q_exec('INSERT INTO services (name, description, duration_min, price, active, sort) VALUES (?, ?, ?, ?, ?, ?)', array_merge($values, [(int) $max['s']]));
+                $max = q_one('SELECT COALESCE(MAX(sort), -1) + 1 AS s FROM {services}');
+                q_exec('INSERT INTO {services} (name, description, duration_min, price, active, sort) VALUES (?, ?, ?, ?, ?, ?)', array_merge($values, [(int) $max['s']]));
             }
             respond(['ok' => true]);
         }
 
         case 'admin/services/delete':
             if (!$isPost) throw new AppError('Method not allowed', 405);
-            q_exec('DELETE FROM services WHERE id = ?', [(int) (input()['id'] ?? 0)]);
+            q_exec('DELETE FROM {services} WHERE id = ?', [(int) (input()['id'] ?? 0)]);
             respond(['ok' => true]);
 
         case 'admin/services/order':
             if (!$isPost) throw new AppError('Method not allowed', 405);
             foreach (array_values((array) (input()['ids'] ?? [])) as $i => $sid) {
-                q_exec('UPDATE services SET sort = ? WHERE id = ?', [$i, (int) $sid]);
+                q_exec('UPDATE {services} SET sort = ? WHERE id = ?', [$i, (int) $sid]);
             }
             respond(['ok' => true]);
 
@@ -568,8 +568,8 @@ try {
             $password = (string) ($in['password'] ?? '');
             if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) throw new AppError('Add meg a nevet és egy érvényes email címet.');
             if (strlen($password) < 8) throw new AppError('A jelszó legalább 8 karakter legyen.');
-            if (q_one('SELECT id FROM admins WHERE email = ?', [$email])) throw new AppError('Ezzel az email címmel már van admin.');
-            q_exec('INSERT INTO admins (name, email, password_hash) VALUES (?, ?, ?)', [$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
+            if (q_one('SELECT id FROM {admins} WHERE email = ?', [$email])) throw new AppError('Ezzel az email címmel már van admin.');
+            q_exec('INSERT INTO {admins} (name, email, password_hash) VALUES (?, ?, ?)', [$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
             respond(['ok' => true]);
         }
 
@@ -577,17 +577,17 @@ try {
             if (!$isPost) throw new AppError('Method not allowed', 405);
             $id = (int) (input()['id'] ?? 0);
             if ($id === (int) $_SESSION['admin_id']) throw new AppError('Saját magadat nem törölheted.');
-            q_exec('DELETE FROM admins WHERE id = ?', [$id]);
+            q_exec('DELETE FROM {admins} WHERE id = ?', [$id]);
             respond(['ok' => true]);
         }
 
         case 'admin/password': {
             if (!$isPost) throw new AppError('Method not allowed', 405);
             $in = input();
-            $me = q_one('SELECT * FROM admins WHERE id = ?', [(int) $_SESSION['admin_id']]);
+            $me = q_one('SELECT * FROM {admins} WHERE id = ?', [(int) $_SESSION['admin_id']]);
             if (!password_verify((string) ($in['current'] ?? ''), (string) $me['password_hash'])) throw new AppError('A jelenlegi jelszó hibás.');
             if (strlen((string) ($in['new'] ?? '')) < 8) throw new AppError('Az új jelszó legalább 8 karakter legyen.');
-            q_exec('UPDATE admins SET password_hash = ? WHERE id = ?', [password_hash((string) $in['new'], PASSWORD_DEFAULT), (int) $me['id']]);
+            q_exec('UPDATE {admins} SET password_hash = ? WHERE id = ?', [password_hash((string) $in['new'], PASSWORD_DEFAULT), (int) $me['id']]);
             respond(['ok' => true]);
         }
 

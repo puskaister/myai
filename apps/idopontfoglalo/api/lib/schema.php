@@ -7,12 +7,12 @@ declare(strict_types=1);
 function schema_statements(): array {
     $opts = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
     return [
-        "CREATE TABLE IF NOT EXISTS settings (
+        "CREATE TABLE IF NOT EXISTS {settings} (
             k VARCHAR(64) NOT NULL PRIMARY KEY,
             v MEDIUMTEXT NOT NULL
         ) $opts",
 
-        "CREATE TABLE IF NOT EXISTS admins (
+        "CREATE TABLE IF NOT EXISTS {admins} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(120) NOT NULL,
             email VARCHAR(190) NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ function schema_statements(): array {
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ) $opts",
 
-        "CREATE TABLE IF NOT EXISTS services (
+        "CREATE TABLE IF NOT EXISTS {services} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(150) NOT NULL,
             description TEXT NULL,
@@ -30,7 +30,7 @@ function schema_statements(): array {
             sort INT NOT NULL DEFAULT 0
         ) $opts",
 
-        "CREATE TABLE IF NOT EXISTS bookings (
+        "CREATE TABLE IF NOT EXISTS {bookings} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             service_id INT UNSIGNED NULL,
             service_name VARCHAR(150) NOT NULL,
@@ -52,7 +52,7 @@ function schema_statements(): array {
             INDEX idx_status (status)
         ) $opts",
 
-        "CREATE TABLE IF NOT EXISTS rate_limits (
+        "CREATE TABLE IF NOT EXISTS {rate_limits} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             k VARCHAR(120) NOT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

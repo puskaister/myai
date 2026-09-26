@@ -57,8 +57,19 @@ function db(): mysqli {
     return $mysqli;
 }
 
+// Táblanév-előtag: több cég is osztozhat egy adatbázison (pl. gumipont_bookings,
+// fodrasz_bookings). Az SQL-ben a táblák {nev} alakban szerepelnek.
+function table_prefix(): string {
+    return preg_replace('/[^a-z0-9_]/', '', strtolower((string) (app_config()['prefix'] ?? '')));
+}
+
+function sql_tables(string $sql): string {
+    return preg_replace_callback('/\{(settings|admins|services|bookings|rate_limits)\}/', fn ($m) => table_prefix() . $m[1], $sql);
+}
+
 // Paraméterezett lekérdezés; a típusokat az értékekből állapítja meg.
 function q(string $sql, array $params = []): mysqli_stmt {
+    $sql = sql_tables($sql);
     $stmt = db()->prepare($sql);
     if (!$stmt) {
         error_log('[idopontfoglalo] SQL prepare hiba: ' . db()->error . " — $sql");
@@ -100,7 +111,7 @@ function q_exec(string $sql, array $params = []): int {
 function app_installed(): bool {
     if (!app_config()) return false;
     try {
-        $res = db()->query("SELECT v FROM settings WHERE k = 'installed'");
+        $res = db()->query(sql_tables("SELECT v FROM {settings} WHERE k = 'installed'"));
         return $res && ($row = $res->fetch_row()) && $row[0] === 'true';
     } catch (AppError $e) {
         return false;

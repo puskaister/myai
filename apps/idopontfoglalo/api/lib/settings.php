@@ -61,7 +61,7 @@ function get_settings(): array {
     if ($cache !== null) return $cache;
 
     $settings = default_settings();
-    $res = db()->query('SELECT k, v FROM settings');
+    $res = db()->query(sql_tables('SELECT k, v FROM {settings}'));
     while ($res && ($row = $res->fetch_assoc())) {
         if (!in_array($row['k'], SETTING_GROUPS, true)) continue;
         $value = json_decode((string) $row['v'], true);
@@ -79,7 +79,7 @@ function get_settings(): array {
 function save_setting_group(string $group, array $value): void {
     if (!in_array($group, SETTING_GROUPS, true)) throw new AppError("Ismeretlen beállítás: $group");
     q_exec(
-        'INSERT INTO settings (k, v) VALUES (?, ?) ON DUPLICATE KEY UPDATE v = VALUES(v)',
+        'INSERT INTO {settings} (k, v) VALUES (?, ?) ON DUPLICATE KEY UPDATE v = VALUES(v)',
         [$group, json_encode($value, JSON_UNESCAPED_UNICODE)]
     );
 }

@@ -1,0 +1,6 @@
+{
+  "_leiras": "Az időpontfoglaló telepítései a my-ai.hu-n. Mind ugyanazt az adatbázist használja (DB_* secretek), cégenként saját táblanév-előtaggal. Új cég: új sor, push, majd https://my-ai.hu/<dir>/install.php",
+  "instances": [
+    { "dir": "foglalas", "prefix": "foglalas_" }
+  ]
+}

@@ -1,7 +1,8 @@
 name: Deploy FTP-n
 
-# A public/ mappa a my-ai.hu gyökere, az apps/idopontfoglalo pedig a /foglalas
-# alá kerül. Feltöltés előtt lefutnak az időpontfoglaló tesztjei.
+# A public/ mappa a my-ai.hu gyökere, az időpontfoglaló telepítései pedig a
+# deploy/idopontfoglalo.json szerinti mappákba kerülnek. Feltöltés előtt
+# lefutnak az időpontfoglaló tesztjei.
 on:
   push:
     branches: [main]
@@ -9,6 +10,7 @@ on:
       - 'public/**'
       - 'apps/**'
       - 'tests/**'
+      - 'deploy/**'
       - '.github/workflows/deploy.yml'
       - '.github/workflows/test-idopontfoglalo.yml'
   workflow_dispatch: # kézzel is indítható a GitHub "Actions" fülén
@@ -25,15 +27,10 @@ jobs:
       - name: Kód letöltése
         uses: actions/checkout@v4
 
+      # public/ → gyökér, az időpontfoglaló pedig a deploy/idopontfoglalo.json
+      # minden sorához külön mappába, saját táblanév-előtaggal és config.php-val.
+      # Az adatbázis-jelszó csak a repó secretjeiben él.
       - name: Feltöltendő mappa összeállítása
-        run: |
-          mkdir -p dist/foglalas
-          cp -R public/. dist/
-          rsync -a --exclude README.md --exclude api/config.php apps/idopontfoglalo/ dist/foglalas/
-
-      # Az adatbázis-jelszó csak a repó secretjeiben él; a config.php itt készül.
-      # A DiMánál a MySQL külön szerveren van (172.30.50.11), nem localhoston.
-      - name: config.php a secretekből
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -44,20 +41,7 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SMTP_FROM: ${{ secrets.SMTP_FROM }}
-        run: |
-          if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
-            echo "::warning::Nincs DB_NAME / DB_USER / DB_PASS secret — a /foglalas a telepítő 'hiányzó config' üzenetét mutatja."
-            exit 0
-          fi
-          php -r '
-            $c = [
-              "db" => ["host" => getenv("DB_HOST") ?: "172.30.50.11", "name" => getenv("DB_NAME"), "user" => getenv("DB_USER"), "pass" => getenv("DB_PASS"), "charset" => "utf8mb4"],
-              "session_name" => "idopont_myai_foglalas",
-              "smtp" => ["host" => getenv("SMTP_HOST") ?: "", "port" => (int) (getenv("SMTP_PORT") ?: 465), "username" => getenv("SMTP_USER") ?: "", "password" => getenv("SMTP_PASS") ?: "", "from" => getenv("SMTP_FROM") ?: ""],
-            ];
-            file_put_contents("dist/foglalas/api/config.php", "<?php\nreturn " . var_export($c, true) . ";\n");
-          '
-          echo "config.php elkészült"
+        run: php deploy/build.php
 
       - name: Feltöltés FTP-n
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

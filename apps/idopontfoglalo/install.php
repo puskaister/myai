@@ -28,7 +28,40 @@ if (!app_config()) {
     }
 }
 
-if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+const APP_TABLES = ['settings', 'admins', 'services', 'bookings', 'rate_limits'];
+
+function table_exists(string $name): bool {
+    $row = q_one('SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?', [$name]);
+    return (int) ($row['n'] ?? 0) > 0;
+}
+
+// Egy korábbi, előtag nélküli telepítés, amit át lehet venni ide (táblák
+// átnevezésével), hogy a közös adatbázisban minden cég előtaggal szerepeljen.
+function legacy_install_exists(): bool {
+    if (table_prefix() === '' || table_exists(table_prefix() . 'settings') || !table_exists('settings')) return false;
+    $row = q_one("SELECT v FROM settings WHERE k = 'installed'");
+    return ($row['v'] ?? '') === 'true';
+}
+
+$legacy = $state === 'form' && legacy_install_exists();
+
+if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['action'] ?? '') === 'adopt') {
+    if (!$legacy) {
+        $error = 'Nincs átvehető előtag nélküli telepítés.';
+    } elseif (!hash_equals((string) app_config()['db']['pass'], (string) ($_POST['dbpass'] ?? ''))) {
+        $error = 'Az adatbázis jelszava nem egyezik.';
+    } else {
+        $renames = [];
+        foreach (APP_TABLES as $t) {
+            if (table_exists($t)) $renames[] = "`$t` TO `" . table_prefix() . $t . '`';
+        }
+        if (db()->query('RENAME TABLE ' . implode(', ', $renames))) {
+            $state = 'done';
+        } else {
+            $error = 'Az átnevezés nem sikerült: ' . db()->error;
+        }
+    }
+} elseif ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $in = $_POST;
     $business = trim((string) ($in['business'] ?? ''));
     $preset = (string) ($in['preset'] ?? 'altalanos');
@@ -49,12 +82,12 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     } else {
         try {
             foreach (schema_statements() as $sql) {
-                if (!db()->query($sql)) throw new AppError('Tábla létrehozási hiba: ' . db()->error, 500);
+                if (!db()->query(sql_tables($sql))) throw new AppError('Tábla létrehozási hiba: ' . db()->error, 500);
             }
-            if (q_one('SELECT id FROM admins LIMIT 1')) throw new AppError('Az adatbázisban már van admin — a telepítés már megtörtént.');
+            if (q_one('SELECT id FROM {admins} LIMIT 1')) throw new AppError('Az adatbázisban már van admin — a telepítés már megtörtént.');
             apply_preset($preset, $business, $email);
-            q_exec('INSERT INTO admins (name, email, password_hash) VALUES (?, ?, ?)', [$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
-            q_exec("INSERT INTO settings (k, v) VALUES ('installed', 'true') ON DUPLICATE KEY UPDATE v = 'true'");
+            q_exec('INSERT INTO {admins} (name, email, password_hash) VALUES (?, ?, ?)', [$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
+            q_exec("INSERT INTO {settings} (k, v) VALUES ('installed', 'true') ON DUPLICATE KEY UPDATE v = 'true'");
             $state = 'done';
         } catch (AppError $e) {
             $error = $e->getMessage();
@@ -75,6 +108,9 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 <main class="narrow">
   <div class="card">
     <h1>Időpontfoglaló telepítése</h1>
+    <?php if ($state !== 'noconfig' && table_prefix() !== ''): ?>
+      <p class="muted">Táblanév-előtag: <code><?= h(table_prefix()) ?></code></p>
+    <?php endif; ?>
     <?php if ($state === 'noconfig'): ?>
       <p>Hiányzik az <code>api/config.php</code>. Másold át az <code>api/config.example.php</code> fájlt ezen a néven, és írd bele az adatbázis adatait. GitHub-os deploynál ezt a workflow a secretekből automatikusan elkészíti.</p>
     <?php elseif ($state === 'nodb'): ?>
@@ -94,6 +130,18 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
       <p><a class="btn" href="admin/">Tovább az admin felületre</a></p>
     <?php else: ?>
       <?php if ($error): ?><p class="alert"><?= h($error) ?></p><?php endif; ?>
+      <?php if ($legacy): ?>
+        <form method="post" class="form note" style="margin-bottom:20px">
+          <input type="hidden" name="action" value="adopt">
+          <strong>Van egy korábbi, előtag nélküli telepítés ebben az adatbázisban.</strong>
+          <span>Átveheted ide: a táblái <code><?= h(table_prefix()) ?>…</code> nevet kapnak, az adatok (foglalások, beállítások, admin fiók) megmaradnak.</span>
+          <label>Adatbázis jelszava
+            <input name="dbpass" type="password" required autocomplete="off">
+          </label>
+          <button class="btn" type="submit">Korábbi telepítés átvétele</button>
+        </form>
+        <p class="muted">…vagy telepíts egy újat alább:</p>
+      <?php endif; ?>
       <form method="post" class="form">
         <label>Cég / vállalkozás neve
           <input name="business" required value="<?= h($_POST['business'] ?? '') ?>" placeholder="pl. Kovács Gumiszerviz">

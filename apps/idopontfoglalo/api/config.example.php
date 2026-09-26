@@ -11,6 +11,10 @@ return [
         'charset' => 'utf8mb4',
     ],
 
+    // Táblanév-előtag: így több cég is osztozhat egy adatbázison
+    // (gumipont_bookings, fodrasz_bookings…). Kisbetű, szám, aláhúzás.
+    'prefix' => 'ceg_',
+
     // Több telepítés ugyanazon a domainen (pl. /foglalas és /foglalas2)
     // ne ossza meg a munkamenetet — ezért telepítésenként egyedi név.
     'session_name' => 'idopont_session',

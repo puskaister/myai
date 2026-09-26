@@ -12,7 +12,7 @@ if (!app_installed()) {
 
 $s = get_settings();
 $public = public_settings();
-$services = q_all('SELECT id, name, description, duration_min, price FROM services WHERE active = 1 ORDER BY sort, id');
+$services = q_all('SELECT id, name, description, duration_min, price FROM {services} WHERE active = 1 ORDER BY sort, id');
 $name = $s['business']['name'];
 $primary = $s['theme']['primary'];
 $v = fn (string $file) => $file . '?v=' . @filemtime(__DIR__ . '/' . $file);

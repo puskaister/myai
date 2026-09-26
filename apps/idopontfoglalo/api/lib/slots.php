@@ -37,7 +37,7 @@ function day_intervals(array $settings, string $date): array {
 function load_busy(string $fromDate, string $toDate, ?int $excludeId = null): array {
     $placeholders = implode(',', array_fill(0, count(ACTIVE_STATUSES), '?'));
     $rows = q_all(
-        "SELECT id, start_at, end_at FROM bookings
+        "SELECT id, start_at, end_at FROM {bookings}
          WHERE status IN ($placeholders) AND start_at < ? AND end_at > ?",
         array_merge(ACTIVE_STATUSES, [$toDate . ' 23:59:59', $fromDate . ' 00:00:00'])
     );
