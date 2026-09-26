@@ -1,0 +1,63 @@
+name: Időpontfoglaló tesztek
+
+# Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
+# A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: PHP + MySQL végponttól végpontig
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring, gd
+
+      - name: PHP szintaxis-ellenőrzés
+        run: find apps/idopontfoglalo -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: JavaScript szintaxis-ellenőrzés
+        run: for f in apps/idopontfoglalo/assets/*.js apps/idopontfoglalo/sw.js; do node --check "$f"; done
+
+      - name: Konfiguráció
+        run: |
+          cat > apps/idopontfoglalo/api/config.php <<'EOF'
+          <?php
+          return [
+              'db' => ['host' => '127.0.0.1', 'name' => 'idopont', 'user' => 'idopont', 'pass' => 'tesztjelszo', 'charset' => 'utf8mb4'],
+              'session_name' => 'idopont_test',
+              'smtp' => [],
+          ];
+          EOF
+
+      - name: PHP szerver indítása
+        run: |
+          php -d sendmail_path=/bin/true -S 127.0.0.1:8000 -t apps/idopontfoglalo > php-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8000
+          DB_PASS: tesztjelszo
+        run: bash tests/idopontfoglalo.sh
+
+      - name: PHP szerver napló (hiba esetén)
+        if: failure()
+        run: cat php-server.log

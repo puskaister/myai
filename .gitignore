@@ -1,0 +1,6 @@
+.DS_Store
+apps/*/api/config.php
+apps/*/uploads/*
+!apps/*/uploads/.htaccess
+!apps/*/uploads/.gitkeep
+dist/

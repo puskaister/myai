@@ -1,21 +1,62 @@
 name: Deploy FTP-n
 
-# Csak akkor fut, ha a public/ mappa vagy ez a workflow változik a main branch-en.
+# A public/ mappa a my-ai.hu gyökere, az apps/idopontfoglalo pedig a /foglalas
+# alá kerül. Feltöltés előtt lefutnak az időpontfoglaló tesztjei.
 on:
   push:
     branches: [main]
     paths:
       - 'public/**'
+      - 'apps/**'
+      - 'tests/**'
       - '.github/workflows/deploy.yml'
+      - '.github/workflows/test-idopontfoglalo.yml'
   workflow_dispatch: # kézzel is indítható a GitHub "Actions" fülén
 
 jobs:
+  test:
+    uses: ./.github/workflows/test-idopontfoglalo.yml
+
   ftp-deploy:
     name: FTP feltöltés a tárhelyre
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Kód letöltése
         uses: actions/checkout@v4
+
+      - name: Feltöltendő mappa összeállítása
+        run: |
+          mkdir -p dist/foglalas
+          cp -R public/. dist/
+          rsync -a --exclude README.md --exclude api/config.php apps/idopontfoglalo/ dist/foglalas/
+
+      # Az adatbázis-jelszó csak a repó secretjeiben él; a config.php itt készül.
+      - name: config.php a secretekből
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        run: |
+          if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
+            echo "::warning::Nincs DB_NAME / DB_USER / DB_PASS secret — a /foglalas a telepítő 'hiányzó config' üzenetét mutatja."
+            exit 0
+          fi
+          php -r '
+            $c = [
+              "db" => ["host" => getenv("DB_HOST") ?: "localhost", "name" => getenv("DB_NAME"), "user" => getenv("DB_USER"), "pass" => getenv("DB_PASS"), "charset" => "utf8mb4"],
+              "session_name" => "idopont_myai_foglalas",
+              "smtp" => ["host" => getenv("SMTP_HOST") ?: "", "port" => (int) (getenv("SMTP_PORT") ?: 465), "username" => getenv("SMTP_USER") ?: "", "password" => getenv("SMTP_PASS") ?: "", "from" => getenv("SMTP_FROM") ?: ""],
+            ];
+            file_put_contents("dist/foglalas/api/config.php", "<?php\nreturn " . var_export($c, true) . ";\n");
+          '
+          echo "config.php elkészült"
 
       - name: Feltöltés FTP-n
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -26,5 +67,5 @@ jobs:
           protocol: ftps
           security: loose # IP-re csatlakozunk, a tanúsítvány a domainre szól
           timeout: 120000 # ms, a lassú FTP válaszok miatt
-          local-dir: ./public/
+          local-dir: ./dist/
           server-dir: ./ # az FTP felhasználó kezdőkönyvtára már a /www/my-ai.hu
