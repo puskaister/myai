@@ -26,4 +26,4 @@ jobs:
           protocol: ftps
           security: loose # IP-re csatlakozunk, a tanúsítvány a domainre szól
           local-dir: ./public/
-          server-dir: ./www/my-ai.hu/
+          server-dir: ./ # az FTP felhasználó kezdőkönyvtára már a /www/my-ai.hu
