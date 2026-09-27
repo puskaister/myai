@@ -7,6 +7,7 @@ declare(strict_types=1);
 require __DIR__ . '/lib/core.php';
 require __DIR__ . '/lib/slots.php';
 require __DIR__ . '/lib/notify.php';
+require __DIR__ . '/lib/schema.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -375,6 +376,46 @@ try {
             session_regenerate_id(true);
             $_SESSION['admin_id'] = (int) $admin['id'];
             respond(['admin' => ['id' => (int) $admin['id'], 'name' => $admin['name'], 'email' => $admin['email']]]);
+        }
+
+        // Jelszó-emlékeztető: 1 óráig érvényes, egyszer használható link emailben.
+        // A válasz mindig ugyanaz, így nem derül ki, létezik-e a fiók.
+        case 'forgot': {
+            if (!$isPost) throw new AppError('Method not allowed', 405);
+            rate_limit('forgot:' . client_ip(), 5, 3600);
+            db()->query(sql_tables(password_resets_schema()));
+            $admin = q_one('SELECT id, name, email FROM {admins} WHERE email = ?', [str_in(input(), 'email', 190)]);
+            if ($admin) {
+                $token = bin2hex(random_bytes(32));
+                q_exec('DELETE FROM {password_resets} WHERE admin_id = ? OR expires_at < NOW()', [(int) $admin['id']]);
+                q_exec(
+                    'INSERT INTO {password_resets} (admin_id, token_hash, expires_at) VALUES (?, ?, ?)',
+                    [(int) $admin['id'], hash('sha256', $token), date('Y-m-d H:i:s', time() + 3600)]
+                );
+                $biz = $settings['business']['name'];
+                send_app_email(app_config() ?? [], $admin['email'], "Jelszó visszaállítása – $biz",
+                    "Kedves {$admin['name']}!\n\nJelszó-visszaállítást kértek a(z) $biz admin felületéhez. Új jelszót ezen a linken állíthatsz be (1 óráig érvényes):\n\n"
+                    . app_base_url() . "/admin/?reset=$token\n\nHa nem te kérted, hagyd figyelmen kívül ezt a levelet — a jelszavad nem változik.");
+            }
+            respond(['ok' => true]);
+        }
+
+        case 'reset': {
+            if (!$isPost) throw new AppError('Method not allowed', 405);
+            rate_limit('reset:' . client_ip(), 10, 3600);
+            db()->query(sql_tables(password_resets_schema()));
+            $in = input();
+            $token = (string) ($in['token'] ?? '');
+            $row = preg_match('/^[a-f0-9]{64}$/', $token)
+                ? q_one('SELECT id, admin_id FROM {password_resets} WHERE token_hash = ? AND used_at IS NULL AND expires_at > NOW()', [hash('sha256', $token)])
+                : null;
+            if (!$row) throw new AppError('A link érvénytelen vagy lejárt. Kérj újat az „Elfelejtett jelszó?” linkkel.');
+            $password = (string) ($in['password'] ?? '');
+            if (strlen($password) < 8) throw new AppError('A jelszó legalább 8 karakter legyen.');
+            q_exec('UPDATE {admins} SET password_hash = ? WHERE id = ?', [password_hash($password, PASSWORD_DEFAULT), (int) $row['admin_id']]);
+            q_exec('UPDATE {password_resets} SET used_at = NOW() WHERE id = ?', [(int) $row['id']]);
+            q_exec('DELETE FROM {password_resets} WHERE admin_id = ? AND id <> ?', [(int) $row['admin_id'], (int) $row['id']]);
+            respond(['ok' => true]);
         }
 
         case 'logout':

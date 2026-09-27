@@ -124,6 +124,25 @@ check "admin: extra mezők mentése" '[ "$(status "$r")" = 200 ] && [ "$(api_get
 r=$(api_post logout '{}')
 check "kijelentkezés után az admin API tiltott" '[ "$(curl -s -o /dev/null -w "%{http_code}" -b "$JAR" "$BASE/api/?r=admin/settings")" = 401 ]'
 
+echo "== Jelszó-emlékeztető"
+r=$(api_post forgot '{"email":"admin@example.com"}')
+check "emlékeztető kérése létező fiókra" '[ "$(status "$r")" = 200 ]'
+r=$(api_post forgot '{"email":"nincs@example.com"}')
+check "nem létező fióknál ugyanaz a válasz (nem árulja el)" '[ "$(status "$r")" = 200 ]'
+r=$(api_post reset '{"token":"0000000000000000000000000000000000000000000000000000000000000000","password":"ujjelszo123"}')
+check "érvénytelen tokennel nem állítható jelszó" '[ "$(status "$r")" = 400 ]'
+# A levelet a CI nem kapja meg, ezért egy ismert tokent közvetlenül az adatbázisba írunk.
+TOK=$(printf 'a%.0s' {1..64})
+mysql -h127.0.0.1 -uidopont -ptesztjelszo idopont -e "INSERT INTO teszt_password_resets (admin_id, token_hash, expires_at) SELECT id, SHA2('$TOK', 256), NOW() + INTERVAL 1 DAY FROM teszt_admins WHERE email = 'admin@example.com'" 2>/dev/null
+r=$(api_post reset "{\"token\":\"$TOK\",\"password\":\"rovid\"}")
+check "túl rövid új jelszó elutasítva" '[ "$(status "$r")" = 400 ]'
+r=$(api_post reset "{\"token\":\"$TOK\",\"password\":\"ujjelszo123\"}")
+check "új jelszó beállítása tokennel" '[ "$(status "$r")" = 200 ]'
+r=$(api_post login '{"email":"admin@example.com","password":"ujjelszo123"}')
+check "belépés az új jelszóval" '[ "$(status "$r")" = 200 ]'
+r=$(api_post reset "{\"token\":\"$TOK\",\"password\":\"masikjelszo1\"}")
+check "a token másodszor nem használható" '[ "$(status "$r")" = 400 ]'
+
 echo
 if [ "$FAILS" -gt 0 ]; then echo "$FAILS teszt HIBÁS"; exit 1; fi
 echo "Minden teszt rendben."

@@ -95,8 +95,44 @@
     } },
     field('Email', el('input', { name: 'email', type: 'email', required: true, autocomplete: 'username' })),
     field('Jelszó', el('input', { name: 'password', type: 'password', required: true, autocomplete: 'current-password' })),
-    el('button', { class: 'btn block', type: 'submit' }, 'Belépés'));
+    el('button', { class: 'btn block', type: 'submit' }, 'Belépés'),
+    el('button', { class: 'link-btn', type: 'button', onclick: showForgot }, 'Elfelejtett jelszó?'));
     root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Belépés'), form)));
+  }
+
+  function showForgot() {
+    const form = el('form', { class: 'form', onsubmit: async (e) => {
+      e.preventDefault();
+      try {
+        await api('forgot', {}, { email: form.email.value });
+        form.replaceChildren(
+          el('p', { class: 'ok' }, 'Ha ezzel az email címmel van admin fiók, elküldtük rá a jelszó-visszaállító linket. Nézd meg a leveleidet (a spam mappát is) — a link 1 óráig érvényes.'),
+          el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
+      } catch (err) { fail(err); }
+    } },
+    el('p', { class: 'muted' }, 'Add meg az admin fiókod email címét, és küldünk egy linket, amivel új jelszót állíthatsz be.'),
+    field('Email', el('input', { name: 'email', type: 'email', required: true, autocomplete: 'username' })),
+    el('button', { class: 'btn block', type: 'submit' }, 'Link küldése'),
+    el('button', { class: 'link-btn', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
+    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Elfelejtett jelszó'), form)));
+  }
+
+  function showReset(token) {
+    const form = el('form', { class: 'form', onsubmit: async (e) => {
+      e.preventDefault();
+      if (form.password.value !== form.password2.value) return toast('A két jelszó nem egyezik.', true);
+      try {
+        await api('reset', {}, { token, password: form.password.value });
+        history.replaceState(null, '', location.pathname);
+        toast('Az új jelszó beállítva — most már beléphetsz vele.');
+        showLogin();
+      } catch (err) { fail(err); }
+    } },
+    field('Új jelszó (min. 8 karakter)', el('input', { name: 'password', type: 'password', required: true, minlength: 8, autocomplete: 'new-password' })),
+    field('Új jelszó még egyszer', el('input', { name: 'password2', type: 'password', required: true, minlength: 8, autocomplete: 'new-password' })),
+    el('button', { class: 'btn block', type: 'submit' }, 'Jelszó beállítása'),
+    el('button', { class: 'link-btn', type: 'button', onclick: () => { history.replaceState(null, '', location.pathname); showLogin(); } }, 'Mégse'));
+    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Új jelszó beállítása'), form)));
   }
 
   // ---------------------------------------------------------------- keret
@@ -566,5 +602,7 @@
     } catch (e) { fail(e); }
   }
 
-  start();
+  const resetToken = new URLSearchParams(location.search).get('reset');
+  if (resetToken) showReset(resetToken);
+  else start();
 })();

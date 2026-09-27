@@ -4,6 +4,20 @@ declare(strict_types=1);
 // Az adatbázis táblái. A telepítő futtatja (CREATE TABLE IF NOT EXISTS, így
 // többször is lefuttatható). Minden tábla InnoDB + utf8mb4.
 
+// Külön függvényben, mert a korábban telepített rendszereknél az API az első
+// jelszó-visszaállításkor utólag hozza létre.
+function password_resets_schema(): string {
+    return "CREATE TABLE IF NOT EXISTS {password_resets} (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        admin_id INT UNSIGNED NOT NULL,
+        token_hash CHAR(64) NOT NULL UNIQUE,
+        expires_at DATETIME NOT NULL,
+        used_at DATETIME NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_admin (admin_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+}
+
 function schema_statements(): array {
     $opts = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
     return [
@@ -51,6 +65,8 @@ function schema_statements(): array {
             INDEX idx_start (start_at),
             INDEX idx_status (status)
         ) $opts",
+
+        password_resets_schema(),
 
         "CREATE TABLE IF NOT EXISTS {rate_limits} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

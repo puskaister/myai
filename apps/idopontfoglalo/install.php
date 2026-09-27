@@ -28,7 +28,7 @@ if (!app_config()) {
     }
 }
 
-const APP_TABLES = ['settings', 'admins', 'services', 'bookings', 'rate_limits'];
+const APP_TABLES = ['settings', 'admins', 'services', 'bookings', 'rate_limits', 'password_resets'];
 
 function table_exists(string $name): bool {
     $row = q_one('SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?', [$name]);
