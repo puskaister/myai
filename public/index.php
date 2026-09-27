@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 $site = [
     'name'    => 'my-ai.hu',
-    'email'   => '',   // pl. info@my-ai.hu — ha üres, a kapcsolat szakasz rejtve marad
-    'phone'   => '',   // pl. +36 30 123 4567
+    'email'   => 'info@my-ai.hu',   // ha üres, a kapcsolat szakasz rejtve marad
+    'phone'   => '+36 30 584 5937',
     'demoUrl' => '/foglalas/',
 ];
 
