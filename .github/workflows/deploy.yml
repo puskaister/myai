@@ -1,8 +1,8 @@
 name: Deploy FTP-n
 
-# A public/ mappa a my-ai.hu gyökere, az időpontfoglaló telepítései pedig a
-# deploy/idopontfoglalo.json szerinti mappákba kerülnek. Feltöltés előtt
-# lefutnak az időpontfoglaló tesztjei.
+# A public/ mappa a my-ai.hu gyökere, az appok telepítései pedig a
+# deploy/<app>.json szerinti mappákba kerülnek. Feltöltés előtt lefutnak
+# az appok tesztjei.
 on:
   push:
     branches: [main]
@@ -27,7 +27,15 @@ jobs:
       - name: Kód letöltése
         uses: actions/checkout@v4
 
-      # public/ → gyökér, az időpontfoglaló pedig a deploy/idopontfoglalo.json
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Anthropic SDK telepítése (chatbot)
+        run: composer install --no-dev --no-interaction --optimize-autoloader --working-dir=apps/chatbot
+
+      # public/ → gyökér, az appok (időpontfoglaló, chatbot) pedig a deploy/<app>.json
       # minden sorához külön mappába, saját táblanév-előtaggal és config.php-val.
       # Az adatbázis-jelszó csak a repó secretjeiben él.
       - name: Feltöltendő mappa összeállítása
@@ -41,6 +49,7 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: php deploy/build.php
 
       - name: Feltöltés FTP-n

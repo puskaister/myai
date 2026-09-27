@@ -1,4 +1,4 @@
-name: Időpontfoglaló tesztek
+name: Appok tesztjei (időpontfoglaló, chatbot)
 
 # Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
 # A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
@@ -60,3 +60,57 @@ jobs:
         run: |
           cat php-server.log
           echo "::error title=PHP szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[302\]' php-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  chatbot:
+    name: Chatbot – SDK + ál-API + MySQL
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring, gd, curl
+          tools: composer
+
+      - name: Anthropic SDK telepítése
+        run: composer install --no-dev --no-interaction --working-dir=apps/chatbot
+
+      - name: PHP és JS szintaxis
+        run: |
+          find apps/chatbot -name '*.php' -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l
+          for f in apps/chatbot/assets/*.js apps/chatbot/sw.js; do node --check "$f"; done
+
+      - name: Szerverek indítása (ál-API + chatbot)
+        env:
+          MOCK_LOG: ${{ runner.temp }}/mock.jsonl
+        run: |
+          bash tests/set-chatbot-config.sh
+          MOCK_LOG="$MOCK_LOG" php -S 127.0.0.1:8001 tests/mock-anthropic.php > mock.log 2>&1 &
+          php -d sendmail_path=/bin/true -d opcache.enable_cli=0 -S 127.0.0.1:8002 -t apps/chatbot > chatbot-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8002
+          DB_PASS: tesztjelszo
+          MOCK_LOG: ${{ runner.temp }}/mock.jsonl
+        run: bash tests/chatbot.sh
+
+      - name: Naplók (hiba esetén)
+        if: failure()
+        run: |
+          cat chatbot-server.log mock.log
+          echo "::error title=Chatbot szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[302\]' chatbot-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

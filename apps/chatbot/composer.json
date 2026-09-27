@@ -1,0 +1,14 @@
+{
+    "name": "myai/chatbot",
+    "description": "Tanítható chatbot (my-ai.hu) — az Anthropic PHP SDK-t a deploy telepíti a vendor/ mappába.",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "anthropic-ai/sdk": "^0.51"
+    },
+    "config": {
+        "platform": { "php": "8.1.0" },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

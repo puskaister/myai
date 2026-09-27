@@ -4,3 +4,5 @@ apps/*/uploads/*
 !apps/*/uploads/.htaccess
 !apps/*/uploads/.gitkeep
 dist/
+apps/*/vendor/
+apps/*/composer.lock
