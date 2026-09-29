@@ -111,6 +111,8 @@ jobs:
 
       - name: Deploy-csomag – az SDK zipből kicsomagolva is működik
         run: |
+          # ideiglenes telepítés csak a CI munkakönyvtárában (élesen lehet szüneteltetve)
+          jq '.instances = [{"dir": "chat", "prefix": "chat_"}]' deploy/chatbot.json > /tmp/chatbot.json && cp /tmp/chatbot.json deploy/chatbot.json
           php deploy/build.php
           test -f dist/chat/vendor.zip && test ! -d dist/chat/vendor
           V1=$(cat dist/chat/vendor.version)
