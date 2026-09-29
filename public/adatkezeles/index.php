@@ -4,9 +4,9 @@
 declare(strict_types=1);
 
 $controller = [
-    'name'    => '',  // az adatkezelő neve (magánszemély / egyéni vállalkozó / cég neve)
-    'address' => '',  // székhely / levelezési cím
-    'taxid'   => '',  // adószám (nem kötelező)
+    'name'    => 'Immobilis Partners KFT',
+    'address' => '1238. Budapest, Molnár utca 65/b',
+    'taxid'   => '11941736-2-43',
     'email'   => 'info@my-ai.hu',
     'phone'   => '+36 30 584 5937',
 ];
