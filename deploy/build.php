@@ -12,7 +12,7 @@ $dist = "$root/dist";
 // app => a mappából kihagyandó fájlok
 $apps = [
     'idopontfoglalo' => ['README.md', 'api/config.php'],
-    'chatbot'        => ['README.md', 'api/config.php', 'composer.json', 'composer.lock'],
+    'chatbot'        => ['README.md', 'api/config.php', 'composer.json', 'composer.lock', 'vendor'],
     'latogatok'      => ['README.md', 'api/config.php'],
 ];
 
@@ -26,7 +26,9 @@ function copy_tree(string $from, string $to, array $skip = []): void {
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($from, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
     foreach ($it as $item) {
         $rel = substr($item->getPathname(), strlen($from) + 1);
-        if (in_array($rel, $skip, true)) continue;
+        foreach ($skip as $sk) {
+            if ($rel === $sk || strpos($rel, $sk . '/') === 0) continue 2; // a mappa teljes tartalma is kimarad
+        }
         $target = "$to/$rel";
         if ($item->isDir()) {
             if (!is_dir($target)) mkdir($target, 0755, true);
@@ -34,6 +36,28 @@ function copy_tree(string $from, string $to, array $skip = []): void {
             copy($item->getPathname(), $target);
         }
     }
+}
+
+// A vendor/ egyetlen zip-be: FTP-n a több ezer kis fájl órákig tartana (és egy
+// hibánál az egész elölről indulna). Rögzített dátumokkal és sorrenddel a zip
+// bájtra azonos, ha a tartalom nem változott — így nem töltődik fel feleslegesen.
+// A szerveren az app első használatkor maga csomagolja ki (ensure_vendor()).
+function zip_vendor(string $vendorDir, string $zipPath): string {
+    $files = [];
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($vendorDir, FilesystemIterator::SKIP_DOTS));
+    foreach ($it as $f) {
+        if ($f->isFile()) $files[] = substr($f->getPathname(), strlen($vendorDir) + 1);
+    }
+    sort($files, SORT_STRING);
+    @unlink($zipPath);
+    $zip = new ZipArchive();
+    if ($zip->open($zipPath, ZipArchive::CREATE) !== true) fail("Nem sikerült létrehozni: $zipPath");
+    foreach ($files as $rel) {
+        $zip->addFile("$vendorDir/$rel", $rel);
+        $zip->setMtimeName($rel, 315532800); // 1980-01-01, hogy a zip determinisztikus legyen
+    }
+    $zip->close();
+    return sha1_file($zipPath);
 }
 
 copy_tree("$root/public", $dist);
@@ -57,6 +81,7 @@ $smtp = [
 ];
 $anthropicKey = (string) getenv('ANTHROPIC_API_KEY');
 
+$vendorZip = null;
 $seenDirs = [];
 $seenPrefixes = [];
 foreach ($apps as $app => $skip) {
@@ -81,7 +106,11 @@ foreach ($apps as $app => $skip) {
         $seenDirs[$dir] = $seenPrefixes[$prefix] = true;
 
         copy_tree("$root/apps/$app", "$dist/$dir", $skip);
-        if (is_dir("$dist/$dir/vendor")) file_put_contents("$dist/$dir/vendor/.htaccess", "Require all denied\n");
+        if ($app === 'chatbot') {
+            $vendorZip ??= zip_vendor("$root/apps/chatbot/vendor", "$root/dist-vendor.zip");
+            copy("$root/dist-vendor.zip", "$dist/$dir/vendor.zip");
+            file_put_contents("$dist/$dir/vendor.version", $vendorZip . "\n");
+        }
 
         if ($hasDb) {
             $config = [

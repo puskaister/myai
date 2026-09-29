@@ -14,7 +14,49 @@ use Anthropic\Core\Exceptions\RateLimitException;
 
 const BOT_MAX_TOOL_ROUNDS = 5;
 
+// A deploy a vendor/ mappát egyetlen vendor.zip-ként tölti fel (FTP-n a több
+// ezer kis fájl órákig tartana). Itt csomagoljuk ki, első használatkor és
+// minden új verziónál; fejlesztés/CI alatt a vendor/ közvetlenül ott van.
+function ensure_vendor(): void {
+    $zipPath = APP_ROOT . '/vendor.zip';
+    if (!is_file($zipPath)) return;
+    $want = trim((string) @file_get_contents(APP_ROOT . '/vendor.version'));
+    $current = fn () => trim((string) @file_get_contents(APP_ROOT . '/vendor/.version'));
+    if ($want !== '' && $current() === $want && is_file(APP_ROOT . '/vendor/autoload.php')) return;
+
+    $lock = fopen(APP_ROOT . '/uploads/.vendor.lock', 'c');
+    if (!$lock || !flock($lock, LOCK_EX)) throw new AppError('A chat most nem elérhető (zárolási hiba).', 503);
+    try {
+        if ($want !== '' && $current() === $want && is_file(APP_ROOT . '/vendor/autoload.php')) return; // közben kicsomagolta más
+        if (!class_exists('ZipArchive')) throw new AppError('A chat most nem elérhető (hiányzik a zip bővítmény).', 503);
+        set_time_limit(300);
+        $tmp = APP_ROOT . '/vendor.tmp-' . bin2hex(random_bytes(4));
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath) !== true || !$zip->extractTo($tmp)) throw new AppError('A chat most nem elérhető (SDK kicsomagolási hiba).', 503);
+        $zip->close();
+        file_put_contents("$tmp/.version", $want);
+        file_put_contents("$tmp/.htaccess", "Require all denied\n");
+        $old = null;
+        if (is_dir(APP_ROOT . '/vendor')) {
+            $old = APP_ROOT . '/vendor.old-' . bin2hex(random_bytes(4));
+            rename(APP_ROOT . '/vendor', $old);
+        }
+        rename($tmp, APP_ROOT . '/vendor');
+        if ($old) remove_tree($old);
+    } finally {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+    }
+}
+
+function remove_tree(string $dir): void {
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($it as $f) $f->isDir() ? @rmdir($f->getPathname()) : @unlink($f->getPathname());
+    @rmdir($dir);
+}
+
 function anthropic_client(): Client {
+    ensure_vendor();
     $autoload = APP_ROOT . '/vendor/autoload.php';
     if (!is_file($autoload)) throw new AppError('A chat most nem elérhető (hiányzik az SDK).', 503);
     require_once $autoload;

@@ -15,6 +15,12 @@ on:
       - '.github/workflows/test-idopontfoglalo.yml'
   workflow_dispatch: # kézzel is indítható a GitHub "Actions" fülén
 
+# Egyszerre csak egy feltöltés fusson: egy új push leállítja a még futó régit
+# (két párhuzamos FTP-feltöltés összeakadna).
+concurrency:
+  group: deploy-ftp
+  cancel-in-progress: true
+
 jobs:
   test:
     uses: ./.github/workflows/test-idopontfoglalo.yml
@@ -30,6 +36,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          extensions: zip
           tools: composer
 
       - name: Anthropic SDK telepítése (chatbot)

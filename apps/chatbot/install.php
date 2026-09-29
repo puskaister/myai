@@ -6,6 +6,7 @@ declare(strict_types=1);
 require __DIR__ . '/api/lib/core.php';
 require __DIR__ . '/api/lib/schema.php';
 require __DIR__ . '/api/lib/presets.php';
+require __DIR__ . '/api/lib/claude.php';
 
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store');
@@ -59,6 +60,13 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
 }
 $hasKey = !empty(app_config()['anthropic']['api_key']);
+// Az SDK kicsomagolása (vendor.zip → vendor/) már telepítéskor, hogy az első chat üzenet gyors legyen.
+$sdkError = '';
+try {
+    ensure_vendor();
+} catch (AppError $e) {
+    $sdkError = $e->getMessage();
+}
 $hasSdk = is_file(__DIR__ . '/vendor/autoload.php');
 ?>
 <!DOCTYPE html>
@@ -82,7 +90,7 @@ $hasSdk = is_file(__DIR__ . '/vendor/autoload.php');
     <?php endif; ?>
     <?php if ($state !== 'noconfig' && (!$hasKey || !$hasSdk)): ?>
       <p class="alert">
-        <?php if (!$hasSdk): ?>Hiányzik az Anthropic SDK (<code>vendor/</code>) — a deploy telepíti.<br><?php endif; ?>
+        <?php if (!$hasSdk): ?>Hiányzik az Anthropic SDK (<code>vendor/</code>) — a deploy telepíti.<?= $sdkError !== '' ? ' ' . h($sdkError) : '' ?><br><?php endif; ?>
         <?php if (!$hasKey): ?>Nincs Anthropic API kulcs a konfigurációban (GitHub secret: <code>ANTHROPIC_API_KEY</code>). Telepíteni lehet, de a bot addig nem válaszol.<?php endif; ?>
       </p>
     <?php endif; ?>

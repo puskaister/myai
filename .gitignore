@@ -6,3 +6,4 @@ apps/*/uploads/*
 dist/
 apps/*/vendor/
 apps/*/composer.lock
+dist-vendor.zip

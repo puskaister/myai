@@ -82,7 +82,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mysqli, mbstring, gd, curl
+          extensions: mysqli, mbstring, gd, curl, zip
           tools: composer
 
       - name: Anthropic SDK telepítése
@@ -108,6 +108,23 @@ jobs:
           DB_PASS: tesztjelszo
           MOCK_LOG: ${{ runner.temp }}/mock.jsonl
         run: bash tests/chatbot.sh
+
+      - name: Deploy-csomag – az SDK zipből kicsomagolva is működik
+        run: |
+          php deploy/build.php
+          test -f dist/chat/vendor.zip && test ! -d dist/chat/vendor
+          V1=$(cat dist/chat/vendor.version)
+          rm -rf dist dist-vendor.zip && php deploy/build.php > /dev/null
+          test "$V1" = "$(cat dist/chat/vendor.version)" || { echo "::error::A vendor.zip nem determinisztikus"; exit 1; }
+          php -r '
+            require "dist/chat/api/lib/core.php";
+            require "dist/chat/api/lib/claude.php";
+            ensure_vendor();
+            require "dist/chat/vendor/autoload.php";
+            if (!class_exists("Anthropic\\Client")) { fwrite(STDERR, "::error::Az SDK nem töltődik be a zipből\n"); exit(1); }
+            ensure_vendor(); // másodszor nem csomagol ki újra
+            echo "SDK a zipből: rendben\n";
+          '
 
       - name: Naplók (hiba esetén)
         if: failure()
