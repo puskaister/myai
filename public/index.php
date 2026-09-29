@@ -90,7 +90,17 @@ header('Content-Type: text/html; charset=utf-8');
   .nav-links a { text-decoration: none; color: var(--muted); font-weight: 550; font-size: .95rem; }
   .nav-links a:hover { color: var(--text); }
   .nav-links .btn { color: var(--on-accent); padding: 9px 16px; font-size: .92rem; }
-  @media (max-width: 720px) { .nav-links a:not(.btn) { display: none; } }
+  .menu-btn { display: none; background: none; border: 1px solid var(--border); border-radius: 10px; width: 42px; height: 42px; cursor: pointer; color: var(--text); align-items: center; justify-content: center; }
+  .menu-btn svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; fill: none; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  @media (max-width: 720px) {
+    .menu-btn { display: inline-flex; }
+    .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0;
+      background: var(--bg); border-bottom: 1px solid var(--border); padding: 8px 16px 16px; box-shadow: 0 12px 24px rgba(15, 23, 42, .08); }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--border); font-size: 1rem; }
+    .nav-links .btn { margin-top: 12px; border-bottom: 0; }
+  }
 
   /* hero */
   .hero { padding: 64px 0 40px; background: radial-gradient(1000px 500px at 85% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), radial-gradient(700px 400px at -10% 30%, color-mix(in srgb, var(--accent-2) 12%, transparent), transparent 70%); overflow: hidden; }
@@ -177,13 +187,19 @@ header('Content-Type: text/html; charset=utf-8');
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span><?= $e($site['name']) ?></a>
-    <nav class="nav-links" aria-label="Fő navigáció">
-      <a href="#fejlesztes">Egyedi fejlesztés</a>
-      <a href="#appok">Appok</a>
-      <a href="#hogyan">Hogyan működik</a>
-      <?php if ($hasContact): ?><a href="#kapcsolat">Kapcsolat</a><?php endif; ?>
-      <a class="btn btn-primary" href="<?= $e($site['demoUrl']) ?>">Demó</a>
-    </nav>
+    <div class="nav-right">
+      <nav class="nav-links" id="nav-links" aria-label="Fő navigáció">
+        <a href="#fejlesztes">Egyedi fejlesztés</a>
+        <a href="#appok">Appok</a>
+        <a href="#hogyan">Hogyan működik</a>
+        <?php if ($hasContact): ?><a href="#kapcsolat">Kapcsolat</a><?php endif; ?>
+        <a href="/adatkezeles/">Adatkezelés</a>
+        <a class="btn btn-primary" href="<?= $e($site['demoUrl']) ?>">Demó</a>
+      </nav>
+      <button type="button" class="menu-btn" aria-controls="nav-links" aria-expanded="false" aria-label="Menü">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -388,5 +404,17 @@ header('Content-Type: text/html; charset=utf-8');
   </div>
 </footer>
 
+<script>
+  // Mobil menü: nyitás/zárás, és zárás, ha egy menüpontra kattintanak.
+  (function () {
+    var btn = document.querySelector('.menu-btn');
+    var nav = document.getElementById('nav-links');
+    if (!btn || !nav) return;
+    function set(open) { nav.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); }
+    btn.addEventListener('click', function () { set(!nav.classList.contains('open')); });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  })();
+</script>
 </body>
 </html>
