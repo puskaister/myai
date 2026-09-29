@@ -13,7 +13,7 @@ $dist = "$root/dist";
 $apps = [
     'idopontfoglalo' => ['README.md', 'api/config.php'],
     'chatbot'        => ['README.md', 'api/config.php', 'composer.json', 'composer.lock', 'vendor'],
-    'latogatok'      => ['README.md', 'api/config.php'],
+    'latogatok'      => ['README.md', 'api/config.php', 'TELEPITES.md'],
 ];
 
 function fail(string $msg): void {
@@ -38,26 +38,37 @@ function copy_tree(string $from, string $to, array $skip = []): void {
     }
 }
 
-// A vendor/ egyetlen zip-be: FTP-n a több ezer kis fájl órákig tartana (és egy
-// hibánál az egész elölről indulna). Rögzített dátumokkal és sorrenddel a zip
+// Egy mappa determinisztikus zipje: rögzített dátumokkal és sorrenddel a zip
 // bájtra azonos, ha a tartalom nem változott — így nem töltődik fel feleslegesen.
-// A szerveren az app első használatkor maga csomagolja ki (ensure_vendor()).
-function zip_vendor(string $vendorDir, string $zipPath): string {
+function zip_dir(string $dir, string $zipPath, string $prefix = '', array $skip = []): string {
     $files = [];
-    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($vendorDir, FilesystemIterator::SKIP_DOTS));
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS));
     foreach ($it as $f) {
-        if ($f->isFile()) $files[] = substr($f->getPathname(), strlen($vendorDir) + 1);
+        if (!$f->isFile()) continue;
+        $rel = substr($f->getPathname(), strlen($dir) + 1);
+        foreach ($skip as $sk) {
+            if ($rel === $sk || strpos($rel, $sk . '/') === 0) continue 2;
+        }
+        $files[] = $rel;
     }
     sort($files, SORT_STRING);
     @unlink($zipPath);
+    if (!is_dir(dirname($zipPath))) mkdir(dirname($zipPath), 0755, true);
     $zip = new ZipArchive();
     if ($zip->open($zipPath, ZipArchive::CREATE) !== true) fail("Nem sikerült létrehozni: $zipPath");
     foreach ($files as $rel) {
-        $zip->addFile("$vendorDir/$rel", $rel);
-        $zip->setMtimeName($rel, 315532800); // 1980-01-01, hogy a zip determinisztikus legyen
+        $zip->addFile("$dir/$rel", $prefix . $rel);
+        $zip->setMtimeName($prefix . $rel, 315532800); // 1980-01-01
     }
     $zip->close();
     return sha1_file($zipPath);
+}
+
+// A vendor/ egyetlen zip-be: FTP-n a több ezer kis fájl órákig tartana (és egy
+// hibánál az egész elölről indulna). A szerveren az app első használatkor maga
+// csomagolja ki (ensure_vendor()).
+function zip_vendor(string $vendorDir, string $zipPath): string {
+    return zip_dir($vendorDir, $zipPath);
 }
 
 copy_tree("$root/public", $dist);
@@ -124,5 +135,15 @@ foreach ($apps as $app => $skip) {
         }
         echo "  $app → /$dir  (előtag: $prefix)\n";
     }
+}
+// Letölthető telepítőcsomagok a vásárlóknak (my-ai.hu/letoltes/). A csomagban
+// nincs config.php (jelszó), a README helyett a vásárlói útmutató van.
+$downloads = [
+    'latogatoszamlalo' => ['app' => 'latogatok', 'skip' => ['README.md', 'api/config.php']],
+];
+foreach ($downloads as $name => $d) {
+    $hash = zip_dir("$root/apps/{$d['app']}", "$dist/letoltes/files/$name.zip", "$name/", $d['skip']);
+    file_put_contents("$dist/letoltes/files/$name.version", substr($hash, 0, 12) . "\n");
+    echo "  letöltés → /letoltes/files/$name.zip (" . round(filesize("$dist/letoltes/files/$name.zip") / 1024) . " KB)\n";
 }
 echo "dist/ kész.\n";

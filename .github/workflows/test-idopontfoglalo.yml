@@ -155,7 +155,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mysqli, mbstring
+          extensions: mysqli, mbstring, zip
 
       - name: PHP és JS szintaxis
         run: |
@@ -173,6 +173,26 @@ jobs:
           BASE: http://127.0.0.1:8003
           DB_PASS: tesztjelszo
         run: bash tests/latogatok.sh
+
+      - name: A letölthető csomag (zip) a vásárlónál is működik
+        env:
+          BASE: http://127.0.0.1:8004
+          DB_PASS: tesztjelszo
+        run: |
+          php deploy/build.php
+          Z=dist/letoltes/files/latogatoszamlalo.zip
+          unzip -l "$Z" | grep -q "latogatoszamlalo/install.php"
+          unzip -l "$Z" | grep -q "latogatoszamlalo/TELEPITES.md"
+          unzip -l "$Z" | grep -q "latogatoszamlalo/api/config.example.php"
+          if unzip -l "$Z" | grep -q "api/config.php$"; then echo "::error::A csomagban benne maradt a config.php (jelszó)!"; exit 1; fi
+          if unzip -l "$Z" | grep -q "README.md"; then echo "::error::A belső README a csomagban maradt"; exit 1; fi
+          rm -rf /tmp/pkg && mkdir /tmp/pkg && unzip -q "$Z" -d /tmp/pkg
+          sed -e "s/'localhost'/'127.0.0.1'/" -e "s/'adatbazis_neve'/'idopont'/" -e "s/'adatbazis_felhasznalo'/'idopont'/" \
+              -e "s/'adatbazis_jelszo'/'tesztjelszo'/" -e "s/'stat_'/'pkg_'/" \
+              /tmp/pkg/latogatoszamlalo/api/config.example.php > /tmp/pkg/latogatoszamlalo/api/config.php
+          php -d sendmail_path=/bin/true -d opcache.enable_cli=0 -S 127.0.0.1:8004 -t /tmp/pkg/latogatoszamlalo > pkg-server.log 2>&1 &
+          sleep 2
+          bash tests/latogatok.sh
 
       - name: Napló (hiba esetén)
         if: failure()

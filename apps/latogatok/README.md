@@ -28,3 +28,8 @@ Az irányítópult (`/stats/`) ezeket mutatja:
 - Beállítható: IP-anonimizálás, kizárt IP-címek (pl. a saját géped) és az adatmegőrzés ideje (alapból 395 nap).
 
 **Adatvédelem:** az IP-cím és a látogatóazonosító személyes adat (GDPR). A my-ai.hu tájékoztatója a `public/adatkezeles/index.php` fájlban van.
+
+
+## Letölthető csomag
+
+A deploy minden futáskor elkészíti a vásárlóknak szóló `latogatoszamlalo.zip`-et (`deploy/build.php`). A csomagban nincs `config.php`, a README helyett a `TELEPITES.md` útmutató van. Letölthető: https://my-ai.hu/letoltes/ (most ingyenes; a letöltés a `public/letoltes/index.php`-n keresztül megy, hogy később egyedi kódhoz köthető legyen).

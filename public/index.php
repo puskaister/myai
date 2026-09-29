@@ -191,6 +191,7 @@ header('Content-Type: text/html; charset=utf-8');
       <nav class="nav-links" id="nav-links" aria-label="Fő navigáció">
         <a href="#fejlesztes">Egyedi fejlesztés</a>
         <a href="#appok">Appok</a>
+        <a href="/letoltes/">Letöltés</a>
         <a href="#hogyan">Hogyan működik</a>
         <?php if ($hasContact): ?><a href="#kapcsolat">Kapcsolat</a><?php endif; ?>
         <a href="/adatkezeles/">Adatkezelés</a>
@@ -322,6 +323,32 @@ header('Content-Type: text/html; charset=utf-8');
             <h3>Biztonságos</h3>
             <p>Minden cég adatai külön kezelve, védett admin belépés, robotok elleni védelem.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="letoltes">
+    <div class="wrap">
+      <div class="product">
+        <div>
+          <span class="eyebrow">Ingyenesen letölthető</span>
+          <h2>Látogatószámláló a saját weboldaladra</h2>
+          <p class="lead" style="margin-top:14px">Lásd, hányan jönnek, honnan érkeznek, mennyi időt töltenek az oldaladon és mire kattintanak — külső szolgáltatás nélkül, minden adat a saját tárhelyeden marad.</p>
+          <div class="cta" style="margin-top:24px">
+            <a class="btn btn-primary" href="/letoltes/">Részletek és letöltés →</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <span class="badge">Ingyenes</span>
+          <ul class="checks">
+            <li>Látogatók, oldalmegtekintések napi és óránkénti grafikonon</li>
+            <li>Valódi eltöltött idő — csak amíg a lap látható</li>
+            <li>Kattintások, hivatkozó oldalak, böngészők, eszközök</li>
+            <li>Egyenkénti látogatások IP-címmel és a látogató útjával</li>
+            <li>GDPR-barát: hozzájárulás-sáv, IP-anonimizálás, automatikus törlés</li>
+            <li>Bármely PHP + MySQL tárhelyen, 5 perc alatt telepíthető</li>
+          </ul>
         </div>
       </div>
     </div>
