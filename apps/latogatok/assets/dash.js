@@ -26,6 +26,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
@@ -66,7 +72,7 @@
 
   // ---------------------------------------------------------------- belépés
   function narrow(title, ...content) {
-    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
+    fill(root, el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
   }
   function showLogin() {
     const f = el('form', { class: 'form', onsubmit: async (e) => {
@@ -84,7 +90,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: f.email.value });
-        f.replaceChildren(el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
+        fill(f, el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
     } },
@@ -115,7 +121,7 @@
   function render() {
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, l]) => el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => go(k) }, l)));
     const view = { overview: viewOverview, visits: viewVisits, settings: viewSettings, account: viewAccount }[state.tab]();
-    root.replaceChildren(tabs, view);
+    fill(root, tabs, view);
   }
   async function go(tab) {
     state.tab = tab;
@@ -137,7 +143,7 @@
     const wrap = el('div', { class: 'chart' });
     const tip = el('div', { class: 'tip', hidden: true });
     const show = (col, p) => {
-      tip.replaceChildren(el('strong', {}, hourly ? p.label : shortDay(p.label)), el('br'), nf(p.pv) + ' megtekintés · ' + nf(p.uv) + ' látogató');
+      fill(tip, el('strong', {}, hourly ? p.label : shortDay(p.label)), el('br'), nf(p.pv) + ' megtekintés · ' + nf(p.uv) + ' látogató');
       tip.hidden = false;
       const r = col.getBoundingClientRect();
       const w = wrap.getBoundingClientRect();
@@ -337,7 +343,7 @@
 
   // ---------------------------------------------------------------- indulás
   async function start() {
-    root.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(root, el('p', { class: 'muted' }, 'Betöltés…'));
     try {
       const { admin } = await api('me');
       if (!admin) return showLogin();

@@ -28,6 +28,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
@@ -71,7 +77,7 @@
 
   // ---------------------------------------------------------------- belépés
   function narrow(title, ...content) {
-    root.replaceChildren(el('div', { class: 'narrow', style: 'margin-top:12px' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
+    fill(root, el('div', { class: 'narrow', style: 'margin-top:12px' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
   }
   function showLogin() {
     who.textContent = 'Fontos dátumok, időben';
@@ -104,7 +110,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: f.email.value });
-        f.replaceChildren(el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
+        fill(f, el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
     } },
@@ -160,7 +166,7 @@
     const tabs = el('nav', { class: 'tabs' },
       el('button', { class: state.tab === 'list' ? 'on' : '', type: 'button', onclick: () => { state.tab = 'list'; render(); } }, 'Közelgő'),
       el('button', { class: state.tab === 'settings' ? 'on' : '', type: 'button', onclick: () => { state.tab = 'settings'; render(); } }, 'Beállítások'));
-    root.replaceChildren(tabs, state.tab === 'list' ? viewList() : viewSettings());
+    fill(root, tabs, state.tab === 'list' ? viewList() : viewSettings());
     document.querySelector('.fab')?.remove();
     if (state.tab === 'list') document.body.append(el('button', { class: 'fab', type: 'button', 'aria-label': 'Új alkalom', onclick: () => editEvent(null) }, '+'));
   }
@@ -352,7 +358,7 @@
         e.preventDefault();
         try { await api('admin/users/save', {}, { name: add.name.value, email: add.email.value, password: add.password.value }); toast('Hozzáadva'); render(); } catch (err) { fail(err); }
       });
-      box.replaceChildren(el('h2', {}, 'Felhasználók (admin)'),
+      fill(box, el('h2', {}, 'Felhasználók (admin)'),
         el('div', { class: 'list' }, d.users.map((x) => el('div', { class: 'item', style: 'grid-template-columns:1fr auto;cursor:default' },
           el('div', {}, el('div', { class: 'who' }, x.name + (x.is_admin ? ' (admin)' : '')), el('div', { class: 'what' }, x.email + ' · ' + x.events + ' alkalom')),
           x.id === state.user.id ? el('span', { class: 'muted' }, 'te') : el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
@@ -370,7 +376,7 @@
 
   // ---------------------------------------------------------------- indulás
   async function start() {
-    root.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(root, el('p', { class: 'muted' }, 'Betöltés…'));
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
     try {
       state.cfg = await api('config');

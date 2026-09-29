@@ -55,6 +55,14 @@ jobs:
           bash tests/set-config.sh teszt_
           bash tests/idopontfoglalo.sh
 
+      - name: Böngészős ellenőrzés (Chrome) – nincs "null" / "[object" a megjelenő oldalon
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          "$CHROME" --headless=new --disable-gpu --no-sandbox --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8000/ > dom.html 2>/dev/null
+          grep -q "Válassz szolgáltatást" dom.html || { echo "::error::a foglalási oldal nem renderelődött"; head -c 3000 dom.html; exit 1; }
+          if grep -qE "\[object [A-Z]|>null<|>undefined<" dom.html; then echo "::error::megjelenítési hiba a foglalási oldalon"; grep -oE ".{80}(\[object [A-Z]|>null<|>undefined<).{40}" dom.html | head; exit 1; fi
+          echo "A foglalási oldal hibátlanul renderelődik."
+
       - name: PHP szerver napló (hiba esetén)
         if: failure()
         run: |
@@ -244,6 +252,8 @@ jobs:
           for f in apps/evfordulok/assets/*.js apps/evfordulok/sw.js; do node --check "$f"; done
           # az el() segédfüggvény mélyen lapítsa ki a gyerekeket (egymásba ágyazott listák)
           if grep -rn "children.flat()" apps/*/assets/*.js; then echo "::error::children.flat() → children.flat(Infinity)"; exit 1; fi
+          # a natív replaceChildren() a listákat/null-t szövegként írná ki — mindig a fill() segédfüggvényen át
+          if grep -rnE "\.replaceChildren\([^)]" apps/*/assets/*.js | grep -v "kids.flat(Infinity)"; then echo "::error::replaceChildren(...) helyett fill(node, ...)"; exit 1; fi
 
       - name: Szerver indítása (a levelek naplófájlba mennek)
         run: |

@@ -33,6 +33,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
@@ -74,7 +80,7 @@
   function narrow(title, ...content) {
     menuBtn.hidden = true;
     stopPolling();
-    root.replaceChildren(el('div', { class: 'narrow', style: 'margin-top:12px' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
+    fill(root, el('div', { class: 'narrow', style: 'margin-top:12px' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
   }
   const joinToken = () => new URLSearchParams(location.search).get('join');
   function joinNote() {
@@ -113,7 +119,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: f.email.value });
-        f.replaceChildren(el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
+        fill(f, el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
     } },
@@ -373,7 +379,7 @@
   function render() {
     if (!state.user) return;
     if (!state.listId || !state.data) {
-      root.replaceChildren(el('div', { class: 'empty' }, el('div', { class: 'big' }, '🛒'), el('h2', {}, 'Nincs még listád'),
+      fill(root, el('div', { class: 'empty' }, el('div', { class: 'big' }, '🛒'), el('h2', {}, 'Nincs még listád'),
         el('button', { class: 'btn', type: 'button', onclick: () => newList() }, '+ Új lista')));
       return;
     }
@@ -406,7 +412,7 @@
     const groups = BOOT.categories.map((c) => ({ c, items: open.filter((i) => (CAT[i.category] ? i.category : 'other') === c.key) })).filter((g) => g.items.length);
     const chips = state.suggestions.slice(0, 10);
 
-    root.replaceChildren(
+    fill(root, 
       el('div', { class: 'list-bar' }, listSel,
         el('button', { class: 'btn ghost small', type: 'button', onclick: () => shareList(), 'aria-label': 'Megosztás' }, d.members.length > 1 ? '👥 ' + d.members.length : 'Megosztás')),
       addForm,
@@ -530,7 +536,7 @@
         e.preventDefault();
         try { await api('admin/options/save', {}, { app_name: opts.app_name.value, allow_register: opts.reg.checked }); toast('Mentve'); } catch (err) { fail(err); }
       });
-      box.replaceChildren(el('hr'), el('h3', { style: 'margin:0' }, 'Felhasználók (admin)'),
+      fill(box, el('hr'), el('h3', { style: 'margin:0' }, 'Felhasználók (admin)'),
         el('div', { class: 'list' }, d.users.map((x) => el('div', { class: 'item', style: 'grid-template-columns:1fr auto;cursor:default' },
           el('div', {}, el('div', { class: 'who' }, x.name + (x.is_admin ? ' (admin)' : '')), el('div', { class: 'what' }, x.email)),
           x.id === state.user.id ? el('span', { class: 'muted' }, 'te') : el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
@@ -544,7 +550,7 @@
 
   // ---------------------------------------------------------------- indulás
   async function start() {
-    root.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(root, el('p', { class: 'muted' }, 'Betöltés…'));
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
     try {
       state.cfg = await api('config');

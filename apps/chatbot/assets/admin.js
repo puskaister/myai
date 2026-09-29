@@ -24,6 +24,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
@@ -69,7 +75,7 @@
 
   // ---------------------------------------------------------------- belépés, jelszó
   function narrowCard(title, ...content) {
-    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
+    fill(root, el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, title), ...content)));
   }
 
   function showLogin() {
@@ -89,7 +95,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: form.email.value });
-        form.replaceChildren(
+        fill(form, 
           el('p', { class: 'ok' }, 'Ha ezzel az email címmel van admin fiók, elküldtük rá a jelszó-visszaállító linket (1 óráig érvényes). Nézd meg a spam mappát is.'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
@@ -124,7 +130,7 @@
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, label]) =>
       el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => { state.tab = k; render(); } }, label)));
     const view = { conversations: viewConversations, training: viewTraining, look: viewLook, settings: viewSettings, account: viewAccount }[state.tab]();
-    root.replaceChildren(tabs, view);
+    fill(root, tabs, view);
   }
 
   async function reloadSettings() { state.data = await api('admin/settings'); }
@@ -211,7 +217,7 @@
     const bot = s.bot;
     const questions = JSON.parse(JSON.stringify(s.questions));
     const qBox = el('div', { class: 'editable' });
-    const drawQuestions = () => qBox.replaceChildren(
+    const drawQuestions = () => fill(qBox, 
       ...(questions.length ? questions.map((q, i) => el('div', { class: 'q-row' },
         field('Kérdés', el('input', { value: q.question, placeholder: 'pl. Milyen autóról van szó?', oninput: (e) => { q.question = e.target.value; } })),
         field('Megjegyzés a botnak (nem kötelező)', el('input', { value: q.hint, placeholder: 'pl. márka és típus; ha nem tudja, írja, hogy nem tudja', oninput: (e) => { q.hint = e.target.value; } })),
@@ -347,7 +353,7 @@
 
   // ---------------------------------------------------------------- indulás
   async function start() {
-    root.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(root, el('p', { class: 'muted' }, 'Betöltés…'));
     try {
       const { admin } = await api('me');
       if (!admin) return showLogin();

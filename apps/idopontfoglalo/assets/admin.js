@@ -27,6 +27,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body, isForm) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
@@ -97,7 +103,7 @@
     field('Jelszó', el('input', { name: 'password', type: 'password', required: true, autocomplete: 'current-password' })),
     el('button', { class: 'btn block', type: 'submit' }, 'Belépés'),
     el('button', { class: 'link-btn', type: 'button', onclick: showForgot }, 'Elfelejtett jelszó?'));
-    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Belépés'), form)));
+    fill(root, el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Belépés'), form)));
   }
 
   function showForgot() {
@@ -105,7 +111,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: form.email.value });
-        form.replaceChildren(
+        fill(form, 
           el('p', { class: 'ok' }, 'Ha ezzel az email címmel van admin fiók, elküldtük rá a jelszó-visszaállító linket. Nézd meg a leveleidet (a spam mappát is) — a link 1 óráig érvényes.'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
@@ -114,7 +120,7 @@
     field('Email', el('input', { name: 'email', type: 'email', required: true, autocomplete: 'username' })),
     el('button', { class: 'btn block', type: 'submit' }, 'Link küldése'),
     el('button', { class: 'link-btn', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
-    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Elfelejtett jelszó'), form)));
+    fill(root, el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Elfelejtett jelszó'), form)));
   }
 
   function showReset(token) {
@@ -132,7 +138,7 @@
     field('Új jelszó még egyszer', el('input', { name: 'password2', type: 'password', required: true, minlength: 8, autocomplete: 'new-password' })),
     el('button', { class: 'btn block', type: 'submit' }, 'Jelszó beállítása'),
     el('button', { class: 'link-btn', type: 'button', onclick: () => { history.replaceState(null, '', location.pathname); showLogin(); } }, 'Mégse'));
-    root.replaceChildren(el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Új jelszó beállítása'), form)));
+    fill(root, el('div', { class: 'narrow' }, el('div', { class: 'card' }, el('h1', {}, 'Új jelszó beállítása'), form)));
   }
 
   // ---------------------------------------------------------------- keret
@@ -142,7 +148,7 @@
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, label]) =>
       el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => { state.tab = k; render(); } }, label)));
     const view = { bookings: viewBookings, services: viewServices, hours: viewHours, settings: viewSettings, account: viewAccount }[state.tab]();
-    root.replaceChildren(tabs, view);
+    fill(root, tabs, view);
   }
 
   async function reloadSettings() {
@@ -280,11 +286,11 @@
     const duration = el('input', { type: 'number', name: 'duration_min', min: 5, step: 5, value: b ? Math.round((new Date(String(b.end_at).replace(' ', 'T')) - new Date(String(b.start_at).replace(' ', 'T'))) / 60000) : durationOf() });
     const slotBox = el('div', { class: 'slots', style: 'margin-top:0' });
     const loadSlots = async () => {
-      slotBox.replaceChildren();
+      fill(slotBox);
       if (!date.value) return;
       try {
         const { slots } = await api('admin/slots', Object.assign({ service_id: service.value, date: date.value }, b ? { exclude: b.id } : {}));
-        slotBox.replaceChildren(...(slots.length
+        fill(slotBox, ...(slots.length
           ? slots.map((t) => el('button', { class: 'slot' + (t === time.value ? ' sel' : ''), type: 'button', onclick: () => { time.value = t; loadSlots(); } }, t))
           : [el('small', {}, 'Nincs szabad időpont a nyitvatartáson belül — időpont kézzel is megadható.')]));
       } catch (e) { fail(e); }
@@ -404,7 +410,7 @@
     const order = ['1', '2', '3', '4', '5', '6', '0'];
 
     const hoursBox = el('div');
-    const drawHours = () => hoursBox.replaceChildren(...order.map((d) => {
+    const drawHours = () => fill(hoursBox, ...order.map((d) => {
       const ranges = hours[d] || (hours[d] = []);
       return el('div', { class: 'hours-row' },
         el('strong', { style: 'text-transform:capitalize;padding-top:10px' }, DAYS[Number(d)]),
@@ -424,7 +430,7 @@
     drawHours();
 
     const closBox = el('div', { class: 'editable' });
-    const drawClosures = () => closBox.replaceChildren(
+    const drawClosures = () => fill(closBox, 
       ...(closures.length ? closures.map((c, i) => el('div', { class: 'rowx' },
         el('div', { class: 'grid2' },
           field('Ettől', el('input', { type: 'date', value: c.from, onchange: (e) => { c.from = e.target.value; } })),
@@ -466,7 +472,7 @@
 
     const fields = JSON.parse(JSON.stringify(s.fields));
     const fieldsBox = el('div', { class: 'editable' });
-    const drawFields = () => fieldsBox.replaceChildren(
+    const drawFields = () => fill(fieldsBox, 
       ...(fields.length ? fields.map((fd, i) => el('div', { class: 'rowx' },
         el('div', { class: 'form' },
           el('div', { class: 'grid2' },
@@ -592,7 +598,7 @@
 
   // ---------------------------------------------------------------- indulás
   async function start() {
-    root.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(root, el('p', { class: 'muted' }, 'Betöltés…'));
     try {
       const { admin } = await api('me');
       if (!admin) return showLogin();

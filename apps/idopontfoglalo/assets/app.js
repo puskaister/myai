@@ -29,6 +29,12 @@
     return node;
   }
 
+  // Gyerekek cseréje: listákat kilapít, az üres (null/false) elemeket kihagyja —
+  // a böngésző saját replaceChildren()-je ezeket "null" / "[object …]" szövegként írná ki.
+  function fill(node, ...kids) {
+    node.replaceChildren(...kids.flat(Infinity).filter((k) => k !== null && k !== undefined && k !== false));
+  }
+
   async function api(route, params, body) {
     const qs = new URLSearchParams(Object.assign({ r: route }, params || {}));
     const opts = { headers: { 'X-Requested-With': 'fetch' } };
@@ -303,12 +309,12 @@
   }
 
   async function viewManage(token) {
-    app.replaceChildren(el('p', { class: 'muted' }, 'Betöltés…'));
+    fill(app, el('p', { class: 'muted' }, 'Betöltés…'));
     let b;
     try {
       b = (await api('booking', { token })).booking;
     } catch (e) {
-      app.replaceChildren(el('div', { class: 'card' }, el('p', { class: 'alert' }, e.message), el('a', { class: 'btn', href: './' }, 'Új foglalás')));
+      fill(app, el('div', { class: 'card' }, el('p', { class: 'alert' }, e.message), el('a', { class: 'btn', href: './' }, 'Új foglalás')));
       return;
     }
     const cancel = async () => {
@@ -320,7 +326,7 @@
       } catch (e) { toast(e.message, true); }
     };
     const active = b.status === 'pending' || b.status === 'confirmed';
-    app.replaceChildren(el('div', { class: 'card' },
+    fill(app, el('div', { class: 'card' },
       el('h1', {}, 'Foglalásod'),
       el('dl', { class: 'summary' },
         el('dt', {}, 'Név'), el('dd', {}, b.name),
@@ -337,10 +343,10 @@
   }
 
   function render() {
-    if (state.step === 'service') app.replaceChildren(...viewService());
-    else if (state.step === 'date') app.replaceChildren(...viewDate());
-    else if (state.step === 'details') app.replaceChildren(...viewDetails());
-    else if (state.step === 'done') app.replaceChildren(viewDone());
+    if (state.step === 'service') fill(app, ...viewService());
+    else if (state.step === 'date') fill(app, ...viewDate());
+    else if (state.step === 'details') fill(app, ...viewDetails());
+    else if (state.step === 'done') fill(app, viewDone());
   }
 
   // ---------------------------------------------------------------- telepítés (PWA)
