@@ -1,6 +1,4 @@
 {
-  "_leiras": "A chatbot telepítései a my-ai.hu-n. Közös adatbázis (DB_* secretek), telepítésenként saját táblanév-előtag — az időpontfoglaló előtagjaitól is különböznie kell. Az AI kulcs: ANTHROPIC_API_KEY secret. Új telepítés: új sor, push, majd https://my-ai.hu/<dir>/install.php",
-  "instances": [
-    { "dir": "chat", "prefix": "chat_" }
-  ]
+  "_leiras": "A chatbot telepítései a my-ai.hu-n. Közös adatbázis (DB_* secretek), telepítésenként saját táblanév-előtag — az időpontfoglaló előtagjaitól is különböznie kell. Az AI kulcs: ANTHROPIC_API_KEY secret. Új telepítés: új sor, push, majd https://my-ai.hu/<dir>/install.php (2026-09-29: élesítés szüneteltetve — visszakapcsolás: { \"dir\": \"chat\", \"prefix\": \"chat_\" })",
+  "instances": []
 }
