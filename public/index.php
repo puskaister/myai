@@ -185,7 +185,7 @@ header('Content-Type: text/html; charset=utf-8');
   .evf-top { background: #db2777; color: #fff; padding: 44px 16px 14px; }
   .evf-top b { display: block; font-size: 1rem; }
   .evf-top span { font-size: .72rem; opacity: .85; }
-  .evf-body { padding: 12px; display: grid; gap: 7px; font-size: .74rem; position: relative; padding-bottom: 20px; }
+  .evf-body { padding: 12px 12px 54px; display: grid; gap: 7px; font-size: .74rem; position: relative; }
   .evf-hl { display: flex; gap: 10px; align-items: center; background: #fce7f3; border: 1px solid #f9a8d4; border-radius: 12px; padding: 10px; }
   .evf-hl .e { font-size: 24px; line-height: 1; }
   .evf-hl .w { font-size: .6rem; font-weight: 800; letter-spacing: .06em; color: #db2777; }
@@ -222,7 +222,7 @@ header('Content-Type: text/html; charset=utf-8');
     background-image: linear-gradient(to top, #eef0f4 1px, transparent 1px); background-size: 100% 25%; }
   .dash-bars i { flex: 1; background: #4f46e5; border-radius: 3px 3px 0 0; display: block; }
   .dash-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .dash-lists div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-lists > div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
   .dash-lists .h { font-weight: 700; font-size: .62rem; margin-bottom: 4px; }
   .dash-lists p { display: flex; justify-content: space-between; margin: 2px 0; font-size: .6rem; position: relative; padding: 2px 4px; border-radius: 4px; overflow: hidden; }
   .dash-lists p em { position: absolute; inset: 0 auto 0 0; background: #eef0ff; z-index: 0; }

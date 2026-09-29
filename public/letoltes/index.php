@@ -94,7 +94,7 @@ header('Content-Type: text/html; charset=utf-8');
     background-image: linear-gradient(to top, #eef0f4 1px, transparent 1px); background-size: 100% 25%; }
   .dash-bars i { flex: 1; background: #4f46e5; border-radius: 3px 3px 0 0; display: block; }
   .dash-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .dash-lists div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-lists > div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
   .dash-lists .h { font-weight: 700; font-size: .62rem; margin-bottom: 4px; }
   .dash-lists p { display: flex; justify-content: space-between; margin: 2px 0; font-size: .6rem; position: relative; padding: 2px 4px; border-radius: 4px; overflow: hidden; }
   .dash-lists p em { position: absolute; inset: 0 auto 0 0; background: #eef0ff; z-index: 0; }
