@@ -1,0 +1,8 @@
+{
+  "name": "myai-ui-tests",
+  "private": true,
+  "description": "Böngészős (Chrome) felületi tesztek a my-ai.hu appokhoz",
+  "dependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}

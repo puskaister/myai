@@ -7,3 +7,5 @@ dist/
 apps/*/vendor/
 apps/*/composer.lock
 dist-vendor.zip
+tests/ui/node_modules/
+tests/ui/package-lock.json

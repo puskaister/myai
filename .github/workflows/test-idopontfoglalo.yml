@@ -63,6 +63,14 @@ jobs:
           if grep -qE "\[object [A-Z]|>null<|>undefined<" dom.html; then echo "::error::megjelenítési hiba a foglalási oldalon"; grep -oE ".{80}(\[object [A-Z]|>null<|>undefined<).{40}" dom.html | head; exit 1; fi
           echo "A foglalási oldal hibátlanul renderelődik."
 
+      - name: Felületi teszt (Chrome) – belépés, fő folyamatok, nincs "null"/"[object"/JS-hiba
+        env:
+          BASE: http://127.0.0.1:8000
+          PASS: ujjelszo123
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js idopontfoglalo
+
       - name: PHP szerver napló (hiba esetén)
         if: failure()
         run: |
@@ -116,6 +124,13 @@ jobs:
           DB_PASS: tesztjelszo
           MOCK_LOG: ${{ runner.temp }}/mock.jsonl
         run: bash tests/chatbot.sh
+
+      - name: Felületi teszt (Chrome) – belépés, fő folyamatok, nincs "null"/"[object"/JS-hiba
+        env:
+          BASE: http://127.0.0.1:8002
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js chatbot
 
       - name: Deploy-csomag – az SDK zipből kicsomagolva is működik
         run: |
@@ -197,6 +212,13 @@ jobs:
           DB_PASS: tesztjelszo
         run: bash tests/latogatok.sh
 
+      - name: Felületi teszt (Chrome) – belépés, fő folyamatok, nincs "null"/"[object"/JS-hiba
+        env:
+          BASE: http://127.0.0.1:8003
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js latogatok
+
       - name: A letölthető csomag (zip) a vásárlónál is működik
         env:
           BASE: http://127.0.0.1:8004
@@ -268,6 +290,13 @@ jobs:
           DB_PASS: tesztjelszo
         run: MAIL_LOG="$RUNNER_TEMP/mails.log" bash tests/evfordulok.sh
 
+      - name: Felületi teszt (Chrome) – belépés, fő folyamatok, nincs "null"/"[object"/JS-hiba
+        env:
+          BASE: http://127.0.0.1:8005
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js evfordulok
+
       - name: Napló (hiba esetén)
         if: failure()
         run: |
@@ -316,6 +345,13 @@ jobs:
           BASE: http://127.0.0.1:8006
           DB_PASS: tesztjelszo
         run: bash tests/bevasarlolista.sh
+
+      - name: Felületi teszt (Chrome) – belépés, fő folyamatok, nincs "null"/"[object"/JS-hiba
+        env:
+          BASE: http://127.0.0.1:8006
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js bevasarlolista
 
       - name: Napló (hiba esetén)
         if: failure()
