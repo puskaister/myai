@@ -1,0 +1,6 @@
+{
+  "_leiras": "Az Évfordulók app telepítései. Közös adatbázis, saját táblanév-előtag (az appok között is egyedi). A napi emlékeztetőt a .github/workflows/evfordulok-cron.yml hívja meg minden telepítésnél.",
+  "instances": [
+    { "dir": "evfordulok", "prefix": "evf_" }
+  ]
+}

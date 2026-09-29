@@ -1,4 +1,4 @@
-name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló)
+name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló, évfordulók)
 
 # Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
 # A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
@@ -199,3 +199,50 @@ jobs:
         run: |
           cat stats-server.log
           echo "::error title=Látogatószámláló szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' stats-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  evfordulok:
+    name: Évfordulók – alkalmak, emlékeztető, naptár
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring, gd
+
+      - name: PHP és JS szintaxis
+        run: |
+          find apps/evfordulok -name '*.php' -print0 | xargs -0 -n1 php -l
+          for f in apps/evfordulok/assets/*.js apps/evfordulok/sw.js; do node --check "$f"; done
+
+      - name: Szerver indítása (a levelek naplófájlba mennek)
+        run: |
+          bash tests/set-evfordulok-config.sh
+          touch "$RUNNER_TEMP/mails.log"
+          TZ=Europe/Budapest php -d "sendmail_path=cat >> $RUNNER_TEMP/mails.log" -d opcache.enable_cli=0 -S 127.0.0.1:8005 -t apps/evfordulok > evf-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8005
+          DB_PASS: tesztjelszo
+        run: MAIL_LOG="$RUNNER_TEMP/mails.log" bash tests/evfordulok.sh
+
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: |
+          cat evf-server.log; tail -50 "$RUNNER_TEMP/mails.log"
+          echo "::error title=Évfordulók szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' evf-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

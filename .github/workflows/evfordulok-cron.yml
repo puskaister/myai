@@ -1,0 +1,35 @@
+name: Évfordulók – napi emlékeztető
+
+# Minden reggel meghívja az Évfordulók app emlékeztető-végpontját (cron.php)
+# a deploy/evfordulok.json minden telepítésénél. A kulcsot a DB_PASS secretből
+# számolja, ugyanúgy, mint az app (api/lib/settings.php: cron_key()).
+# Többszöri futás sem küld kétszer ugyanarról az alkalomról.
+on:
+  schedule:
+    - cron: '0 5 * * *'   # 05:00 UTC = 7:00 nyári / 6:00 téli magyar idő
+  workflow_dispatch:
+
+jobs:
+  remind:
+    name: Emlékeztető-kör
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cron.php meghívása minden telepítésnél
+        env:
+          DB_PASS: ${{ secrets.DB_PASS }}
+          SITE: http://my-ai.hu   # SSL beállítása után: https://my-ai.hu
+        run: |
+          fail=0
+          for row in $(jq -c '.instances[]' deploy/evfordulok.json); do
+            dir=$(jq -r .dir <<<"$row"); prefix=$(jq -r .prefix <<<"$row")
+            key=$(php -r 'echo substr(hash_hmac("sha256", "cron|" . $argv[1], getenv("DB_PASS")), 0, 32);' "$prefix")
+            echo "::add-mask::$key"
+            if out=$(curl -fsS --max-time 180 "$SITE/$dir/cron.php?key=$key"); then
+              echo "/$dir: $out"
+            else
+              echo "::error::/$dir emlékeztető-köre sikertelen"; fail=1
+            fi
+          done
+          exit $fail
