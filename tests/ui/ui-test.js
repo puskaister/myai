@@ -12,7 +12,8 @@ const BASE = process.env.BASE;
 const CHROME = process.env.CHROME || '/usr/bin/google-chrome';
 const PASS = process.env.PASS || 'titkos123';
 const EMAIL = process.env.EMAIL || 'admin@example.com';
-const BAD = /\[object [A-Za-z]+\]|\bnull\b|\bundefined\b|\bNaN\b/;
+// Önálló szóként (ékezetes betű is betűnek számít: a „nullázva” nem hiba).
+const BAD = /\[object [A-Za-z]+\]|(?<![\p{L}\p{N}_])(?:null|undefined|NaN)(?![\p{L}\p{N}_])/u;
 
 let fails = 0;
 const jsErrors = [];
