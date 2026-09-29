@@ -15,6 +15,7 @@ $apps = [
     'chatbot'        => ['README.md', 'api/config.php', 'composer.json', 'composer.lock', 'vendor'],
     'latogatok'      => ['README.md', 'api/config.php', 'TELEPITES.md'],
     'evfordulok'     => ['README.md', 'api/config.php'],
+    'bevasarlolista' => ['README.md', 'api/config.php'],
 ];
 
 function fail(string $msg): void {

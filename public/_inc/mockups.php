@@ -72,3 +72,26 @@ function mockup_stats(): void { ?>
   </div>
 </div>
 <?php }
+
+function mockup_bevasarlolista(): void { ?>
+<div class="phone-stage" aria-hidden="true">
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="bev-top"><b>Bevásárlólista</b><span>Heti bevásárlás · 👥 3</span></div>
+      <div class="bev-body">
+        <div class="bev-add"><span>Mit kell venni?</span><i>🎤</i></div>
+        <div class="bev-heard">„kenyér, tej meg két kiló alma”</div>
+        <div class="bev-cat">🥬 ZÖLDSÉG, GYÜMÖLCS</div>
+        <div class="bev-row"><s></s><b>Alma</b><em>2 kg</em></div>
+        <div class="bev-row"><s></s><b>Paradicsom</b><em>1 kg</em></div>
+        <div class="bev-cat">🥖 PÉKÁRU</div>
+        <div class="bev-row"><s></s><b>Kenyér</b></div>
+        <div class="bev-cat">🥛 TEJTERMÉK, TOJÁS</div>
+        <div class="bev-row"><s></s><b>Tej</b><em>2 l</em></div>
+        <div class="bev-row done"><s>✓</s><b>Tojás</b><em>10 db</em></div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php }

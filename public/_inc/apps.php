@@ -19,6 +19,13 @@ const APPS = [
         'mockup'  => 'mockup_evfordulok',
         'for'     => 'Család, barátok, ügyfél-születésnapok',
     ],
+    'bevasarlolista' => [
+        'name'    => 'Bevásárlólista',
+        'short'   => 'Mondd be, és felírja: „kenyér, tej meg két kiló alma”. Közös lista a családdal, bolti sorrendben.',
+        'badge'   => 'Új · szóbeli bevitel',
+        'mockup'  => 'mockup_bevasarlolista',
+        'for'     => 'Család, pár, lakótársak',
+    ],
     'latogatoszamlalo' => [
         'name'    => 'Látogatószámláló',
         'short'   => 'Saját webstatisztika: látogatók, eltöltött idő, kattintások — külső szolgáltatás nélkül, a saját tárhelyeden.',

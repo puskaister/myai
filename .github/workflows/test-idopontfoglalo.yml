@@ -1,4 +1,4 @@
-name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló, évfordulók)
+name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló, évfordulók, bevásárlólista)
 
 # Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
 # A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
@@ -167,14 +167,14 @@ jobs:
           find public -name '*.php' -print0 | xargs -0 -n1 php -l
           php -d display_errors=1 -S 127.0.0.1:8009 -t public > public-server.log 2>&1 &
           sleep 1
-          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/latogatoszamlalo/ /adatkezeles/; do
+          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /adatkezeles/; do
             code=$(curl -s -o page.html -w '%{http_code}' "http://127.0.0.1:8009$u")
             if [ "$code" != 200 ] || grep -qiE "fatal error|warning:|parse error|notice:|deprecated:" page.html; then
               echo "::error::$u hibás (HTTP $code)"; head -c 2000 page.html; exit 1
             fi
             echo "ok $u"
           done
-          test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 3 || { echo "::error::az Appok oldalon nem 3 kártya van"; exit 1; }
+          test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 4 || { echo "::error::az Appok oldalon nem 4 kártya van"; exit 1; }
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/letoltes/)" = 301 || { echo "::error::a /letoltes/ nem irányít át"; exit 1; }
 
       - name: Szerver indítása
@@ -263,3 +263,52 @@ jobs:
         run: |
           cat evf-server.log; tail -50 "$RUNNER_TEMP/mails.log"
           echo "::error title=Évfordulók szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' evf-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  bevasarlolista:
+    name: Bevásárlólista – magyar értelmező, listák, közös használat
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring, gd
+
+      - name: PHP és JS szintaxis
+        run: |
+          find apps/bevasarlolista -name '*.php' -print0 | xargs -0 -n1 php -l
+          for f in apps/bevasarlolista/assets/*.js apps/bevasarlolista/sw.js; do node --check "$f"; done
+
+      - name: Magyar szóbeli/szöveges bevitel értelmezése
+        run: node tests/bevasarlolista-parse.test.js
+
+      - name: Szerver indítása
+        run: |
+          bash tests/set-bevasarlolista-config.sh
+          php -d sendmail_path=/bin/true -d opcache.enable_cli=0 -S 127.0.0.1:8006 -t apps/bevasarlolista > bev-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8006
+          DB_PASS: tesztjelszo
+        run: bash tests/bevasarlolista.sh
+
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: |
+          cat bev-server.log
+          echo "::error title=Bevásárlólista szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[302\]' bev-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

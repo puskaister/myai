@@ -1,0 +1,6 @@
+{
+  "_leiras": "A Bevásárlólista app telepítései. Közös adatbázis, saját táblanév-előtag (az appok között is egyedi).",
+  "instances": [
+    { "dir": "bevasarlas", "prefix": "bev_" }
+  ]
+}

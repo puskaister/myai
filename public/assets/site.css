@@ -207,7 +207,7 @@ footer a { color: var(--muted); }
 .nav-links a[aria-current="page"] { color: var(--text); }
 .app-grid { display: grid; gap: 22px; grid-template-columns: 1fr; margin-top: 36px; }
 @media (min-width: 720px) { .app-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1040px) { .app-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1040px) { .app-grid { grid-template-columns: repeat(2, 1fr); gap: 26px; } }
 .app-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; box-shadow: var(--shadow); }
 .app-thumb { display: block; height: 270px; overflow: hidden; position: relative; text-decoration: none;
   background: radial-gradient(420px 220px at 70% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%), var(--bg-soft); border-bottom: 1px solid var(--border); }
@@ -242,3 +242,19 @@ footer a { color: var(--muted); }
 .req { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 .meta { color: var(--muted); font-size: .9rem; margin-top: 12px; }
 code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px 6px; border-radius: 6px; font-size: .88em; }
+
+/* Bevásárlólista telefon-makett */
+.bev-top { background: #16a34a; color: #fff; padding: 44px 16px 14px; }
+.bev-top b { display: block; font-size: 1rem; }
+.bev-top span { font-size: .72rem; opacity: .9; }
+.bev-body { padding: 12px 12px 18px; display: grid; gap: 6px; font-size: .74rem; }
+.bev-add { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 9px 10px; color: #9ca3af; }
+.bev-add i { font-style: normal; background: #16a34a; border-radius: 9px; width: 26px; height: 26px; display: grid; place-items: center; font-size: .8rem; }
+.bev-heard { background: #dcfce7; color: #166534; border-radius: 10px; padding: 7px 10px; font-weight: 700; font-size: .72rem; }
+.bev-cat { font-size: .58rem; font-weight: 800; letter-spacing: .06em; color: #6b7280; margin: 4px 2px 0; }
+.bev-row { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 7px 9px; }
+.bev-row s { text-decoration: none; width: 15px; height: 15px; border-radius: 50%; border: 2px solid #d1d5db; display: grid; place-items: center; font-size: .55rem; color: #fff; font-weight: 900; flex: 0 0 auto; }
+.bev-row b { flex: 1; font-weight: 650; font-size: .76rem; }
+.bev-row em { font-style: normal; font-size: .62rem; font-weight: 700; color: #6b7280; background: #f3f4f6; border-radius: 999px; padding: 2px 7px; }
+.bev-row.done s { background: #16a34a; border-color: #16a34a; }
+.bev-row.done b { text-decoration: line-through; color: #9ca3af; font-weight: 500; }
