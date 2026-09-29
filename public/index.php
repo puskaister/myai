@@ -177,7 +177,59 @@ header('Content-Type: text/html; charset=utf-8');
   .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
   .footer-btn { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
 
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .phone { transform: none; } }
+  @media (min-width: 640px) { .grid.four { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .grid.four { grid-template-columns: repeat(4, 1fr); } }
+
+  /* Évfordulók telefon-makett */
+  .phone.tilt-r { transform: rotate(3deg); }
+  .evf-top { background: #db2777; color: #fff; padding: 44px 16px 14px; }
+  .evf-top b { display: block; font-size: 1rem; }
+  .evf-top span { font-size: .72rem; opacity: .85; }
+  .evf-body { padding: 12px; display: grid; gap: 7px; font-size: .74rem; position: relative; padding-bottom: 20px; }
+  .evf-hl { display: flex; gap: 10px; align-items: center; background: #fce7f3; border: 1px solid #f9a8d4; border-radius: 12px; padding: 10px; }
+  .evf-hl .e { font-size: 24px; line-height: 1; }
+  .evf-hl .w { font-size: .6rem; font-weight: 800; letter-spacing: .06em; color: #db2777; }
+  .evf-hl .t { font-weight: 750; font-size: .86rem; }
+  .evf-hl .s { color: #6b7280; font-size: .66rem; }
+  .evf-m { font-size: .58rem; font-weight: 800; letter-spacing: .08em; color: #6b7280; margin: 4px 2px 0; }
+  .evf-row { display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; align-items: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 7px 8px; }
+  .evf-row .d { text-align: center; line-height: 1.05; }
+  .evf-row .d b { display: block; font-size: .9rem; }
+  .evf-row .d i { font-style: normal; font-size: .55rem; color: #6b7280; text-transform: uppercase; }
+  .evf-row .t { font-weight: 650; font-size: .72rem; }
+  .evf-row .s { color: #6b7280; font-size: .6rem; }
+  .evf-row .n { font-size: .58rem; font-weight: 700; color: #db2777; white-space: nowrap; }
+  .evf-row .n.far { color: #6b7280; }
+  .evf-fab { position: absolute; right: 12px; bottom: 10px; width: 34px; height: 34px; border-radius: 50%; background: #db2777; color: #fff; display: grid; place-items: center; font-size: 20px; font-weight: 600; box-shadow: 0 6px 14px rgba(219, 39, 119, .4); }
+
+  /* Látogatószámláló böngészőablak-makett */
+  .browser { width: 100%; max-width: 520px; margin: 0 auto; border-radius: 14px; overflow: hidden; background: #f5f6f8; color: #111827;
+    border: 1px solid #d9dce5; box-shadow: 0 30px 70px rgba(15, 23, 42, .2); font-size: .72rem; }
+  .browser-bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; background: #e9ebf1; border-bottom: 1px solid #d9dce5; }
+  .browser-bar i { width: 9px; height: 9px; border-radius: 50%; background: #c9ccd6; display: block; }
+  .browser-bar i:nth-child(1) { background: #f87171; } .browser-bar i:nth-child(2) { background: #fbbf24; } .browser-bar i:nth-child(3) { background: #34d399; }
+  .browser-bar span { flex: 1; margin-left: 8px; background: #fff; border-radius: 6px; padding: 3px 10px; color: #6b7280; font-size: .66rem; }
+  .dash-top { background: #4f46e5; color: #fff; padding: 10px 14px; font-weight: 750; font-size: .8rem; }
+  .dash-top small { display: block; font-weight: 400; opacity: .8; font-size: .62rem; }
+  .dash-body { padding: 12px; display: grid; gap: 10px; }
+  .dash-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .dash-tiles div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-tiles b { display: block; font-size: .92rem; font-variant-numeric: tabular-nums; }
+  .dash-tiles span { color: #6b7280; font-size: .56rem; }
+  .dash-chart { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px 6px; }
+  .dash-chart .h { font-weight: 700; font-size: .66rem; margin-bottom: 6px; }
+  .dash-bars { display: flex; align-items: flex-end; gap: 3px; height: 70px; border-bottom: 1px solid #e5e7eb;
+    background-image: linear-gradient(to top, #eef0f4 1px, transparent 1px); background-size: 100% 25%; }
+  .dash-bars i { flex: 1; background: #4f46e5; border-radius: 3px 3px 0 0; display: block; }
+  .dash-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .dash-lists div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-lists .h { font-weight: 700; font-size: .62rem; margin-bottom: 4px; }
+  .dash-lists p { display: flex; justify-content: space-between; margin: 2px 0; font-size: .6rem; position: relative; padding: 2px 4px; border-radius: 4px; overflow: hidden; }
+  .dash-lists p em { position: absolute; inset: 0 auto 0 0; background: #eef0ff; z-index: 0; }
+  .dash-lists p span { position: relative; z-index: 1; font-style: normal; }
+  .dash-lists p span:last-child { color: #6b7280; }
+  @media (max-width: 480px) { .dash-tiles { grid-template-columns: 1fr 1fr; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .phone, .phone.tilt-r { transform: none; } }
 </style>
 <script src="/stats/consent.js" data-privacy="/adatkezeles/" defer></script>
 <script src="/stats/t.js" defer></script>
@@ -337,6 +389,25 @@ header('Content-Type: text/html; charset=utf-8');
       </div>
 
       <div class="product">
+        <div class="phone-stage" aria-hidden="true">
+          <div class="phone tilt-r">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="evf-top"><b>Évfordulók</b><span>Fontos dátumok, időben</span></div>
+              <div class="evf-body">
+                <div class="evf-hl"><div class="e">🎂</div><div><div class="w">HOLNAP</div><div class="t">Anya születésnapja</div><div class="s">66. születésnap · szerda</div></div></div>
+                <div class="evf-m">OKTÓBER</div>
+                <div class="evf-row"><div class="d"><b>4</b><i>okt</i></div><div><div class="t">🌷 Ferenc névnapja</div><div class="s">Névnap · szombat</div></div><div class="n">5 nap múlva</div></div>
+                <div class="evf-row"><div class="d"><b>12</b><i>okt</i></div><div><div class="t">💍 Házassági évforduló</div><div class="s">10. évforduló · vasárnap</div></div><div class="n far">még 13 nap</div></div>
+                <div class="evf-row"><div class="d"><b>28</b><i>okt</i></div><div><div class="t">🎂 Bence</div><div class="s">8. születésnap · kedd</div></div><div class="n far">még 29 nap</div></div>
+                <div class="evf-m">NOVEMBER</div>
+                <div class="evf-row"><div class="d"><b>1</b><i>nov</i></div><div><div class="t">🕯️ Mindenszentek</div><div class="s">Emléknap · szombat</div></div><div class="n far">még 33 nap</div></div>
+                <div class="evf-fab">+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="product-card">
           <span class="badge">Elérhető · telefonra telepíthető</span>
           <h3>Soha többé elfelejtett születésnap</h3>
@@ -357,7 +428,9 @@ header('Content-Type: text/html; charset=utf-8');
           </div>
         </div>
 
-        <div class="grid two" style="margin-top:0">
+      </div>
+
+        <div class="grid four">
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></div>
             <h3>Email előtte napon</h3>
@@ -379,7 +452,6 @@ header('Content-Type: text/html; charset=utf-8');
             <p>Saját fiók, saját lista — más nem látja a te dátumaidat. Jelszóval védve.</p>
           </div>
         </div>
-      </div>
     </div>
   </section>
 
@@ -390,13 +462,7 @@ header('Content-Type: text/html; charset=utf-8');
           <span class="eyebrow">Ingyenesen letölthető</span>
           <h2>Látogatószámláló a saját weboldaladra</h2>
           <p class="lead" style="margin-top:14px">Lásd, hányan jönnek, honnan érkeznek, mennyi időt töltenek az oldaladon és mire kattintanak — külső szolgáltatás nélkül, minden adat a saját tárhelyeden marad.</p>
-          <div class="cta" style="margin-top:24px">
-            <a class="btn btn-primary" href="/letoltes/">Részletek és letöltés →</a>
-          </div>
-        </div>
-        <div class="product-card">
-          <span class="badge">Ingyenes</span>
-          <ul class="checks">
+          <ul class="checks" style="margin-top:22px">
             <li>Látogatók, oldalmegtekintések napi és óránkénti grafikonon</li>
             <li>Valódi eltöltött idő — csak amíg a lap látható</li>
             <li>Kattintások, hivatkozó oldalak, böngészők, eszközök</li>
@@ -404,6 +470,31 @@ header('Content-Type: text/html; charset=utf-8');
             <li>GDPR-barát: hozzájárulás-sáv, IP-anonimizálás, automatikus törlés</li>
             <li>Bármely PHP + MySQL tárhelyen, 5 perc alatt telepíthető</li>
           </ul>
+          <div class="cta">
+            <a class="btn btn-primary" href="/letoltes/">Részletek és letöltés →</a>
+          </div>
+        </div>
+        <div aria-hidden="true">
+          <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span>a-weboldalad.hu/stats</span></div>
+            <div class="dash-top">Látogatók<small>Utolsó 30 nap</small></div>
+            <div class="dash-body">
+              <div class="dash-tiles">
+                <div><b>1 284</b><span>látogató</span></div>
+                <div><b>3 902</b><span>megtekintés</span></div>
+                <div><b>1 p 42</b><span>átlagos idő</span></div>
+                <div><b>611</b><span>kattintás</span></div>
+              </div>
+              <div class="dash-chart">
+                <div class="h">Oldalmegtekintések naponta</div>
+                <div class="dash-bars"><i style="height:38%"></i><i style="height:52%"></i><i style="height:45%"></i><i style="height:61%"></i><i style="height:58%"></i><i style="height:30%"></i><i style="height:26%"></i><i style="height:49%"></i><i style="height:66%"></i><i style="height:72%"></i><i style="height:63%"></i><i style="height:80%"></i><i style="height:41%"></i><i style="height:35%"></i><i style="height:57%"></i><i style="height:74%"></i><i style="height:69%"></i><i style="height:88%"></i><i style="height:92%"></i><i style="height:47%"></i><i style="height:39%"></i></div>
+              </div>
+              <div class="dash-lists">
+                <div><div class="h">Honnan jöttek</div><p><em style="width:100%"></em><span>google.com</span><span>412</span></p><p><em style="width:61%"></em><span>facebook.com</span><span>251</span></p><p><em style="width:23%"></em><span>instagram.com</span><span>96</span></p></div>
+                <div><div class="h">Mire kattintottak</div><p><em style="width:100%"></em><span>Időpontfoglalás</span><span>188</span></p><p><em style="width:57%"></em><span>Telefonszám</span><span>107</span></p><p><em style="width:35%"></em><span>Árak</span><span>66</span></p></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

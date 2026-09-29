@@ -74,6 +74,35 @@ header('Content-Type: text/html; charset=utf-8');
   code { background: var(--soft); border: 1px solid var(--border); padding: 1px 6px; border-radius: 6px; font-size: .88em; }
   .req { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   .chip { padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); font-size: .88rem; color: var(--muted); font-weight: 600; }
+  /* Látogatószámláló böngészőablak-makett */
+  .browser { width: 100%; max-width: 520px; margin: 0 auto; border-radius: 14px; overflow: hidden; background: #f5f6f8; color: #111827;
+    border: 1px solid #d9dce5; box-shadow: 0 30px 70px rgba(15, 23, 42, .2); font-size: .72rem; }
+  .browser-bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; background: #e9ebf1; border-bottom: 1px solid #d9dce5; }
+  .browser-bar i { width: 9px; height: 9px; border-radius: 50%; background: #c9ccd6; display: block; }
+  .browser-bar i:nth-child(1) { background: #f87171; } .browser-bar i:nth-child(2) { background: #fbbf24; } .browser-bar i:nth-child(3) { background: #34d399; }
+  .browser-bar span { flex: 1; margin-left: 8px; background: #fff; border-radius: 6px; padding: 3px 10px; color: #6b7280; font-size: .66rem; }
+  .dash-top { background: #4f46e5; color: #fff; padding: 10px 14px; font-weight: 750; font-size: .8rem; }
+  .dash-top small { display: block; font-weight: 400; opacity: .8; font-size: .62rem; }
+  .dash-body { padding: 12px; display: grid; gap: 10px; }
+  .dash-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .dash-tiles div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-tiles b { display: block; font-size: .92rem; font-variant-numeric: tabular-nums; }
+  .dash-tiles span { color: #6b7280; font-size: .56rem; }
+  .dash-chart { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px 6px; }
+  .dash-chart .h { font-weight: 700; font-size: .66rem; margin-bottom: 6px; }
+  .dash-bars { display: flex; align-items: flex-end; gap: 3px; height: 70px; border-bottom: 1px solid #e5e7eb;
+    background-image: linear-gradient(to top, #eef0f4 1px, transparent 1px); background-size: 100% 25%; }
+  .dash-bars i { flex: 1; background: #4f46e5; border-radius: 3px 3px 0 0; display: block; }
+  .dash-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .dash-lists div { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 7px 8px; }
+  .dash-lists .h { font-weight: 700; font-size: .62rem; margin-bottom: 4px; }
+  .dash-lists p { display: flex; justify-content: space-between; margin: 2px 0; font-size: .6rem; position: relative; padding: 2px 4px; border-radius: 4px; overflow: hidden; }
+  .dash-lists p em { position: absolute; inset: 0 auto 0 0; background: #eef0ff; z-index: 0; }
+  .dash-lists p span { position: relative; z-index: 1; font-style: normal; }
+  .dash-lists p span:last-child { color: #6b7280; }
+  @media (max-width: 480px) { .dash-tiles { grid-template-columns: 1fr 1fr; } }
+  .hero-grid { display: grid; gap: 40px; align-items: center; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 1fr; } }
   footer { border-top: 1px solid var(--border); padding: 24px 0 40px; color: var(--muted); font-size: .9rem; }
   button.link { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
 </style>
@@ -85,7 +114,8 @@ header('Content-Type: text/html; charset=utf-8');
 
 <main>
   <section class="hero">
-    <div class="wrap">
+    <div class="wrap hero-grid">
+      <div>
       <span class="eyebrow">Ingyenes letöltés</span>
       <h1>Látogatószámláló a saját weboldaladra</h1>
       <p class="lead">Lásd, hányan jönnek, honnan érkeznek, mennyi időt töltenek az oldaladon és mire kattintanak — külső szolgáltatás nélkül, minden adat a saját tárhelyeden marad.</p>
@@ -98,6 +128,29 @@ header('Content-Type: text/html; charset=utf-8');
       <?php else: ?>
         <p class="meta">A csomag hamarosan elérhető.</p>
       <?php endif; ?>
+      </div>
+        <div aria-hidden="true">
+          <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span>a-weboldalad.hu/stats</span></div>
+            <div class="dash-top">Látogatók<small>Utolsó 30 nap</small></div>
+            <div class="dash-body">
+              <div class="dash-tiles">
+                <div><b>1 284</b><span>látogató</span></div>
+                <div><b>3 902</b><span>megtekintés</span></div>
+                <div><b>1 p 42</b><span>átlagos idő</span></div>
+                <div><b>611</b><span>kattintás</span></div>
+              </div>
+              <div class="dash-chart">
+                <div class="h">Oldalmegtekintések naponta</div>
+                <div class="dash-bars"><i style="height:38%"></i><i style="height:52%"></i><i style="height:45%"></i><i style="height:61%"></i><i style="height:58%"></i><i style="height:30%"></i><i style="height:26%"></i><i style="height:49%"></i><i style="height:66%"></i><i style="height:72%"></i><i style="height:63%"></i><i style="height:80%"></i><i style="height:41%"></i><i style="height:35%"></i><i style="height:57%"></i><i style="height:74%"></i><i style="height:69%"></i><i style="height:88%"></i><i style="height:92%"></i><i style="height:47%"></i><i style="height:39%"></i></div>
+              </div>
+              <div class="dash-lists">
+                <div><div class="h">Honnan jöttek</div><p><em style="width:100%"></em><span>google.com</span><span>412</span></p><p><em style="width:61%"></em><span>facebook.com</span><span>251</span></p><p><em style="width:23%"></em><span>instagram.com</span><span>96</span></p></div>
+                <div><div class="h">Mire kattintottak</div><p><em style="width:100%"></em><span>Időpontfoglalás</span><span>188</span></p><p><em style="width:57%"></em><span>Telefonszám</span><span>107</span></p><p><em style="width:35%"></em><span>Árak</span><span>66</span></p></div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </section>
 
