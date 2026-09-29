@@ -11,8 +11,8 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
 if (!app_installed()) {
-    http_response_code(503);
-    echo json_encode(['error' => 'not installed']);
+    // telepítés előtt nincs mit küldeni — ne jelezzen hibát az ütemezőnek
+    echo json_encode(['skipped' => 'not installed']);
     exit;
 }
 if (!hash_equals(cron_key(), (string) ($_GET['key'] ?? ''))) {
