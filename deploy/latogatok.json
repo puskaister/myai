@@ -1,0 +1,6 @@
+{
+  "_leiras": "A látogatószámláló telepítései. Közös adatbázis, saját táblanév-előtag (az appok között is egyedi). A követő szkript: <script src=\"https://my-ai.hu/<dir>/t.js\" defer></script>",
+  "instances": [
+    { "dir": "stats", "prefix": "stat_" }
+  ]
+}

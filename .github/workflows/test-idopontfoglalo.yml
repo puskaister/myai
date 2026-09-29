@@ -1,4 +1,4 @@
-name: Appok tesztjei (időpontfoglaló, chatbot)
+name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló)
 
 # Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
 # A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
@@ -114,3 +114,49 @@ jobs:
         run: |
           cat chatbot-server.log mock.log
           echo "::error title=Chatbot szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[302\]' chatbot-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  latogatok:
+    name: Látogatószámláló – követés + irányítópult
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring
+
+      - name: PHP és JS szintaxis
+        run: |
+          find apps/latogatok -name '*.php' -print0 | xargs -0 -n1 php -l
+          for f in apps/latogatok/assets/*.js apps/latogatok/t.js; do node --check "$f"; done
+
+      - name: Szerver indítása
+        run: |
+          bash tests/set-latogatok-config.sh
+          php -d sendmail_path=/bin/true -d opcache.enable_cli=0 -S 127.0.0.1:8003 -t apps/latogatok > stats-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8003
+          DB_PASS: tesztjelszo
+        run: bash tests/latogatok.sh
+
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: |
+          cat stats-server.log
+          echo "::error title=Látogatószámláló szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' stats-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

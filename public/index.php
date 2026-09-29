@@ -167,6 +167,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .phone { transform: none; } }
 </style>
+<script src="/stats/t.js" defer></script>
 </head>
 <body>
 

@@ -13,6 +13,7 @@ $dist = "$root/dist";
 $apps = [
     'idopontfoglalo' => ['README.md', 'api/config.php'],
     'chatbot'        => ['README.md', 'api/config.php', 'composer.json', 'composer.lock'],
+    'latogatok'      => ['README.md', 'api/config.php'],
 ];
 
 function fail(string $msg): void {
@@ -86,7 +87,7 @@ foreach ($apps as $app => $skip) {
             $config = [
                 'db' => $db,
                 'prefix' => $prefix,
-                'session_name' => ($app === 'chatbot' ? 'chatbot_' : 'idopont_') . rtrim($prefix, '_'),
+                'session_name' => ($app === 'idopontfoglalo' ? 'idopont' : $app) . '_' . rtrim($prefix, '_'),
                 'smtp' => $smtp,
             ];
             if ($app === 'chatbot') $config['anthropic'] = ['api_key' => $anthropicKey, 'base_url' => ''];
