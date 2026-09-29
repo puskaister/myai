@@ -227,6 +227,8 @@ jobs:
         run: |
           find apps/evfordulok -name '*.php' -print0 | xargs -0 -n1 php -l
           for f in apps/evfordulok/assets/*.js apps/evfordulok/sw.js; do node --check "$f"; done
+          # az el() segédfüggvény mélyen lapítsa ki a gyerekeket (egymásba ágyazott listák)
+          if grep -rn "children.flat()" apps/*/assets/*.js; then echo "::error::children.flat() → children.flat(Infinity)"; exit 1; fi
 
       - name: Szerver indítása (a levelek naplófájlba mennek)
         run: |
