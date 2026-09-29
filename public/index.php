@@ -276,7 +276,7 @@ header('Content-Type: text/html; charset=utf-8');
   <section id="appok" class="soft">
     <div class="wrap">
       <div class="center">
-        <span class="eyebrow">Első appunk</span>
+        <span class="eyebrow">Appjaink</span>
         <h2>Online időpontfoglaló</h2>
         <p class="lead">Gumiszerviznek, fodrászatnak, rendelőnek, szervíznek — bárkinek, aki időpontra dolgozik. Az ügyfél pár koppintással foglal, te pedig egy helyen látsz mindent.</p>
       </div>
@@ -328,7 +328,62 @@ header('Content-Type: text/html; charset=utf-8');
     </div>
   </section>
 
-  <section id="letoltes">
+  <section id="evfordulok">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Új app</span>
+        <h2>Évfordulók</h2>
+        <p class="lead">Születésnapok, névnapok, évfordulók és minden fontos dátum egy helyen — előtte napon emailben szólunk, a telefonodon pedig mindig látod, mi következik.</p>
+      </div>
+
+      <div class="product">
+        <div class="product-card">
+          <span class="badge">Elérhető · telefonra telepíthető</span>
+          <h3>Soha többé elfelejtett születésnap</h3>
+          <p>Rögzítsd egyszer, és minden évben időben szól. Telefonon úgy működik, mint egy app, számítógépen böngészőből.</p>
+          <ul class="checks">
+            <li>Egyszeri, éves és havi alkalmak — a február 29-ét is jól kezeli</li>
+            <li>Email-emlékeztető előtte napon (vagy aznap, pár nappal, egy héttel előtte)</li>
+            <li>Ma és holnap kiemelve, a következő 12 hónap egy pillantással</li>
+            <li>Kiírja, hányadik születésnap vagy évforduló következik</li>
+            <li>Megjegyzés minden alkalomhoz, pl. ajándékötlet</li>
+            <li>Feliratkozás a telefon naptárában is, emlékeztetővel</li>
+          </ul>
+          <div class="cta">
+            <a class="btn btn-primary" href="/evfordulok/">App megnyitása</a>
+          </div>
+          <div class="uses" aria-label="Kinek ajánljuk">
+            <span class="chip">Család</span><span class="chip">Barátok</span><span class="chip">Párok</span><span class="chip">Ügyfél-születésnapok</span><span class="chip">Munkatársak</span><span class="chip">Egyesületek</span>
+          </div>
+        </div>
+
+        <div class="grid two" style="margin-top:0">
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></div>
+            <h3>Email előtte napon</h3>
+            <p>Reggel megjön a levél: holnap van anyukád születésnapja — még van idő virágot venni.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div>
+            <h3>A telefonodon, mint egy app</h3>
+            <p>Saját ikonnal a kezdőképernyőn; az ikonon a jelvény mutatja, ha ma vagy holnap van valami.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+            <h3>A naptáradban is</h3>
+            <p>Egy személyes linkkel minden alkalom megjelenik az iPhone, a Google vagy az Outlook naptárában.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <h3>Mindenkinek a sajátja</h3>
+            <p>Saját fiók, saját lista — más nem látja a te dátumaidat. Jelszóval védve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="letoltes" class="soft">
     <div class="wrap">
       <div class="product">
         <div>
