@@ -266,7 +266,7 @@
   function viewSettings() {
     const s = state.settings;
     const o = s.options;
-    const snippet = '<script src="' + s.base_url + '/t.js" defer></script>';
+    const snippet = '<script src="' + s.base_url + '/consent.js" data-privacy="/adatkezeles/" defer></script>\n<script src="' + s.base_url + '/t.js" defer></script>';
     const ips = el('textarea', { name: 'ips', placeholder: 'Soronként egy IP-cím' }, o.exclude_ips.join('\n'));
     const f = el('form', { class: 'card form' },
       el('h2', {}, 'Mérés'),
@@ -290,8 +290,8 @@
       el('div', {},
         el('div', { class: 'card form' },
           el('h2', {}, 'Beillesztés weboldalba'),
-          el('p', { class: 'muted', style: 'margin:0' }, 'Tedd ezt a sort minden mérni kívánt oldal <head> részébe. Más domainen lévő oldalakon is működik.'),
-          el('div', { class: 'note', style: 'font-family:ui-monospace,monospace;font-size:.85rem;word-break:break-all;user-select:all' }, snippet)),
+          el('p', { class: 'muted', style: 'margin:0' }, 'Tedd ezt a két sort minden mérni kívánt oldal <head> részébe. Az első a hozzájárulás-sáv (a data-privacy az adatkezelési tájékoztató címe) — mérés csak elfogadás után indul. Ha az oldal maga kér hozzájárulást, az elsőt hagyd el, a másodikhoz add hozzá: data-consent="off".'),
+          el('div', { class: 'note', style: 'font-family:ui-monospace,monospace;font-size:.85rem;word-break:break-all;user-select:all;white-space:pre-wrap' }, snippet)),
         el('div', { class: 'card form' },
           el('h2', {}, 'Adatok törlése'),
           el('p', { class: 'muted', style: 'margin:0' }, 'Minden eddigi látogatás és kattintás végleges törlése.'),

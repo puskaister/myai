@@ -158,7 +158,7 @@ jobs:
       - name: PHP és JS szintaxis
         run: |
           find apps/latogatok -name '*.php' -print0 | xargs -0 -n1 php -l
-          for f in apps/latogatok/assets/*.js apps/latogatok/t.js; do node --check "$f"; done
+          for f in apps/latogatok/assets/*.js apps/latogatok/t.js apps/latogatok/consent.js; do node --check "$f"; done
 
       - name: Szerver indítása
         run: |

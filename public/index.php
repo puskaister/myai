@@ -164,9 +164,12 @@ header('Content-Type: text/html; charset=utf-8');
   footer { padding: 36px 0 calc(env(safe-area-inset-bottom) + 36px); color: var(--muted); font-size: .9rem; border-top: 1px solid var(--border); }
   footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   footer a { color: var(--muted); }
+  .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .footer-btn { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
 
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .phone { transform: none; } }
 </style>
+<script src="/stats/consent.js" data-privacy="/adatkezeles/" defer></script>
 <script src="/stats/t.js" defer></script>
 </head>
 <body>
@@ -377,7 +380,11 @@ header('Content-Type: text/html; charset=utf-8');
 <footer>
   <div class="wrap">
     <span>© <?= date('Y') ?> <?= $e($site['name']) ?></span>
-    <a href="<?= $e($site['demoUrl']) ?>">Időpontfoglaló demó</a>
+    <span class="footer-links">
+      <a href="<?= $e($site['demoUrl']) ?>">Időpontfoglaló demó</a>
+      <a href="/adatkezeles/">Adatkezelési tájékoztató</a>
+      <button type="button" class="footer-btn" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button>
+    </span>
   </div>
 </footer>
 

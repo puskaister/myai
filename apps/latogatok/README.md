@@ -10,7 +10,16 @@ Az irányítópult (`/stats/`) ezeket mutatja:
 - toplisták: oldalak, hivatkozók, kattintások, böngészők, rendszerek, eszközök
 - a látogatások listája a részletekkel és a látogató útjával
 
-**Beillesztés:** `<script src="https://my-ai.hu/stats/t.js" defer></script>` a mért oldalak `<head>` részébe.
+**Beillesztés** a mért oldalak `<head>` részébe:
+
+```html
+<script src="https://my-ai.hu/stats/consent.js" data-privacy="/adatkezeles/" defer></script>
+<script src="https://my-ai.hu/stats/t.js" defer></script>
+```
+
+- **Hozzájárulás-sáv (`consent.js`):** a mérés csak az „Elfogadom” után indul. Elutasítás vagy visszavonás esetén nincs mérés, és a tárolt azonosító törlődik.
+- **Beállítás módosítása:** `myaiConsent.open()`.
+- **Ha az oldal maga kezeli a hozzájárulást:** a `consent.js` elhagyható, és a `t.js`-hez `data-consent="off"` adható.
 
 - A mérés sütit nem használ. A visszatérő látogató felismeréséhez egy véletlen azonosítót tesz a `localStorage`-ba.
 - A robotokat kiszűri.
@@ -18,4 +27,4 @@ Az irányítópult (`/stats/`) ezeket mutatja:
 - Az IP-címenkénti óránkénti keret 300 megtekintés.
 - Beállítható: IP-anonimizálás, kizárt IP-címek (pl. a saját géped) és az adatmegőrzés ideje (alapból 395 nap).
 
-**Adatvédelem:** az IP-cím és a látogatóazonosító személyes adatnak minősül (GDPR). Az adatkezelési tájékoztatóban szerepeljen a mérés. Szigorúbb értelmezés szerint a `localStorage`-azonosító használatához hozzájárulás (süti-sáv) kell.
+**Adatvédelem:** az IP-cím és a látogatóazonosító személyes adat (GDPR). A my-ai.hu tájékoztatója a `public/adatkezeles/index.php` fájlban van.

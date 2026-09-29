@@ -21,6 +21,7 @@ check "telepítés előtt átirányít" '[ "$(curl -s -o /dev/null -w "%{http_co
 out=$(curl -s "$BASE/install.php" -d site=teszt.hu -d name=Admin -d email=admin@example.com -d password=titkos123 -d password2=titkos123 --data-urlencode dbpass="$DB_PASS")
 check "telepítés sikerül" 'grep -q "Kész!" <<<"$out"'
 check "követő szkript elérhető" 'curl -s "$BASE/t.js" | grep -q "track.php"'
+check "hozzájárulás-sáv elérhető, a követő megvárja" 'curl -s "$BASE/consent.js" | grep -q "myai-consent" && curl -s "$BASE/t.js" | grep -q "myai_consent"'
 
 echo "== Követés"
 r=$(track "$CHROME" '{"t":"view","v":"abcdefgh12345678","h":"teszt.hu","p":"/arak","ti":"Árak","r":"https://www.google.com/search?q=x","s":"1920x1080","l":"hu-HU"}')
