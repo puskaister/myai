@@ -110,7 +110,7 @@ try {
 
     switch ($route) {
         case 'config':
-            respond(['app_name' => get_options()['app_name'], 'allow_register' => (bool) get_options()['allow_register'],
+            respond(['app_name' => get_options()['app_name'], 'allow_register' => (bool) get_options()['allow_register'], 'base_url' => app_base_url(),
                      'categories' => CATEGORIES, 'recurrences' => RECURRENCES]);
 
         case 'login': {

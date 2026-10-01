@@ -25,7 +25,7 @@ jobs:
       - name: cron.php meghívása minden telepítésnél
         env:
           DB_PASS: ${{ secrets.DB_PASS }}
-          SITE: http://my-ai.hu   # SSL beállítása után: https://my-ai.hu
+          SITE: https://my-ai.hu
         run: |
           fail=0
           for row in $(jq -c '.instances[]' deploy/evfordulok.json); do
