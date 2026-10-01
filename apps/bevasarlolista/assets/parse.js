@@ -62,6 +62,27 @@
     return null;
   }
 
+  // Vessző nélkül diktált felsorolás szétbontása ismert tételekre:
+  // "kenyér tej vaj" → [kenyér, tej, vaj]. Csak akkor bont, ha MINDEN szó (vagy
+  // szókapcsolat, pl. "darált hús") ismert szótári tétel — különben null.
+  function segment(tokens, lexicon) {
+    const out = [];
+    let i = 0;
+    while (i < tokens.length) {
+      let found = null;
+      for (let len = Math.min(3, tokens.length - i); len >= 1 && !found; len--) {
+        const phrase = tokens.slice(i, i + len).map((t) => t.toLowerCase().replace(/[.!?]+$/, ''));
+        const last = baseForm(phrase[len - 1], lexicon) || phrase[len - 1];
+        const key = deaccent([...phrase.slice(0, -1), last].join(' '));
+        if (lexicon.has(key)) found = [lexicon.get(key), len];
+      }
+      if (!found) return null;
+      out.push(found[0]);
+      i += found[1];
+    }
+    return out;
+  }
+
   function parseChunk(chunk, lexicon) {
     let s = chunk.trim().replace(/^[-–•*]\s*/, '');
     let prev;
@@ -91,6 +112,12 @@
     }
     if (!tokens.length) return null;
 
+    // több, vessző nélkül egymás után mondott ismert tétel? ("kenyér tej vaj")
+    if (tokens.length >= 2) {
+      const parts = segment(tokens, lexicon);
+      if (parts && parts.length >= 2) return parts.map((n, i) => ({ name: cap(n), qty: i === 0 ? qty : '' }));
+    }
+
     // az utolsó szó alapformája (tárgyeset: "almát" → "alma")
     const last = tokens[tokens.length - 1];
     const base = baseForm(last.replace(/[.!?]+$/, ''), lexicon);
@@ -105,7 +132,8 @@
     const out = [];
     for (const chunk of String(text || '').replace(/[!?]+/g, ',').replace(/\.(\s|$)/g, ',$1').split(SPLIT)) {
       const item = chunk && parseChunk(chunk, lexicon);
-      if (item) out.push(item);
+      if (Array.isArray(item)) out.push(...item);
+      else if (item) out.push(item);
     }
     return out;
   }

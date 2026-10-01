@@ -16,6 +16,13 @@ const cases = [
   ['2 doboz meggy', [['Meggy', '2 doboz']]],
   ['pár banánt', [['Banán', 'pár']]],
   ['fogkrém\nsampon\nmosogatószer', [['Fogkrém', ''], ['Sampon', ''], ['Mosogatószer', '']]],
+  // vessző nélküli diktálás (telefon billentyűzet)
+  ['kenyér tej meg két kiló alma', [['Kenyér', ''], ['Tej', ''], ['Alma', '2 kg']]],
+  ['vaj sajt tojás', [['Vaj', ''], ['Sajt', ''], ['Tojás', '']]],
+  ['darált hús hagyma paradicsom', [['Darált hús', ''], ['Hagyma', ''], ['Paradicsom', '']]],
+  ['két liter tej kenyér', [['Tej', '2 l'], ['Kenyér', '']]],
+  ['csirkemell filé', [['Csirkemell filé', '']]],
+  ['valami különleges sajt', [['Valami különleges sajt', '']]],
   ['', []],
 ];
 

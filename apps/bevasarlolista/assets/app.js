@@ -311,12 +311,34 @@
   // ---------------------------------------------------------------- szóbeli bevitel
   const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+  // Ha a beépített hangfelismerés itt nem használható: útmutató a billentyűzet
+  // diktálás-gombjához (az mindenhol működik, a szöveget ugyanúgy tételekre bontjuk).
+  function dictationHelp(reason) {
+    const steps = isIOS
+      ? [el('li', {}, 'Koppints a „Mit kell venni?” mezőbe.'),
+        el('li', {}, 'A billentyűzet jobb alsó sarkában koppints a 🎤 mikrofonra, és mondd be: „kenyér, tej meg két kiló alma”.'),
+        el('li', {}, 'Koppints a „Kész” / ↵ gombra — a tételek egyenként felkerülnek a listára.'),
+        el('li', { class: 'muted' }, 'Ha nincs mikrofon a billentyűzeten: Beállítások → Általános → Billentyűzet → „Diktálás engedélyezése”.')]
+      : [el('li', {}, 'Koppints a „Mit kell venni?” mezőbe.'),
+        el('li', {}, 'A billentyűzeten koppints a 🎤 mikrofonra, és mondd be a tételeket.'),
+        el('li', {}, 'Koppints a ↵ gombra — a tételek egyenként felkerülnek a listára.')];
+    const close = modal('Szóbeli bevitel', el('div', {},
+      el('p', {}, reason),
+      el('ol', { style: 'padding-left:20px;margin:10px 0 14px' }, steps),
+      isIOS && isStandalone ? el('p', { class: 'muted', style: 'font-size:.9rem' }, 'Tipp: Safariban (nem a kezdőképernyős appból) megnyitva a zöld 🎤 gomb is működik.') : null,
+      el('button', { class: 'btn block', type: 'button', onclick: () => { close(); document.getElementById('add-input')?.focus(); } }, 'Rendben, diktálok')));
+  }
+
   function startVoice() {
     if (!Recognition) {
-      const close = modal('Szóbeli bevitel', el('div', {},
-        el('p', {}, 'Ez a böngésző nem támogatja a beépített hangfelismerést. Használd a telefonod billentyűzetén a mikrofon (diktálás) gombot: koppints a beviteli mezőbe, és mondd be a tételeket — pl. „kenyér, tej meg két kiló alma”.'),
-        el('button', { class: 'btn block', type: 'button', onclick: () => { close(); document.getElementById('add-input')?.focus(); } }, 'Rendben')));
-      return;
+      return dictationHelp('Ez a böngésző nem támogatja a beépített hangfelismerést, de a billentyűzet diktálás-gombjával ugyanígy bemondhatod a tételeket:');
+    }
+    // A kezdőképernyőre telepített iPhone-appokban az Apple nem engedi a beépített hangfelismerést.
+    if (isIOS && isStandalone) {
+      return dictationHelp('iPhone-on a kezdőképernyőre telepített appban az Apple nem engedi a beépített hangfelismerést — a billentyűzet diktálás-gombja viszont működik:');
     }
     const rec = new Recognition();
     rec.lang = 'hu-HU';
@@ -347,10 +369,18 @@
     };
     rec.onerror = (ev) => {
       if (cancelled) return;
-      const msg = { 'not-allowed': 'A mikrofon le van tiltva. Engedélyezd a böngésző beállításaiban.', 'service-not-allowed': 'A hangfelismerés itt nem érhető el — használd a billentyűzet diktálás gombját.', 'no-speech': 'Nem hallottam semmit — próbáld újra.', network: 'A hangfelismeréshez internet kell.', 'audio-capture': 'Nem találok mikrofont.' }[ev.error] || 'A hangfelismerés nem sikerült.';
       cancelled = true;
       close();
-      toast(msg, true);
+      if (ev.error === 'service-not-allowed') {
+        return dictationHelp(isIOS
+          ? 'A Safari hangfelismeréséhez be kell kapcsolni a Siri / Diktálás funkciót (Beállítások → Általános → Billentyűzet → „Diktálás engedélyezése”). Addig a billentyűzet diktálás-gombjával is bemondhatod a tételeket:'
+          : 'A böngésző itt nem engedi a beépített hangfelismerést, de a billentyűzet diktálás-gombjával ugyanígy bemondhatod a tételeket:');
+      }
+      if (ev.error === 'not-allowed') {
+        return toast(isIOS ? 'A mikrofon le van tiltva: Beállítások → Safari → Mikrofon → „Engedélyezés”, majd próbáld újra.' : 'A mikrofon le van tiltva — a címsor melletti lakat ikonnál engedélyezd, majd próbáld újra.', true);
+      }
+      const msg = { 'no-speech': 'Nem hallottam semmit — próbáld újra.', network: 'A hangfelismeréshez internet kell.', 'audio-capture': 'Nem találok mikrofont.', aborted: '' }[ev.error] ?? 'A hangfelismerés nem sikerült (' + ev.error + ').';
+      if (msg) toast(msg, true);
     };
     rec.onend = () => {
       if (cancelled) return;
