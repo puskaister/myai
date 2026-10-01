@@ -6,8 +6,14 @@ name: Évfordulók – napi emlékeztető
 # Többszöri futás sem küld kétszer ugyanarról az alkalomról.
 on:
   schedule:
-    - cron: '0 5 * * *'   # 05:00 UTC = 7:00 nyári / 6:00 téli magyar idő
+    # Két időpont: a GitHub az ütemezett futásokat gyakran órákkal késlelteti vagy kihagyja.
+    # A dupla futás nem gond — egy alkalomról soha nem megy két levél.
+    - cron: '0 5 * * *'    # 05:00 UTC = 7:00 nyári / 6:00 téli magyar idő
+    - cron: '30 7 * * *'   # tartalék
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/evfordulok-cron.yml']   # a workflow módosításakor egyszer lefut (ellenőrzés)
 
 jobs:
   remind:
@@ -28,6 +34,8 @@ jobs:
             echo "::add-mask::$key"
             if out=$(curl -fsS --max-time 180 "$SITE/$dir/cron.php?key=$key"); then
               echo "/$dir: $out"
+              # az eredmény bejelentkezés nélkül is látható (annotáció)
+              echo "::notice title=Évfordulók /$dir::$(jq -r '"\(.date // "–"): \(.emails // 0) levél elküldve, \(.occasions // 0) alkalomról, \(.failed // 0) sikertelen\(if (.errors // []) | length > 0 then " — " + ((.errors // []) | join("; ")) else "" end)\(if .skipped then " (" + .skipped + ")" else "" end)"' <<<"$out")"
             else
               echo "::error::/$dir emlékeztető-köre sikertelen"; fail=1
             fi

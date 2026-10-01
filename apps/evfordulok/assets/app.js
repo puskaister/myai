@@ -285,6 +285,18 @@
   }
 
   // ---------------------------------------------------------------- beállítások
+  // Teszt levél a saját címre — megmutatja, elment-e, milyen úton, és ha nem, miért.
+  const testBox = el('div', { 'aria-live': 'polite' });
+  async function testEmail() {
+    fill(testBox, el('p', { class: 'muted', style: 'margin:0' }, 'Küldés…'));
+    try {
+      const r = await api('account/test-email', {}, {});
+      fill(testBox, r.ok
+        ? el('p', { class: 'ok', style: 'margin:0' }, 'Elküldve ide: ' + r.to + ' (' + r.transport + '). Ha 1–2 percen belül nem érkezik meg, nézd meg a Spam / Promóciók mappát is.')
+        : el('p', { class: 'alert', style: 'margin:0' }, 'Nem sikerült elküldeni (' + r.transport + '). ' + (r.error || '')));
+    } catch (e) { fill(testBox); fail(e); }
+  }
+
   function viewSettings() {
     const u = state.user;
     const acc = el('form', { class: 'card form' },
@@ -292,7 +304,10 @@
       field('Neved', el('input', { name: 'name', required: true, value: u.name })),
       field('Email (ide jönnek az emlékeztetők)', el('input', { name: 'email', type: 'email', required: true, value: u.email })),
       el('label', { class: 'check' }, el('input', { type: 'checkbox', name: 'notify', checked: u.notify }), 'Email-emlékeztetők küldése'),
-      el('button', { class: 'btn', type: 'submit' }, 'Mentés'));
+      el('div', { class: 'row' },
+        el('button', { class: 'btn', type: 'submit' }, 'Mentés'),
+        el('button', { class: 'btn ghost', type: 'button', onclick: testEmail }, 'Teszt email küldése')),
+      testBox);
     acc.addEventListener('submit', async (e) => {
       e.preventDefault();
       try { state.user = (await api('account/save', {}, { name: acc.name.value, email: acc.email.value, notify: acc.notify.checked })).user; toast('Mentve'); render(); } catch (err) { fail(err); }
@@ -338,6 +353,13 @@
     return el('button', { class: 'btn', type: 'button', onclick: async () => { deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall = null; render(); } }, 'Telepítés');
   }
 
+  function lastRun(r) {
+    if (!r) return el('p', { class: 'note', style: 'margin:0' }, 'Az emlékeztető-kör még nem futott le.');
+    return el('div', { class: r.failed ? 'alert' : 'note', style: 'margin:0' },
+      'Legutóbbi futás: ' + r.at + ' · ' + r.emails + ' levél elküldve (' + r.occasions + ' alkalomról)' + (r.failed ? ' · ' + r.failed + ' sikertelen' : ''),
+      (r.errors || []).map((e) => el('div', { style: 'margin-top:4px;font-size:.88rem' }, e)));
+  }
+
   function adminCard() {
     const box = el('div', { class: 'card form' }, el('h2', {}, 'Felhasználók (admin)'), el('p', { class: 'muted' }, 'Betöltés…'));
     api('admin/users').then((d) => {
@@ -368,7 +390,9 @@
         el('hr'), el('h3', {}, 'Új felhasználó'), add,
         el('hr'), el('h3', {}, 'Beállítások'), opts,
         el('hr'), el('h3', {}, 'Napi emlékeztető-kör'),
-        el('p', { class: 'muted', style: 'margin:0' }, 'Legutóbb lefutott: ' + (d.last_run || 'még nem') + '. Időzítés: a GitHub Actions ütemező minden reggel meghívja; tartaléknak a tárhely CRON funkciójában is beállítható ez a cím (naponta egyszer, pl. 7:00):'),
+        el('p', { class: 'muted', style: 'margin:0' }, 'Levelezés: ' + d.transport),
+        lastRun(d.last_result),
+        el('p', { class: 'muted', style: 'margin:0' }, 'Időzítés: a GitHub Actions ütemező minden reggel meghívja (a GitHub néha órákat késik); megbízhatóbb, ha a tárhely CRON funkciójában is beállítod ezt a címet (naponta egyszer, pl. 7:00):'),
         el('div', { class: 'snippet' }, d.cron_url));
     }).catch(fail);
     return box;

@@ -96,7 +96,7 @@ function user_events(int $userId, string $today): array {
 // alkalmakról, amelyeknek ma van az emlékeztető napja. Egy alkalomról egy
 // előfordulásra legfeljebb egy levél megy (sent_reminders egyedi kulcs).
 function run_reminders(string $today): array {
-    $stats = ['users' => 0, 'emails' => 0, 'occasions' => 0];
+    $stats = ['users' => 0, 'emails' => 0, 'occasions' => 0, 'failed' => 0, 'errors' => []];
     $config = app_config() ?? [];
     $appName = get_options()['app_name'];
     $base = app_base_url();
@@ -134,8 +134,21 @@ function run_reminders(string $today): array {
                 q_exec('INSERT IGNORE INTO {sent_reminders} (event_id, occurrence) VALUES (?, ?)', [(int) $e['id'], $next]);
                 $stats['occasions']++;
             }
+        } else {
+            // nem jelöljük elküldöttnek → a következő kör (aznap) újra megpróbálja
+            $stats['failed']++;
+            $stats['errors'][] = $u['email'] . ': ' . (($GLOBALS['mail_last']['error'] ?? '') ?: 'ismeretlen hiba');
         }
     }
     set_setting_value('last_run', $today);
+    set_setting_value('last_run_result', json_encode(['at' => date('Y-m-d H:i'), 'transport' => mail_transport()] + $stats, JSON_UNESCAPED_UNICODE));
     return $stats;
+}
+
+// Milyen úton megy a levél (a beállítások alapján) — csak kijelzéshez, jelszó nélkül.
+function mail_transport(): string {
+    $smtp = app_config()['smtp'] ?? [];
+    return !empty($smtp['host']) && !empty($smtp['username']) && !empty($smtp['password'])
+        ? 'SMTP (' . $smtp['host'] . ':' . ((int) ($smtp['port'] ?? 465)) . ', ' . $smtp['username'] . ')'
+        : 'PHP mail() (nincs SMTP beállítva)';
 }

@@ -10,19 +10,27 @@ declare(strict_types=1);
 // mail()-alapú küldésre esünk vissza (helyi/teszt környezetekhez).
 
 function send_app_email(array $config, string $to, string $subject, string $body, ?string $bcc = null): bool {
+    // A legutóbbi küldés eredménye (diagnosztikához: teszt email, emlékeztető-kör).
+    $GLOBALS['mail_last'] = ['transport' => 'mail', 'ok' => false, 'error' => ''];
     $smtp = $config['smtp'] ?? null;
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $fromDomain = preg_replace('/^www\./', '', explode(':', $host)[0]);
+    // Üres beállításnál (pl. nincs SMTP secret) is legyen érvényes feladó — üres
+    // "From:" sorral a levelezők elutasítják vagy spamnek jelölik a levelet.
+    $from = is_array($smtp) && !empty($smtp['from']) ? (string) $smtp['from']
+        : (is_array($smtp) && !empty($smtp['username']) && strpos((string) $smtp['username'], '@') ? (string) $smtp['username'] : "no-reply@$fromDomain");
+
     if (is_array($smtp) && !empty($smtp['host']) && !empty($smtp['username']) && !empty($smtp['password'])) {
+        $GLOBALS['mail_last']['transport'] = 'smtp';
         if (smtp_send_mail($smtp, $to, $subject, $body, $bcc)) {
+            $GLOBALS['mail_last']['ok'] = true;
             return true;
         }
-        // Ha az SMTP-küldés hibázik, még megpróbáljuk a natív mail()-t is,
-        // mielőtt teljesen feladnánk.
+        // Ha az SMTP-küldés hibázik, még megpróbáljuk a natív mail()-t is.
+        $GLOBALS['mail_last']['transport'] = 'smtp → mail';
     }
 
     $encodedSubject = mb_encode_mimeheader($subject, 'UTF-8', 'B');
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $fromDomain = preg_replace('/^www\./', '', explode(':', $host)[0]);
-    $from = $smtp['from'] ?? "no-reply@$fromDomain";
     $headers = "MIME-Version: 1.0\r\n"
         . "Content-Type: text/plain; charset=UTF-8\r\n"
         . "From: $from";
@@ -30,7 +38,15 @@ function send_app_email(array $config, string $to, string $subject, string $body
         $headers .= "\r\nBcc: $bcc";
     }
 
-    return @mail($to, $encodedSubject, $body, $headers);
+    // -f: a boríték-feladó (Return-Path) is a saját domain legyen (SPF-egyezés)
+    $ok = filter_var($from, FILTER_VALIDATE_EMAIL) ? @mail($to, $encodedSubject, $body, $headers, '-f' . $from) : @mail($to, $encodedSubject, $body, $headers);
+    if (!$ok) {
+        $err = error_get_last();
+        $GLOBALS['mail_last']['error'] = trim(($GLOBALS['mail_last']['error'] !== '' ? $GLOBALS['mail_last']['error'] . ' | ' : '') . 'A PHP mail() nem tudta átadni a levelet' . ($err ? ': ' . $err['message'] : '.'));
+        error_log("[evfordulok] mail() sikertelen: $to");
+    }
+    $GLOBALS['mail_last']['ok'] = $ok;
+    return $ok;
 }
 
 function smtp_send_mail(array $smtp, string $to, string $subject, string $body, ?string $bcc = null): bool {
@@ -38,7 +54,7 @@ function smtp_send_mail(array $smtp, string $to, string $subject, string $body, 
     $port = (int) ($smtp['port'] ?? 465);
     $username = (string) ($smtp['username'] ?? '');
     $password = (string) ($smtp['password'] ?? '');
-    $from = (string) ($smtp['from'] ?? $username);
+    $from = !empty($smtp['from']) ? (string) $smtp['from'] : $username;
 
     if ($host === '' || $username === '' || $password === '') return false;
 
@@ -59,6 +75,7 @@ function smtp_send_mail(array $smtp, string $to, string $subject, string $body, 
     $socket = @stream_socket_client($address, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $context);
     if (!$socket) {
         error_log("[evfordulok smtp] Nem sikerült csatlakozni ($host:$port): $errstr ($errno)");
+        $GLOBALS['mail_last']['error'] = "SMTP: nem sikerült csatlakozni ($host:$port): $errstr";
         return false;
     }
     stream_set_timeout($socket, 15);
@@ -114,6 +131,7 @@ function smtp_send_mail(array $smtp, string $to, string $subject, string $body, 
 
     if (!$ok) {
         error_log("[evfordulok smtp] Sikertelen lépés ($failedStep): \"$failedResponse\" — $host:$port, $username");
+        $GLOBALS['mail_last']['error'] = "SMTP hiba ($failedStep): $failedResponse";
     }
 
     return $ok;

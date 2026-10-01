@@ -104,7 +104,7 @@ try {
     $user = current_user();
     if (!in_array($route, $public, true) && !$user) throw new AppError('Bejelentkezés szükséges.', 401);
     if (strpos($route, 'admin/') === 0 && empty($user['is_admin'])) throw new AppError('Ehhez nincs jogosultságod.', 403);
-    if ((in_array($route, ['login', 'register', 'logout', 'forgot', 'reset'], true) || preg_match('#/(save|delete|password|calendar-reset)$#', $route)) && !$isPost) {
+    if ((in_array($route, ['login', 'register', 'logout', 'forgot', 'reset'], true) || preg_match('#/(save|delete|password|calendar-reset|test-email)$#', $route)) && !$isPost) {
         throw new AppError('Method not allowed', 405);
     }
 
@@ -216,6 +216,15 @@ try {
             respond(['ok' => true]);
         }
 
+        // Teszt levél a saját címre: kiderül, hogy elmegy-e, és milyen úton.
+        case 'account/test-email': {
+            rate_limit('testmail:' . (int) $user['id'], 5, 3600);
+            $ok = send_app_email(app_config() ?? [], $user['email'], 'Teszt levél – ' . get_options()['app_name'],
+                "Kedves {$user['name']}!\n\nEz egy teszt levél az Évfordulók appból. Ha megkaptad, az emlékeztetők is meg fognak érkezni.\n\n"
+                . 'Küldés módja: ' . mail_transport() . "\nIdőpont: " . date('Y-m-d H:i') . "\n\n" . app_base_url() . '/');
+            respond(['ok' => $ok, 'to' => $user['email'], 'transport' => mail_transport(), 'error' => $GLOBALS['mail_last']['error'] ?? '']);
+        }
+
         case 'account/calendar-reset':
             q_exec('UPDATE {users} SET cal_token = ? WHERE id = ?', [bin2hex(random_bytes(16)), (int) $user['id']]);
             respond(['user' => public_user(current_user())]);
@@ -223,7 +232,8 @@ try {
         // ------------------------------------------------------------- admin
         case 'admin/users':
             respond(['users' => q_all('SELECT u.id, u.name, u.email, u.is_admin, u.created_at, (SELECT COUNT(*) FROM {events} e WHERE e.user_id = u.id) AS events FROM {users} u ORDER BY u.id'),
-                     'options' => get_options(), 'cron_url' => app_base_url() . '/cron.php?key=' . cron_key(), 'last_run' => setting_value('last_run')]);
+                     'options' => get_options(), 'cron_url' => app_base_url() . '/cron.php?key=' . cron_key(), 'last_run' => setting_value('last_run'),
+                     'last_result' => json_decode((string) setting_value('last_run_result'), true), 'transport' => mail_transport()]);
 
         case 'admin/users/save': {
             $in = input();

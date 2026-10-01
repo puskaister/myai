@@ -93,6 +93,10 @@ $smtp = [
     'from' => getenv('SMTP_FROM') ?: '',
 ];
 $anthropicKey = (string) getenv('ANTHROPIC_API_KEY');
+// Látható visszajelzés (jelszó nélkül), hogy az appok milyen úton küldenek levelet.
+echo $smtp['host'] !== '' && $smtp['username'] !== '' && $smtp['password'] !== ''
+    ? "::notice title=Levelezés::SMTP beállítva: {$smtp['host']}:{$smtp['port']}, felhasználó: {$smtp['username']}, feladó: " . ($smtp['from'] ?: $smtp['username']) . "\n"
+    : "::warning title=Levelezés::Nincs SMTP beállítva (SMTP_HOST / SMTP_USER / SMTP_PASS secret) — az appok a PHP mail()-lel küldenek, ami gyakran spambe kerül vagy nem érkezik meg.\n";
 
 $vendorZip = null;
 $seenDirs = [];

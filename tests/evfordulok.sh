@@ -46,6 +46,10 @@ check "app oldal, manifest, ikon" 'curl -s "$BASE/" | grep -q "app.js" && curl -
 check "regisztráció alapból tiltva" '[ "$(status "$(post "$J2" register "{\"name\":\"X\",\"email\":\"x@example.com\",\"password\":\"titkos123\"}")")" = 403 ]'
 check "belépés nélkül tiltott" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/?r=events")" = 401 ]'
 r=$(post "$J1" login '{"email":"anna@example.com","password":"titkos123"}'); check "belépés" '[ "$(status "$r")" = 200 ]'
+: > "$MAIL_LOG"
+r=$(post "$J1" account/test-email '{}')
+check "teszt email: elküldve, módja kiírva" '[ "$(status "$r")" = 200 ] && jq -e ".ok == true and (.transport | test(\"mail\"))" <<<"$(body "$r")" >/dev/null && grep -q "Ez egy teszt levél" "$MAIL_LOG"'
+check "teszt email: érvényes feladó (nem üres From)" 'grep -qE "^From: [^ ]+@" "$MAIL_LOG"'
 
 echo "== Alkalmak"
 save() { post "$J1" events/save "$1"; }
@@ -89,6 +93,7 @@ check "a második nem látja az első alkalmait" 'get "$J2" events | jq -e "(.ev
 post "$J2" events/delete "{\"id\":$BID}" >/dev/null
 ok3=$(get "$J1" events | jq -e --argjson id "$BID" '[.events[] | select(.id == $id)] | length == 1' >/dev/null && echo y)
 check "más alkalmát nem törölheti" '[ "$ok3" = y ]'
+check "admin: levelezés módja és az utolsó kör eredménye" 'get "$J1" admin/users | jq -e "(.transport | length) > 0 and (.last_result.at | length) > 0 and .last_result.failed == 0" >/dev/null'
 check "nem admin nem kezelhet felhasználókat" '[ "$(curl -s -o /dev/null -w "%{http_code}" -b "$J2" "$BASE/api/?r=admin/users")" = 403 ]'
 r=$(post "$J1" events/delete "{\"id\":$BID}")
 ok4=$(get "$J1" events | jq -e --argjson id "$BID" '[.events[] | select(.id == $id)] | length == 0' >/dev/null && echo y)
