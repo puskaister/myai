@@ -8,6 +8,17 @@ declare(strict_types=1);
 require_once __DIR__ . '/apps.php';
 require_once __DIR__ . '/mockups.php';
 
+// http → https (a böngészőben megnyitott oldalakon; helyi gépen / IP-címen nem)
+(function (): void {
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    if (PHP_SAPI === 'cli' || $https || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'GET' || $host === ''
+        || preg_match('/^(localhost|\d+\.\d+\.\d+\.\d+|\[[0-9a-f:]+\])(:\d+)?$/i', $host)) return;
+    header('Location: https://' . $host . ($_SERVER['REQUEST_URI'] ?? '/'), true, 301);
+    exit;
+})();
+
+
 const SITE = [
     'name'    => 'my-ai.hu',
     'email'   => 'info@my-ai.hu',   // ha üres, a kapcsolat-sáv rejtve marad

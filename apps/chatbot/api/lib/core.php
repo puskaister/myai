@@ -135,3 +135,19 @@ function app_base_url(): string {
 function h(?string $s): string {
     return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
 }
+
+// http → https: a böngészőben megnyitott oldalakon (index.php, install.php) átirányítunk,
+// az API-hívásokon és a háttérvégpontokon (cron, ics, track) nem. Helyi gépen
+// (localhost / IP-cím, pl. a CI tesztszerverén) sem.
+function is_https_request(): bool {
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+}
+(function (): void {
+    if (PHP_SAPI === 'cli' || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'GET' || is_https_request()) return;
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    if ($host === '' || preg_match('/^(localhost|\d+\.\d+\.\d+\.\d+|\[[0-9a-f:]+\])(:\d+)?$/i', $host)) return;
+    $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+    if (strpos($script, '/api/') !== false || !in_array(basename($script), ['index.php', 'install.php'], true)) return;
+    header('Location: https://' . $host . ($_SERVER['REQUEST_URI'] ?? '/'), true, 301);
+    exit;
+})();
