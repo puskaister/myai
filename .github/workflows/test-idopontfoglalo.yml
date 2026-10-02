@@ -190,7 +190,7 @@ jobs:
           find public -name '*.php' -print0 | xargs -0 -n1 php -l
           php -d display_errors=1 -S 127.0.0.1:8009 -t public > public-server.log 2>&1 &
           sleep 1
-          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /ugyintezes/ /ugyintezes/chat.html /ugyintezes/widget.js /ugyintezes/ugyfelek/minta.json /adatkezeles/; do
+          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /ugyintezes/ /ugyintezes/chat.html /ugyintezes/widget.js /ugyintezes/ugyfelek/minta.json /ugyintezes/ugyfelek/my-ai.json /adatkezeles/; do
             code=$(curl -s -o page.html -w '%{http_code}' "http://127.0.0.1:8009$u")
             if [ "$code" != 200 ] || grep -qiE "fatal error|warning:|parse error|notice:|deprecated:" page.html; then
               echo "::error::$u hibás (HTTP $code)"; head -c 2000 page.html; exit 1

@@ -45,7 +45,7 @@ app_hero('ugyintezesi-seged', 'Ingyenes · nincs futási költség',
   <section class="soft" id="beepites">
     <div class="wrap">
       <h2>Beépítés bármely weboldalba</h2>
-      <p class="lead" style="max-width:62ch">Egyetlen sor a weboldal kódjában, és a jobb alsó sarokban megjelenik a chat-buborék. Működik WordPressen, Wixen, Shopify-on és saját fejlesztésű oldalon is. Ezen az oldalon is kipróbálhatod: kattints a jobb alsó sarokban.</p>
+      <p class="lead" style="max-width:62ch">Egyetlen sor a weboldal kódjában, és a jobb alsó sarokban megjelenik a chat-buborék. Működik WordPressen, Wixen, Shopify-on és saját fejlesztésű oldalon is. Ezen az oldalon is kipróbálhatod: a jobb alsó sarokban a my-ai.hu saját chatbotja válaszol a weboldal- és appkészítéssel kapcsolatos kérdésekre.</p>
       <pre style="overflow-x:auto;background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:12px;font-size:.9rem;margin-top:18px"><code style="background:none;color:inherit;padding:0;font-size:inherit">&lt;script src="https://my-ai.hu/ugyintezes/widget.js" data-ugyfel="minta" defer&gt;&lt;/script&gt;</code></pre>
       <ol class="steps-list" style="margin-top:18px">
         <li>Elküldöd a témákat és válaszokat (vagy a <a href="/ugyintezes/">demó szerkesztőjében</a> összeállítod és kimásolod).</li>
@@ -60,7 +60,7 @@ app_hero('ugyintezesi-seged', 'Ingyenes · nincs futási költség',
     </div>
   </section>
 
-  <script src="/ugyintezes/widget.js" data-ugyfel="minta" defer></script>
+  <script src="/ugyintezes/widget.js" data-ugyfel="my-ai" data-szin="#4f46e5" data-felirat="Kérdezz tőlünk" defer></script>
 
 <?php
 contact_section('Saját útmutatóiddal szeretnéd használni?', 'Írj vagy hívj — betöltjük a tudásbázist, és beillesztjük a weboldaladra.');
