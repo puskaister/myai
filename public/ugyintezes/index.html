@@ -125,7 +125,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visi
             <button class="ghost" type="button" id="cancelBtn" hidden>Mégse</button>
           </div>
         </form>
-        <p class="note">A módosítások csak ebben a böngészőben maradnak meg. Ha az ügyfelei számára is élesítené őket, másolja ki a tudásbázist, és küldje el nekünk (info@my-ai.hu), beépítjük.</p>
+        <p class="note">A módosítások csak ebben a böngészőben maradnak meg. A „Tudásbázis másolása” gomb a beépíthető chat-buborék formátumában (ugyfelek/&lt;név&gt;.json) másolja ki a témákat. Küldje el nekünk (info@my-ai.hu), és beállítjuk a weboldalára.</p>
         <div class="actions" style="margin-top:10px">
           <button class="ghost" type="button" id="copyBtn">Tudásbázis másolása</button>
           <button class="ghost" type="button" id="resetBtn">Mintákra visszaállítás</button>
@@ -244,7 +244,10 @@ document.getElementById("edit").addEventListener("submit",e=>{e.preventDefault()
 });
 
 document.getElementById("copyBtn").onclick=async e=>{
-  const txt=JSON.stringify(kb.map(({id,title,keys,answer})=>({id,title,keys,answer})),null,2);
+  const txt=JSON.stringify({nev:"Ügyfél neve",szin:"#17695f",
+    udvozles:"Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.",
+    nem_ertem:"Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal. Élő ügyintéző: [telefonszám].",
+    temak:kb.map(({id,title,keys,answer})=>({id,title,keys,answer}))},null,2);
   try{await navigator.clipboard.writeText(txt);e.target.textContent="Kimásolva"}
   catch(err){const ta=document.getElementById("copyFallback");ta.hidden=false;ta.value=txt;ta.select();e.target.textContent="Jelölje ki és másolja"}
   setTimeout(()=>e.target.textContent="Tudásbázis másolása",2500);
