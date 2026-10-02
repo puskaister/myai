@@ -101,15 +101,15 @@ function mockup_ugyintezes(): void { ?>
   <div class="phone tilt-r">
     <div class="screen">
       <div class="notch"></div>
-      <div class="ugy-top"><b>Ügyintézési Segéd</b><span><em>A-014</em> Virtuális ügyintéző</span></div>
+      <div class="ugy-top"><b>my-ai.hu</b><span>Kérdezz tőlünk · mindig elérhető</span></div>
       <div class="ugy-body">
-        <div class="ugy-msg bot">Jó napot! Miben segíthetek?</div>
-        <div class="ugy-msg user">Milyen papírok kellenek a költözéshez?</div>
-        <div class="ugy-msg bot"><b>Lakcímváltozás bejelentése</b>
-          <ol><li>Személyi igazolvány, lakcímkártya</li><li>Szállásadói hozzájárulás</li><li>Bejelentés online vagy személyesen</li></ol>
+        <div class="ugy-msg bot">Szia! Weboldal- vagy appkészítésen gondolkodsz?</div>
+        <div class="ugy-msg user">Mennyi idő alatt készül el egy app?</div>
+        <div class="ugy-msg bot"><b>Határidő</b>
+          <ol><li>Gyors egyeztetés</li><li>Hamar kipróbálható első változat</li><li>Finomítás a visszajelzéseid alapján</li></ol>
         </div>
-        <div class="ugy-chips"><s>Időpontfoglalás</s><s>Díjak</s><s>Nyitvatartás</s></div>
-        <div class="ugy-input"><span>Írja be a kérdését…</span><i>➤</i></div>
+        <div class="ugy-chips"><s>Weboldal</s><s>App telefonra</s><s>Árajánlat</s></div>
+        <div class="ugy-input"><span>Írd be a kérdésed…</span><i>➤</i></div>
       </div>
     </div>
   </div>

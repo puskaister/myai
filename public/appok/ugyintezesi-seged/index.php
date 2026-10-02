@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Ügyintézési Segéd – ingyenes ügyfélszolgálati chatbot – my-ai.hu', 'Ügyfélszolgálati chatbot ügyintézési útmutató válaszokkal: időpontfoglalás, szükséges dokumentumok, határidők, díjak. Szabályalapú, nincs AI-díj és nincs havi költség.', 'appok');
+page_start('Ügyintézési Segéd – ingyenes ügyfélszolgálati chatbot – my-ai.hu', 'Ingyenes chatbot a weboldaladra: a saját kérdéseidből és válaszaidból felel, egy sorral beépíthető. Szabályalapú, nincs AI-díj és nincs havi költség.', 'appok');
 app_hero('ugyintezesi-seged', 'Ingyenes · nincs futási költség',
-    'Az ügyfelek kérdésére lépésről lépésre elmondja, mit, hol és hogyan kell intézni. Kulcsszavak alapján válaszol a saját útmutatóidból, így nincs AI-díj és nincs havi költség.',
+    'Éjjel-nappal válaszol az érdeklődők kérdéseire a weboldaladon: árajánlat, határidő, szolgáltatások, elérhetőség. Kulcsszavak alapján, a te válaszaidból felel, így nincs AI-díj és nincs havi költség.',
     [['/ugyintezes/', 'Demó kipróbálása →'], ['#beepites', 'Beépítés weboldalba']]);
 ?>
   <section class="soft">
@@ -16,8 +16,8 @@ app_hero('ugyintezesi-seged', 'Ingyenes · nincs futási költség',
       <h2>Mit tud?</h2>
       <div style="margin-top:22px">
         <ul class="checks feature-list">
-          <li>Lépésenkénti, számozott ügyintézési útmutatók és dokumentumlisták</li>
-          <li>Ékezet nélkül és szótővel is érti a kérdést („koltozes”, „mit vigyek”)</li>
+          <li>Lépésenkénti, számozott válaszok és felsorolások</li>
+          <li>Ékezet nélkül és szótővel is érti a kérdést („mennyibe kerul”, „kell app store?”)</li>
           <li>Gyorsgombok a leggyakoribb témákhoz, kapcsolódó témák ajánlása</li>
           <li>Ha nem érti a kérdést, felajánlja a témákat és az élő ügyfélszolgálat elérhetőségét</li>
           <li>Tudásbázis-szerkesztő: témák, kulcsszavak és válaszok programozás nélkül</li>
@@ -38,7 +38,7 @@ app_hero('ugyintezesi-seged', 'Ingyenes · nincs futási költség',
         <div class="card"><h3>Az ügyfél kérdez</h3><p>A bot a kérdésben lévő kulcsszavak alapján kiválasztja a legjobban illő útmutatót.</p></div>
         <div class="card"><h3>Pontos választ kap</h3><p>Mindig azt mondja, amit te írtál bele — nem talál ki semmit, és nem kerül pénzbe.</p></div>
       </div>
-      <p class="meta" style="margin-top:18px">A demó mintaválaszai helyőrzőket tartalmaznak ([telefonszám], [link]). Küldd el a saját útmutatóidat, és beépítjük, vagy a weboldaladra illesztjük.</p>
+      <p class="meta" style="margin-top:18px">A demóban a my-ai.hu saját kérdései és válaszai szerepelnek. Küldd el a sajátjaidat, és beállítjuk a weboldaladra.</p>
     </div>
   </section>
 

@@ -28,10 +28,10 @@ const APPS = [
     ],
     'ugyintezesi-seged' => [
         'name'    => 'Ügyintézési Segéd',
-        'short'   => 'Ügyfélszolgálati chatbot, ami lépésről lépésre elmondja, mit és hogyan kell intézni. Szabályalapú, nincs AI-díj.',
+        'short'   => 'Chatbot a weboldaladra, ami a te válaszaidból felel az érdeklődők kérdéseire. Egy sorral beépíthető, nincs AI-díj.',
         'badge'   => 'Új · ingyenes',
         'mockup'  => 'mockup_ugyintezes',
-        'for'     => 'Ügyfélszolgálat, hivatal, iroda, szolgáltató',
+        'for'     => 'Szolgáltató, webshop, iroda, ügyfélszolgálat',
     ],
     'latogatoszamlalo' => [
         'name'    => 'Látogatószámláló',

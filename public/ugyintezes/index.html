@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ügyintézési Segéd – my-ai.hu</title>
-<meta name="description" content="Ingyenes, szabályalapú ügyfélszolgálati chatbot ügyintézési útmutató válaszokkal. Élő demó.">
+<meta name="description" content="Ingyenes, szabályalapú chatbot saját kérdés-válasz tudásbázissal. Élő demó.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
@@ -96,12 +96,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visi
     <section class="chat" aria-label="Beszélgetés">
       <div class="chat-head">
         <span class="ticket" id="ticket">A-001</span>
-        <div><div class="who">Virtuális ügyintéző</div><div class="status">Mindig elérhető</div></div>
+        <div><div class="who">my-ai.hu – Kérdezz tőlünk</div><div class="status">Mindig elérhető</div></div>
       </div>
       <div class="log" id="log" aria-live="polite"></div>
       <div class="chips" id="chips"></div>
       <form class="ask" id="ask">
-        <input id="q" autocomplete="off" placeholder="Írja be a kérdését, pl. „milyen papírok kellenek?”" aria-label="Kérdés">
+        <input id="q" autocomplete="off" placeholder="Írja be a kérdését, pl. „mennyi idő alatt készül el egy app?”" aria-label="Kérdés">
         <button class="primary" type="submit">Küldés</button>
       </form>
     </section>
@@ -109,7 +109,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visi
     <aside class="kb">
       <div class="panel">
         <h2>Tudásbázis</h2>
-        <p class="hint">Ezekből a témákból válaszol a bot. A „minta” jelűeket cserélje le a saját ügyintézési útmutatóira.</p>
+        <p class="hint">Ezekből a témákból válaszol a bot. A „minta” jelűek a my-ai.hu saját témái; cserélje le őket a saját kérdéseire és válaszaira.</p>
         <ul class="topics" id="topics"></ul>
       </div>
 
@@ -117,8 +117,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visi
         <h2 id="formTitle">Új téma hozzáadása</h2>
         <form id="edit">
           <input type="hidden" id="editId">
-          <div class="field"><label for="fTitle">Téma neve</label><input id="fTitle" required placeholder="pl. Parkolási engedély"></div>
-          <div class="field"><label for="fKeys">Kulcsszavak</label><input id="fKeys" required placeholder="parkolás, engedély, matrica"><small>Vesszővel elválasztva. Elég a szótő is (pl. „parkol”).</small></div>
+          <div class="field"><label for="fTitle">Téma neve</label><input id="fTitle" required placeholder="pl. Webshop"></div>
+          <div class="field"><label for="fKeys">Kulcsszavak</label><input id="fKeys" required placeholder="webshop, online bolt, termék"><small>Vesszővel elválasztva. Elég a szótő is (pl. „termék”).</small></div>
           <div class="field"><label for="fAnswer">Válasz</label><textarea id="fAnswer" required placeholder="Lépések soronként. Egy sor elején „- ” felsorolást, „1. ” számozott lépést ad."></textarea></div>
           <div class="actions">
             <button class="primary" type="submit" id="saveBtn">Mentés</button>
@@ -138,27 +138,228 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visi
 
 <script>
 const DEFAULT_KB = [
- {id:"idopont",title:"Időpontfoglalás",sample:true,keys:["időpont","foglal","bejelentkez","mikor mehetek","sorszám"],
-  answer:"Időpontot háromféleképpen foglalhat:\n1. Online, a foglalási oldalunkon: [link]\n2. Telefonon: [telefonszám], munkanapokon [ó:p]–[ó:p] között\n3. Személyesen, az ügyfélszolgálaton sorszámmal\nKérjük, a foglalt időpont előtt 10 perccel érkezzen."},
- {id:"dok",title:"Szükséges dokumentumok",sample:true,keys:["dokumentum","papír","irat","mit vigyek","igazolvány","okmány","kell vinni"],
-  answer:"Az ügyintézéshez általában ezeket hozza magával:\n- Személyazonosító igazolvány vagy útlevél\n- Lakcímet igazoló hatósági igazolvány (lakcímkártya)\n- Az ügytípushoz tartozó kitöltött nyomtatvány: [link]\n- Meghatalmazott esetén a meghatalmazás eredeti példánya\nAz ügytípusonkénti pontos listát itt találja: [link]"},
- {id:"lakcim",title:"Lakcímváltozás bejelentése",sample:true,keys:["lakcím","költöz","bejelent","új cím","lakcímkártya"],
-  answer:"Lakcímváltozás bejelentésének lépései:\n1. Készítse elő a személyi igazolványát és a régi lakcímkártyáját\n2. Ha nem a saját ingatlanába költözik, kérje el a szállásadó hozzájárulását\n3. Jelentse be online ([link]) vagy személyesen az ügyfélszolgálaton\n4. Az új lakcímkártyát [átvétel módja] kapja meg\nA bejelentésre a költözéstől számított [határidő] áll rendelkezésre."},
- {id:"hatarido",title:"Ügyintézési határidő",sample:true,keys:["határidő","meddig tart","mennyi idő","mikor lesz kész","elbírál","várakozás"],
-  answer:"Az ügyintézési határidő az ügy típusától függ:\n- Egyszerű ügyek: [x] munkanap\n- Hatósági eljárás: [x] nap\nAz ügy állapotát az ügyszám megadásával itt követheti: [link]\nHa a határidő lejárt, kérjük, hívja a [telefonszám] számot."},
- {id:"dij",title:"Díjak és befizetés",sample:true,keys:["díj","ár","mennyibe","fizet","illeték","utal","költség","kártya"],
-  answer:"Befizetési lehetőségek:\n- Bankkártyával az ügyfélszolgálaton\n- Átutalással: [számlaszám], közleményben az ügyszámmal\n- Online, a fizetési oldalon: [link]\nAz aktuális díjtételeket itt találja: [link]"},
- {id:"online",title:"Online ügyintézés",sample:true,keys:["online","interneten","ügyfélkapu","otthonról","elektronikus","e-ügyintézés","dáp"],
-  answer:"Számos ügyet személyes megjelenés nélkül is elintézhet:\n1. Jelentkezzen be azonosítással a(z) [portál neve] oldalon: [link]\n2. Válassza ki az ügytípust és töltse ki az űrlapot\n3. Csatolja a dokumentumok szkennelt példányát\n4. Küldje be, és mentse el a kapott ügyszámot"},
- {id:"nyitva",title:"Nyitvatartás és elérhetőség",sample:true,keys:["nyitva","nyitvatartás","hány órá","mikor van","cím","hol van","elérhető","telefon","email"],
-  answer:"Ügyfélszolgálatunk elérhetőségei:\n- Cím: [cím]\n- Hétfő–csütörtök: [ó:p]–[ó:p], péntek: [ó:p]–[ó:p]\n- Telefon: [telefonszám]\n- E-mail: [e-mail cím]"},
- {id:"meghatalmazas",title:"Meghatalmazás",sample:true,keys:["meghatalmaz","helyettem","más intézheti","rokon","képvisel"],
-  answer:"Ha más intézi az ügyét helyette:\n1. Töltse ki a meghatalmazást: [nyomtatvány link]\n2. Két tanú aláírása szükséges, a nevükkel és lakcímükkel\n3. A meghatalmazott hozza magával a saját személyi igazolványát és a meghatalmazás eredeti példányát"},
- {id:"panasz",title:"Panasz, észrevétel",sample:true,keys:["panasz","reklamáció","elégedetlen","észrevétel","probléma","felettes"],
-  answer:"Panaszát így juttathatja el hozzánk:\n- Írásban: [e-mail cím] vagy postán: [cím]\n- Személyesen, a panaszkönyvbe\nKérjük, adja meg az ügyszámot és a panasz rövid leírását. Válaszunkat [x] napon belül küldjük meg."}
+ {
+  "id": "weboldal",
+  "title": "Weboldal készítés",
+  "keys": [
+   "weboldal",
+   "honlap",
+   "weblap",
+   "bemutatkozó",
+   "landing",
+   "oldal készít",
+   "webes rendszer"
+  ],
+  "answer": "Egyedi weboldalakat és webes rendszereket készítünk, a vállalkozásod arculatával:\n- Bemutatkozó oldalak\n- Webshopok\n- Admin felületek és belső rendszerek\n- Ügyfélkapuk\nMinden oldal mobilon és számítógépen is kényelmesen használható. Nem sablont adunk el: a te igényedből indulunk ki.",
+  "sample": true
+ },
+ {
+  "id": "app",
+  "title": "App készítés telefonra",
+  "keys": [
+   "app",
+   "alkalmazás",
+   "applikáció",
+   "mobil",
+   "telefon",
+   "iphone",
+   "android",
+   "ipad",
+   "tablet"
+  ],
+  "answer": "Egy fejlesztés, ami iPhone-on, Androidon és böngészőben is fut:\n- Az ügyfeleid böngészőből nyitják meg, vagy egy koppintással a kezdőképernyőre teszik\n- Saját ikon, teljes képernyő, gyors indulás\n- Nincs regisztráció, letöltés vagy App Store\nTipikus felhasználás: foglalás, rendelés, nyilvántartás, ügyféltájékoztatás.",
+  "sample": true
+ },
+ {
+  "id": "appstore",
+  "title": "App Store és letöltés",
+  "keys": [
+   "app store",
+   "play áruház",
+   "google play",
+   "letölt",
+   "telepít",
+   "kezdőképernyő",
+   "pwa"
+  ],
+  "answer": "Az appjaink App Store és letöltés nélkül működnek. A felhasználó megnyitja a linket, és ha szeretné, a telefonja kezdőképernyőjére teszi, ahol saját ikonnal, teljes képernyőn indul.\nElőnye, hogy a módosítások azonnal mindenkinél megjelennek, nem kell az áruházak jóváhagyására várni.",
+  "elsobbseg": 1,
+  "sample": true
+ },
+ {
+  "id": "hatarido",
+  "title": "Határidő, mennyi idő alatt készül el",
+  "keys": [
+   "határidő",
+   "mennyi idő",
+   "meddig tart",
+   "mikor lesz kész",
+   "gyors",
+   "sürgős",
+   "hamar"
+  ],
+  "answer": "Rövid határidővel dolgozunk:\n1. Gyors egyeztetés az igényeidről\n2. Hamar kipróbálható első változat\n3. Folyamatos finomítás a visszajelzéseid alapján\nA pontos határidő a feladattól függ. Írd meg, mire van szükséged, és megmondjuk.",
+  "elsobbseg": 1,
+  "sample": true
+ },
+ {
+  "id": "ar",
+  "title": "Ár, költség, árajánlat",
+  "keys": [
+   "mennyibe kerül",
+   "mennyibe",
+   "árak",
+   "ára",
+   "árat",
+   "árajánlat",
+   "ajánlat",
+   "költség",
+   "díj",
+   "fizet",
+   "olcsó",
+   "drága",
+   "büdzsé",
+   "keret"
+  ],
+  "answer": "Az ár a feladattól függ, mert minden fejlesztés a te igényeidre szabott. Pontos árajánlatot rövid egyeztetés után adunk.\nAjánlatkéréshez írd meg:\n- mit szeretnél (weboldal, app, belső rendszer)\n- kik fogják használni\n- van-e határidő\nE-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
+  "elsobbseg": 1,
+  "sample": true
+ },
+ {
+  "id": "folyamat",
+  "title": "Hogyan zajlik a fejlesztés",
+  "keys": [
+   "hogyan működik",
+   "folyamat",
+   "menete",
+   "lépések",
+   "hogyan zajlik",
+   "kezd",
+   "indul",
+   "hogyan tovább"
+  ],
+  "answer": "Három lépésben jutsz el a saját megoldásodig:\n1. Egyeztetünk: elmondod, hogyan dolgozol, milyen szolgáltatásaid vannak, mire van szükséged\n2. Beállítjuk a te arculatoddal: elkészül a kipróbálható változat a logóddal, színeiddel és tartalmaiddal, saját címmel\n3. Az ügyfeleid használják: weboldalról, Facebookról vagy QR-kódról nyitják meg",
+  "elsobbseg": 1,
+  "sample": true
+ },
+ {
+  "id": "kesz",
+  "title": "Kész appok",
+  "keys": [
+   "kész app",
+   "meglévő",
+   "sablon",
+   "demó",
+   "időpontfoglaló",
+   "foglaló",
+   "évforduló",
+   "bevásárlólista",
+   "látogatószámláló",
+   "statisztika"
+  ],
+  "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel\n- Bevásárlólista: szóbeli bevitellel, közös lista\n- Látogatószámláló: saját webstatisztika, ingyenesen letölthető\n- Ügyintézési Segéd: ez a chatbot\nRészletek és élő demók: my-ai.hu/appok/",
+  "sample": true
+ },
+ {
+  "id": "webshop",
+  "title": "Webshop",
+  "keys": [
+   "webshop",
+   "web shop",
+   "online bolt",
+   "webáruház",
+   "termék",
+   "rendelés",
+   "kosár"
+  ],
+  "answer": "Webshopot is készítünk, a vállalkozásodra szabva: termékek, rendelés, admin felület a rendelések kezeléséhez. Mobilon és számítógépen is kényelmesen használható.\nÍrd meg, mit árulnál és hány termékkel, és egyeztetünk a részletekről.",
+  "sample": true
+ },
+ {
+  "id": "belso",
+  "title": "Belső rendszer, nyilvántartás",
+  "keys": [
+   "belső rendszer",
+   "nyilvántartás",
+   "admin",
+   "adminisztráció",
+   "ügyfélkapu",
+   "cég",
+   "vállalat",
+   "automatizál",
+   "excel"
+  ],
+  "answer": "Belső rendszereket és admin felületeket is fejlesztünk: nyilvántartás, ügyfélkezelés, foglalások, ügyfélkapu.\nHa most Excelben vagy papíron vezetsz valamit, gyakran gyorsan kiváltható egy egyszerű webes rendszerrel, ami telefonon is működik.",
+  "sample": true
+ },
+ {
+  "id": "arculat",
+  "title": "Saját arculat, logó, színek",
+  "keys": [
+   "arculat",
+   "logó",
+   "szín",
+   "dizájn",
+   "design",
+   "megjelenés",
+   "egyedi kinézet"
+  ],
+  "answer": "Minden megoldás a te arculatoddal készül: a logód, a színeid és a tartalmaid kerülnek bele, és saját címet kapsz, amit megoszthatsz az ügyfeleiddel.",
+  "sample": true
+ },
+ {
+  "id": "chatbot",
+  "title": "Chatbot a weboldalamra",
+  "keys": [
+   "chatbot",
+   "chat",
+   "bot",
+   "ügyfélszolgálat",
+   "gyik",
+   "kérdés válasz",
+   "widget",
+   "beépít"
+  ],
+  "answer": "Az Ügyintézési Segéd egy ingyenes, szabályalapú chatbot: a te témáidból és válaszaidból felel, és egyetlen sorral beépíthető bármely weboldalba.\nRészletek: my-ai.hu/appok/ugyintezesi-seged/",
+  "sample": true
+ },
+ {
+  "id": "modositas",
+  "title": "Módosítás és frissítés később",
+  "keys": [
+   "módosít",
+   "frissít",
+   "változtat",
+   "karbantart",
+   "bővít",
+   "utólag",
+   "támogatás"
+  ],
+  "answer": "A módosítások azonnal mindenkinél megjelennek, nem kell frissítést telepíteni. Ha később bővítenéd vagy változtatnál rajta, írj nekünk, és megbeszéljük.",
+  "sample": true
+ },
+ {
+  "id": "kapcsolat",
+  "title": "Kapcsolat, elérhetőség",
+  "keys": [
+   "kapcsolat",
+   "elérhető",
+   "telefon",
+   "email",
+   "e-mail",
+   "hívj",
+   "írj",
+   "beszél",
+   "ember",
+   "ügyintéző"
+  ],
+  "answer": "Írj vagy hívj, és megbeszéljük:\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937\nAz igényedet röviden is elég leírni, a részleteket közösen tisztázzuk.",
+  "elsobbseg": 1,
+  "sample": true
+ }
 ];
 
-const STORE="ugyintezesi-seged-kb";
+const STORE="ugyintezesi-seged-kb-v2";
 let kb = load();
 function load(){try{const s=localStorage.getItem(STORE);if(s){const v=JSON.parse(s);if(Array.isArray(v)&&v.length)return v}}catch(e){}return structuredClone(DEFAULT_KB)}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(kb))}catch(e){}}
@@ -173,6 +374,7 @@ function match(q){
     for(const k of t.keys){const nk=norm(k);if(!nk)continue;
       if(nq.includes(" "+nk)||nq.includes(nk)) score+= nk.includes(" ")?3:2;}
     if(nq.includes(norm(t.title))) score+=3;
+    if(score>0) score+=Number(t.elsobbseg)||0;
     return {t,score};
   }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
   return scored;
@@ -199,7 +401,7 @@ function answer(q){
   const res=match(q);
   setTimeout(()=>{
     if(!res.length){
-      add("bot",`<p>Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal.</p><p>Ha élő ügyintézővel beszélne: [telefonszám].</p>`);
+      add("bot",`<p>Erre most nem tudok pontos választ. Válassz az alábbi témák közül, vagy írj nekünk: info@my-ai.hu, +36 30 584 5937.</p>`);
       return;
     }
     const best=res[0].t;
@@ -237,7 +439,7 @@ function resetForm(){document.getElementById("edit").reset();document.getElement
 cancelBtn.onclick=resetForm;
 document.getElementById("edit").addEventListener("submit",e=>{e.preventDefault();
   const id=document.getElementById("editId").value;
-  const item={id:id||("t"+Date.now()),title:fTitle.value.trim(),keys:fKeys.value.split(",").map(s=>s.trim()).filter(Boolean),answer:fAnswer.value.trim(),sample:false};
+  const prev=kb.find(x=>x.id===id);const item={id:id||("t"+Date.now()),title:fTitle.value.trim(),keys:fKeys.value.split(",").map(s=>s.trim()).filter(Boolean),answer:fAnswer.value.trim(),sample:false};if(prev&&prev.elsobbseg)item.elsobbseg=prev.elsobbseg;
   if(id){kb=kb.map(x=>x.id===id?item:x)}else kb.push(item);
   save();refresh();resetForm();
   add("bot",`<p class="meta">Mentve: ${esc(item.title)}</p>`);
@@ -245,9 +447,9 @@ document.getElementById("edit").addEventListener("submit",e=>{e.preventDefault()
 
 document.getElementById("copyBtn").onclick=async e=>{
   const txt=JSON.stringify({nev:"Ügyfél neve",szin:"#17695f",
-    udvozles:"Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.",
-    nem_ertem:"Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal. Élő ügyintéző: [telefonszám].",
-    temak:kb.map(({id,title,keys,answer})=>({id,title,keys,answer}))},null,2);
+    udvozles:"Szia! Weboldal- vagy appkészítésen gondolkodsz? Kérdezz bátran, például az árról, a határidőről vagy arról, hogyan működik egy app App Store nélkül.",
+    nem_ertem:"Erre most nem tudok pontos választ. Válassz az alábbi témák közül, vagy írj nekünk: info@my-ai.hu, +36 30 584 5937.",
+    temak:kb.map(({id,title,keys,answer,elsobbseg})=>elsobbseg?{id,title,keys,answer,elsobbseg}:{id,title,keys,answer})},null,2);
   try{await navigator.clipboard.writeText(txt);e.target.textContent="Kimásolva"}
   catch(err){const ta=document.getElementById("copyFallback");ta.hidden=false;ta.value=txt;ta.select();e.target.textContent="Jelölje ki és másolja"}
   setTimeout(()=>e.target.textContent="Tudásbázis másolása",2500);
@@ -262,9 +464,9 @@ function refresh(){chips();topics()}
 document.getElementById("ask").addEventListener("submit",e=>{e.preventDefault();const q=document.getElementById("q");if(q.value.trim()){answer(q.value.trim());q.value=""}});
 
 refresh();
-add("bot",`<p>Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.</p>`);
-add("user","Milyen papírok kellenek a költözéshez?");
-add("bot",`<h3>Lakcímváltozás bejelentése</h3>${render(kb.find(t=>t.id==="lakcim")?.answer||"")}<p class="meta">Kapcsolódó: Szükséges dokumentumok</p>`);
+add("bot",`<p>Szia! Weboldal- vagy appkészítésen gondolkodsz? Kérdezz bátran, például az árról, a határidőről vagy arról, hogyan működik egy app App Store nélkül.</p>`);
+add("user","Mennyibe kerül egy weboldal?");
+{const t=kb.find(t=>t.id==="ar");if(t)add("bot",`<h3>${esc(t.title)}</h3>${render(t.answer)}<p class="meta">Kapcsolódó: Weboldal készítés</p>`);}
 </script>
 </body>
 </html>
