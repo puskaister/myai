@@ -26,6 +26,13 @@ const APPS = [
         'mockup'  => 'mockup_bevasarlolista',
         'for'     => 'Család, pár, lakótársak',
     ],
+    'ugyintezesi-seged' => [
+        'name'    => 'Ügyintézési Segéd',
+        'short'   => 'Ügyfélszolgálati chatbot, ami lépésről lépésre elmondja, mit és hogyan kell intézni. Szabályalapú, nincs AI-díj.',
+        'badge'   => 'Új · ingyenes',
+        'mockup'  => 'mockup_ugyintezes',
+        'for'     => 'Ügyfélszolgálat, hivatal, iroda, szolgáltató',
+    ],
     'latogatoszamlalo' => [
         'name'    => 'Látogatószámláló',
         'short'   => 'Saját webstatisztika: látogatók, eltöltött idő, kattintások — külső szolgáltatás nélkül, a saját tárhelyeden.',

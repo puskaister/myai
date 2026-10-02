@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ügyintézési Segéd – my-ai.hu</title>
+<meta name="description" content="Ingyenes, szabályalapú ügyfélszolgálati chatbot ügyintézési útmutató válaszokkal. Élő demó.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: két oszlop – bal oldalt a beszélgetés (sorszámos „ablak”), jobb oldalt a tudásbázis-szerkesztő; telefonon egymás alatt */
+:root{
+  --bg:#eef2f1; --surface:#ffffff; --ink:#15302f; --muted:#5b706e; --line:#d3dedc;
+  --accent:#17695f; --accent-ink:#ffffff; --ticket:#f2b636; --ticket-ink:#2a1e00;
+  --user:#dcebe8; --danger:#a3392d;
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Source Sans 3",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1918; --surface:#172423; --ink:#e3eeec; --muted:#93a8a5; --line:#2a3b39;
+  --accent:#4fb3a5; --accent-ink:#06201c; --ticket:#e9b445; --ticket-ink:#2a1e00;
+  --user:#1f3a37; --danger:#e07a6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1918; --surface:#172423; --ink:#e3eeec; --muted:#93a8a5; --line:#2a3b39;
+  --accent:#4fb3a5; --accent-ink:#06201c; --ticket:#e9b445; --ticket-ink:#2a1e00;
+  --user:#1f3a37; --danger:#e07a6c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--f-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:24px 40px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;margin-bottom:20px}
+h1{font:700 clamp(1.6rem,3.5vw,2.3rem)/1.1 var(--f-display);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:60ch}
+.badge{text-decoration:none;font:500 .75rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:4px 8px}
+.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Chat */
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;height:min(78vh,720px);min-height:480px;overflow:hidden}
+.chat-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ticket{font:500 .95rem var(--f-mono);background:var(--ticket);color:var(--ticket-ink);padding:4px 10px;border-radius:3px;font-variant-numeric:tabular-nums}
+.chat-head .who{font-weight:600}
+.chat-head .status{color:var(--muted);font-size:.85rem}
+.log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.msg.bot{background:var(--bg);border-top-left-radius:3px;align-self:flex-start}
+.msg.user{background:var(--user);border-top-right-radius:3px;align-self:flex-end}
+.msg h3{font:600 1rem var(--f-display);margin:0 0 6px}
+.msg ol,.msg ul{margin:6px 0;padding-left:1.2em}
+.msg p{margin:6px 0}
+.msg .meta{font:500 .72rem var(--f-mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+.chip{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+form.ask{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:110px}
+button.primary{font:600 .95rem var(--f-body);background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+button.ghost{font:600 .9rem var(--f-body);background:transparent;color:var(--accent);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* KB panel */
+.kb{display:flex;flex-direction:column;gap:16px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.panel h2{font:600 1.15rem var(--f-display);margin:0 0 4px}
+.panel .hint{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.topics{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.topics li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.topics li:first-child{border-top:0}
+.topics .t{min-width:0}
+.topics .t b{display:block;font-weight:600}
+.topics .t span{color:var(--muted);font-size:.82rem;overflow-wrap:anywhere}
+.tag{font:500 .68rem var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+.row-actions{display:flex;gap:4px;flex-shrink:0}
+.icon-btn{font:inherit;font-size:.82rem;background:none;border:0;color:var(--accent);cursor:pointer;padding:4px 6px}
+.icon-btn.del{color:var(--danger)}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;font-weight:600}
+.field small{color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.note{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+@media (prefers-reduced-motion:no-preference){.msg{animation:in .18s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Ügyintézési Segéd</h1>
+      <p class="sub">Ingyenes, szabályalapú ügyfélszolgálati chatbot. Kulcsszavak alapján válaszol, nincs mögötte fizetős AI-szolgáltatás.</p>
+    </div>
+    <a class="badge" href="/appok/ugyintezesi-seged/">my-ai.hu · Mintaválaszokkal</a>
+  </header>
+
+  <div class="grid">
+    <section class="chat" aria-label="Beszélgetés">
+      <div class="chat-head">
+        <span class="ticket" id="ticket">A-001</span>
+        <div><div class="who">Virtuális ügyintéző</div><div class="status">Mindig elérhető</div></div>
+      </div>
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="chips" id="chips"></div>
+      <form class="ask" id="ask">
+        <input id="q" autocomplete="off" placeholder="Írja be a kérdését, pl. „milyen papírok kellenek?”" aria-label="Kérdés">
+        <button class="primary" type="submit">Küldés</button>
+      </form>
+    </section>
+
+    <aside class="kb">
+      <div class="panel">
+        <h2>Tudásbázis</h2>
+        <p class="hint">Ezekből a témákból válaszol a bot. A „minta” jelűeket cserélje le a saját ügyintézési útmutatóira.</p>
+        <ul class="topics" id="topics"></ul>
+      </div>
+
+      <div class="panel">
+        <h2 id="formTitle">Új téma hozzáadása</h2>
+        <form id="edit">
+          <input type="hidden" id="editId">
+          <div class="field"><label for="fTitle">Téma neve</label><input id="fTitle" required placeholder="pl. Parkolási engedély"></div>
+          <div class="field"><label for="fKeys">Kulcsszavak</label><input id="fKeys" required placeholder="parkolás, engedély, matrica"><small>Vesszővel elválasztva. Elég a szótő is (pl. „parkol”).</small></div>
+          <div class="field"><label for="fAnswer">Válasz</label><textarea id="fAnswer" required placeholder="Lépések soronként. Egy sor elején „- ” felsorolást, „1. ” számozott lépést ad."></textarea></div>
+          <div class="actions">
+            <button class="primary" type="submit" id="saveBtn">Mentés</button>
+            <button class="ghost" type="button" id="cancelBtn" hidden>Mégse</button>
+          </div>
+        </form>
+        <p class="note">A módosítások csak ebben a böngészőben maradnak meg. A „Tudásbázis másolása” gomb a beépíthető chat-buborék formátumában (ugyfelek/&lt;név&gt;.json) másolja ki a témákat. Küldje el nekünk (info@my-ai.hu), és beállítjuk a weboldalára.</p>
+        <div class="actions" style="margin-top:10px">
+          <button class="ghost" type="button" id="copyBtn">Tudásbázis másolása</button>
+          <button class="ghost" type="button" id="resetBtn">Mintákra visszaállítás</button>
+        </div>
+        <textarea id="copyFallback" hidden readonly aria-label="Tudásbázis szövege"></textarea>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const DEFAULT_KB = [
+ {id:"idopont",title:"Időpontfoglalás",sample:true,keys:["időpont","foglal","bejelentkez","mikor mehetek","sorszám"],
+  answer:"Időpontot háromféleképpen foglalhat:\n1. Online, a foglalási oldalunkon: [link]\n2. Telefonon: [telefonszám], munkanapokon [ó:p]–[ó:p] között\n3. Személyesen, az ügyfélszolgálaton sorszámmal\nKérjük, a foglalt időpont előtt 10 perccel érkezzen."},
+ {id:"dok",title:"Szükséges dokumentumok",sample:true,keys:["dokumentum","papír","irat","mit vigyek","igazolvány","okmány","kell vinni"],
+  answer:"Az ügyintézéshez általában ezeket hozza magával:\n- Személyazonosító igazolvány vagy útlevél\n- Lakcímet igazoló hatósági igazolvány (lakcímkártya)\n- Az ügytípushoz tartozó kitöltött nyomtatvány: [link]\n- Meghatalmazott esetén a meghatalmazás eredeti példánya\nAz ügytípusonkénti pontos listát itt találja: [link]"},
+ {id:"lakcim",title:"Lakcímváltozás bejelentése",sample:true,keys:["lakcím","költöz","bejelent","új cím","lakcímkártya"],
+  answer:"Lakcímváltozás bejelentésének lépései:\n1. Készítse elő a személyi igazolványát és a régi lakcímkártyáját\n2. Ha nem a saját ingatlanába költözik, kérje el a szállásadó hozzájárulását\n3. Jelentse be online ([link]) vagy személyesen az ügyfélszolgálaton\n4. Az új lakcímkártyát [átvétel módja] kapja meg\nA bejelentésre a költözéstől számított [határidő] áll rendelkezésre."},
+ {id:"hatarido",title:"Ügyintézési határidő",sample:true,keys:["határidő","meddig tart","mennyi idő","mikor lesz kész","elbírál","várakozás"],
+  answer:"Az ügyintézési határidő az ügy típusától függ:\n- Egyszerű ügyek: [x] munkanap\n- Hatósági eljárás: [x] nap\nAz ügy állapotát az ügyszám megadásával itt követheti: [link]\nHa a határidő lejárt, kérjük, hívja a [telefonszám] számot."},
+ {id:"dij",title:"Díjak és befizetés",sample:true,keys:["díj","ár","mennyibe","fizet","illeték","utal","költség","kártya"],
+  answer:"Befizetési lehetőségek:\n- Bankkártyával az ügyfélszolgálaton\n- Átutalással: [számlaszám], közleményben az ügyszámmal\n- Online, a fizetési oldalon: [link]\nAz aktuális díjtételeket itt találja: [link]"},
+ {id:"online",title:"Online ügyintézés",sample:true,keys:["online","interneten","ügyfélkapu","otthonról","elektronikus","e-ügyintézés","dáp"],
+  answer:"Számos ügyet személyes megjelenés nélkül is elintézhet:\n1. Jelentkezzen be azonosítással a(z) [portál neve] oldalon: [link]\n2. Válassza ki az ügytípust és töltse ki az űrlapot\n3. Csatolja a dokumentumok szkennelt példányát\n4. Küldje be, és mentse el a kapott ügyszámot"},
+ {id:"nyitva",title:"Nyitvatartás és elérhetőség",sample:true,keys:["nyitva","nyitvatartás","hány órá","mikor van","cím","hol van","elérhető","telefon","email"],
+  answer:"Ügyfélszolgálatunk elérhetőségei:\n- Cím: [cím]\n- Hétfő–csütörtök: [ó:p]–[ó:p], péntek: [ó:p]–[ó:p]\n- Telefon: [telefonszám]\n- E-mail: [e-mail cím]"},
+ {id:"meghatalmazas",title:"Meghatalmazás",sample:true,keys:["meghatalmaz","helyettem","más intézheti","rokon","képvisel"],
+  answer:"Ha más intézi az ügyét helyette:\n1. Töltse ki a meghatalmazást: [nyomtatvány link]\n2. Két tanú aláírása szükséges, a nevükkel és lakcímükkel\n3. A meghatalmazott hozza magával a saját személyi igazolványát és a meghatalmazás eredeti példányát"},
+ {id:"panasz",title:"Panasz, észrevétel",sample:true,keys:["panasz","reklamáció","elégedetlen","észrevétel","probléma","felettes"],
+  answer:"Panaszát így juttathatja el hozzánk:\n- Írásban: [e-mail cím] vagy postán: [cím]\n- Személyesen, a panaszkönyvbe\nKérjük, adja meg az ügyszámot és a panasz rövid leírását. Válaszunkat [x] napon belül küldjük meg."}
+];
+
+const STORE="ugyintezesi-seged-kb";
+let kb = load();
+function load(){try{const s=localStorage.getItem(STORE);if(s){const v=JSON.parse(s);if(Array.isArray(v)&&v.length)return v}}catch(e){}return structuredClone(DEFAULT_KB)}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(kb))}catch(e){}}
+
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function match(q){
+  const nq=" "+norm(q)+" ";
+  const scored=kb.map(t=>{
+    let score=0;
+    for(const k of t.keys){const nk=norm(k);if(!nk)continue;
+      if(nq.includes(" "+nk)||nq.includes(nk)) score+= nk.includes(" ")?3:2;}
+    if(nq.includes(norm(t.title))) score+=3;
+    return {t,score};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  return scored;
+}
+
+function render(text){
+  const lines=text.split("\n");let html="",list=null;
+  const close=()=>{if(list){html+=`</${list}>`;list=null}};
+  for(const raw of lines){const l=raw.trim();if(!l){close();continue}
+    let m;
+    if((m=l.match(/^[-•]\s+(.*)/))){if(list!=="ul"){close();html+="<ul>";list="ul"}html+=`<li>${esc(m[1])}</li>`}
+    else if((m=l.match(/^\d+[.)]\s+(.*)/))){if(list!=="ol"){close();html+="<ol>";list="ol"}html+=`<li>${esc(m[1])}</li>`}
+    else{close();html+=`<p>${esc(l)}</p>`}}
+  close();return html;
+}
+
+const log=document.getElementById("log");
+function add(role,html){const d=document.createElement("div");d.className="msg "+role;d.innerHTML=html;log.appendChild(d);log.scrollTop=log.scrollHeight}
+
+let n=1;
+function answer(q){
+  add("user",esc(q));
+  n++;document.getElementById("ticket").textContent="A-"+String(n).padStart(3,"0");
+  const res=match(q);
+  setTimeout(()=>{
+    if(!res.length){
+      add("bot",`<p>Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal.</p><p>Ha élő ügyintézővel beszélne: [telefonszám].</p>`);
+      return;
+    }
+    const best=res[0].t;
+    let html=`<h3>${esc(best.title)}</h3>${render(best.answer)}`;
+    const more=res.slice(1,3).filter(x=>x.score>=res[0].score-1);
+    if(more.length) html+=`<p class="meta">Kapcsolódó: ${more.map(x=>esc(x.t.title)).join(" · ")}</p>`;
+    add("bot",html);
+  },250);
+}
+
+function chips(){const c=document.getElementById("chips");c.innerHTML="";
+  kb.slice(0,6).forEach(t=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t.title;b.onclick=()=>answer(t.title);c.appendChild(b)})}
+
+function topics(){const ul=document.getElementById("topics");ul.innerHTML="";
+  kb.forEach(t=>{const li=document.createElement("li");
+    li.innerHTML=`<div class="t"><b>${esc(t.title)}${t.sample?'<span class="tag">minta</span>':""}</b><span>${esc(t.keys.join(", "))}</span></div>
+    <div class="row-actions"><button class="icon-btn" data-e="${t.id}">Szerkeszt</button><button class="icon-btn del" data-d="${t.id}">Töröl</button></div>`;
+    ul.appendChild(li)});
+}
+
+let pendingDelete=null;
+document.getElementById("topics").addEventListener("click",e=>{
+  const id=e.target.dataset.e, del=e.target.dataset.d;
+  if(id){const t=kb.find(x=>x.id===id);
+    document.getElementById("editId").value=t.id;fTitle.value=t.title;fKeys.value=t.keys.join(", ");fAnswer.value=t.answer;
+    document.getElementById("formTitle").textContent="Téma szerkesztése";cancelBtn.hidden=false;fTitle.focus()}
+  if(del){
+    if(pendingDelete===del){kb=kb.filter(x=>x.id!==del);pendingDelete=null;save();refresh()}
+    else{pendingDelete=del;e.target.textContent="Biztos?";setTimeout(()=>{if(pendingDelete===del){pendingDelete=null;e.target.textContent="Töröl"}},3000)}
+  }
+});
+
+const fTitle=document.getElementById("fTitle"),fKeys=document.getElementById("fKeys"),fAnswer=document.getElementById("fAnswer"),cancelBtn=document.getElementById("cancelBtn");
+function resetForm(){document.getElementById("edit").reset();document.getElementById("editId").value="";document.getElementById("formTitle").textContent="Új téma hozzáadása";cancelBtn.hidden=true}
+cancelBtn.onclick=resetForm;
+document.getElementById("edit").addEventListener("submit",e=>{e.preventDefault();
+  const id=document.getElementById("editId").value;
+  const item={id:id||("t"+Date.now()),title:fTitle.value.trim(),keys:fKeys.value.split(",").map(s=>s.trim()).filter(Boolean),answer:fAnswer.value.trim(),sample:false};
+  if(id){kb=kb.map(x=>x.id===id?item:x)}else kb.push(item);
+  save();refresh();resetForm();
+  add("bot",`<p class="meta">Mentve: ${esc(item.title)}</p>`);
+});
+
+document.getElementById("copyBtn").onclick=async e=>{
+  const txt=JSON.stringify({nev:"Ügyfél neve",szin:"#17695f",
+    udvozles:"Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.",
+    nem_ertem:"Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal. Élő ügyintéző: [telefonszám].",
+    temak:kb.map(({id,title,keys,answer})=>({id,title,keys,answer}))},null,2);
+  try{await navigator.clipboard.writeText(txt);e.target.textContent="Kimásolva"}
+  catch(err){const ta=document.getElementById("copyFallback");ta.hidden=false;ta.value=txt;ta.select();e.target.textContent="Jelölje ki és másolja"}
+  setTimeout(()=>e.target.textContent="Tudásbázis másolása",2500);
+};
+let resetArmed=false;
+document.getElementById("resetBtn").onclick=e=>{
+  if(!resetArmed){resetArmed=true;e.target.textContent="Biztos? Kattintson újra";setTimeout(()=>{resetArmed=false;e.target.textContent="Mintákra visszaállítás"},3000);return}
+  kb=structuredClone(DEFAULT_KB);save();refresh();resetArmed=false;e.target.textContent="Mintákra visszaállítás";
+};
+
+function refresh(){chips();topics()}
+document.getElementById("ask").addEventListener("submit",e=>{e.preventDefault();const q=document.getElementById("q");if(q.value.trim()){answer(q.value.trim());q.value=""}});
+
+refresh();
+add("bot",`<p>Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.</p>`);
+add("user","Milyen papírok kellenek a költözéshez?");
+add("bot",`<h3>Lakcímváltozás bejelentése</h3>${render(kb.find(t=>t.id==="lakcim")?.answer||"")}<p class="meta">Kapcsolódó: Szükséges dokumentumok</p>`);
+</script>
+</body>
+</html>

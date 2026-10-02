@@ -258,3 +258,19 @@ code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px
 .bev-row em { font-style: normal; font-size: .62rem; font-weight: 700; color: #6b7280; background: #f3f4f6; border-radius: 999px; padding: 2px 7px; }
 .bev-row.done s { background: #16a34a; border-color: #16a34a; }
 .bev-row.done b { text-decoration: line-through; color: #9ca3af; font-weight: 500; }
+
+/* Ügyintézési Segéd makett */
+.ugy-top { background: #17695f; color: #fff; padding: 44px 16px 14px; }
+.ugy-top b { display: block; font-size: 1rem; }
+.ugy-top span { font-size: .72rem; opacity: .95; display: flex; align-items: center; gap: 6px; }
+.ugy-top em { font-style: normal; font-family: ui-monospace, Menlo, monospace; background: #f2b636; color: #2a1e00; border-radius: 3px; padding: 1px 6px; font-weight: 700; }
+.ugy-body { padding: 12px 12px 18px; display: grid; gap: 7px; font-size: .72rem; }
+.ugy-msg { max-width: 88%; padding: 7px 10px; border-radius: 12px; line-height: 1.35; }
+.ugy-msg.bot { background: #fff; border: 1px solid #e5e7eb; border-top-left-radius: 3px; justify-self: start; }
+.ugy-msg.user { background: #dcebe8; border-top-right-radius: 3px; justify-self: end; }
+.ugy-msg b { display: block; margin-bottom: 3px; }
+.ugy-msg ol { margin: 0; padding-left: 1.2em; }
+.ugy-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.ugy-chips s { text-decoration: none; border: 1px solid #d3dedc; background: #fff; border-radius: 999px; padding: 2px 8px; font-size: .62rem; color: #17695f; font-weight: 600; }
+.ugy-input { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 10px; color: #9ca3af; }
+.ugy-input i { font-style: normal; background: #17695f; color: #fff; border-radius: 8px; width: 24px; height: 24px; display: grid; place-items: center; font-size: .7rem; }

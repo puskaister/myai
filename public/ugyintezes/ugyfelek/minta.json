@@ -1,0 +1,130 @@
+{
+  "_leiras": "Minta tudásbázis. Új ügyfél: másold le <azonosito>.json néven (kisbetű, szám, kötőjel), és a beépítő kódban data-ugyfel=\"<azonosito>\".",
+  "nev": "Minta Ügyfélszolgálat",
+  "szin": "#17695f",
+  "udvozles": "Jó napot kívánok! Az ügyintézéssel kapcsolatos kérdésekben segítek. Írja be, mit szeretne elintézni, vagy válasszon témát lent.",
+  "nem_ertem": "Ezt sajnos nem értettem. Válasszon az alábbi témák közül, vagy fogalmazza meg más szavakkal. Élő ügyintéző: [telefonszám].",
+  "temak": [
+    {
+      "id": "idopont",
+      "title": "Időpontfoglalás",
+      "keys": [
+        "időpont",
+        "foglal",
+        "bejelentkez",
+        "mikor mehetek",
+        "sorszám"
+      ],
+      "answer": "Időpontot háromféleképpen foglalhat:\n1. Online, a foglalási oldalunkon: [link]\n2. Telefonon: [telefonszám], munkanapokon [ó:p]–[ó:p] között\n3. Személyesen, az ügyfélszolgálaton sorszámmal\nKérjük, a foglalt időpont előtt 10 perccel érkezzen."
+    },
+    {
+      "id": "dok",
+      "title": "Szükséges dokumentumok",
+      "keys": [
+        "dokumentum",
+        "papír",
+        "irat",
+        "mit vigyek",
+        "igazolvány",
+        "okmány",
+        "kell vinni"
+      ],
+      "answer": "Az ügyintézéshez általában ezeket hozza magával:\n- Személyazonosító igazolvány vagy útlevél\n- Lakcímet igazoló hatósági igazolvány (lakcímkártya)\n- Az ügytípushoz tartozó kitöltött nyomtatvány: [link]\n- Meghatalmazott esetén a meghatalmazás eredeti példánya\nAz ügytípusonkénti pontos listát itt találja: [link]"
+    },
+    {
+      "id": "lakcim",
+      "title": "Lakcímváltozás bejelentése",
+      "keys": [
+        "lakcím",
+        "költöz",
+        "bejelent",
+        "új cím",
+        "lakcímkártya"
+      ],
+      "answer": "Lakcímváltozás bejelentésének lépései:\n1. Készítse elő a személyi igazolványát és a régi lakcímkártyáját\n2. Ha nem a saját ingatlanába költözik, kérje el a szállásadó hozzájárulását\n3. Jelentse be online ([link]) vagy személyesen az ügyfélszolgálaton\n4. Az új lakcímkártyát [átvétel módja] kapja meg\nA bejelentésre a költözéstől számított [határidő] áll rendelkezésre."
+    },
+    {
+      "id": "hatarido",
+      "title": "Ügyintézési határidő",
+      "keys": [
+        "határidő",
+        "meddig tart",
+        "mennyi idő",
+        "mikor lesz kész",
+        "elbírál",
+        "várakozás"
+      ],
+      "answer": "Az ügyintézési határidő az ügy típusától függ:\n- Egyszerű ügyek: [x] munkanap\n- Hatósági eljárás: [x] nap\nAz ügy állapotát az ügyszám megadásával itt követheti: [link]\nHa a határidő lejárt, kérjük, hívja a [telefonszám] számot."
+    },
+    {
+      "id": "dij",
+      "title": "Díjak és befizetés",
+      "keys": [
+        "díj",
+        "ár",
+        "mennyibe",
+        "fizet",
+        "illeték",
+        "utal",
+        "költség",
+        "kártya"
+      ],
+      "answer": "Befizetési lehetőségek:\n- Bankkártyával az ügyfélszolgálaton\n- Átutalással: [számlaszám], közleményben az ügyszámmal\n- Online, a fizetési oldalon: [link]\nAz aktuális díjtételeket itt találja: [link]"
+    },
+    {
+      "id": "online",
+      "title": "Online ügyintézés",
+      "keys": [
+        "online",
+        "interneten",
+        "ügyfélkapu",
+        "otthonról",
+        "elektronikus",
+        "e-ügyintézés",
+        "dáp"
+      ],
+      "answer": "Számos ügyet személyes megjelenés nélkül is elintézhet:\n1. Jelentkezzen be azonosítással a(z) [portál neve] oldalon: [link]\n2. Válassza ki az ügytípust és töltse ki az űrlapot\n3. Csatolja a dokumentumok szkennelt példányát\n4. Küldje be, és mentse el a kapott ügyszámot"
+    },
+    {
+      "id": "nyitva",
+      "title": "Nyitvatartás és elérhetőség",
+      "keys": [
+        "nyitva",
+        "nyitvatartás",
+        "hány órá",
+        "mikor van",
+        "cím",
+        "hol van",
+        "elérhető",
+        "telefon",
+        "email"
+      ],
+      "answer": "Ügyfélszolgálatunk elérhetőségei:\n- Cím: [cím]\n- Hétfő–csütörtök: [ó:p]–[ó:p], péntek: [ó:p]–[ó:p]\n- Telefon: [telefonszám]\n- E-mail: [e-mail cím]"
+    },
+    {
+      "id": "meghatalmazas",
+      "title": "Meghatalmazás",
+      "keys": [
+        "meghatalmaz",
+        "helyettem",
+        "más intézheti",
+        "rokon",
+        "képvisel"
+      ],
+      "answer": "Ha más intézi az ügyét helyette:\n1. Töltse ki a meghatalmazást: [nyomtatvány link]\n2. Két tanú aláírása szükséges, a nevükkel és lakcímükkel\n3. A meghatalmazott hozza magával a saját személyi igazolványát és a meghatalmazás eredeti példányát"
+    },
+    {
+      "id": "panasz",
+      "title": "Panasz, észrevétel",
+      "keys": [
+        "panasz",
+        "reklamáció",
+        "elégedetlen",
+        "észrevétel",
+        "probléma",
+        "felettes"
+      ],
+      "answer": "Panaszát így juttathatja el hozzánk:\n- Írásban: [e-mail cím] vagy postán: [cím]\n- Személyesen, a panaszkönyvbe\nKérjük, adja meg az ügyszámot és a panasz rövid leírását. Válaszunkat [x] napon belül küldjük meg."
+    }
+  ]
+}

@@ -95,3 +95,23 @@ function mockup_bevasarlolista(): void { ?>
   </div>
 </div>
 <?php }
+
+function mockup_ugyintezes(): void { ?>
+<div class="phone-stage" aria-hidden="true">
+  <div class="phone tilt-r">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="ugy-top"><b>Ügyintézési Segéd</b><span><em>A-014</em> Virtuális ügyintéző</span></div>
+      <div class="ugy-body">
+        <div class="ugy-msg bot">Jó napot! Miben segíthetek?</div>
+        <div class="ugy-msg user">Milyen papírok kellenek a költözéshez?</div>
+        <div class="ugy-msg bot"><b>Lakcímváltozás bejelentése</b>
+          <ol><li>Személyi igazolvány, lakcímkártya</li><li>Szállásadói hozzájárulás</li><li>Bejelentés online vagy személyesen</li></ol>
+        </div>
+        <div class="ugy-chips"><s>Időpontfoglalás</s><s>Díjak</s><s>Nyitvatartás</s></div>
+        <div class="ugy-input"><span>Írja be a kérdését…</span><i>➤</i></div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php }
