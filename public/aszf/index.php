@@ -17,7 +17,7 @@ $provider = [
     'name'     => 'Immobilis Partners KFT',
     'address'  => '1238. Budapest, Molnár utca 65/b',
     'taxid'    => '11941736-2-43',
-    'regno'    => '',  // cégjegyzékszám
+    'regno'    => '01-09-684414',
     'email'    => 'info@my-ai.hu',
     'phone'    => '+36 30 584 5937',
 ];
