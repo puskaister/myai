@@ -82,7 +82,7 @@ try {
             if (mb_strlen($name) < 2) $errors['company'] = 'Add meg a cég vagy vállalkozás nevét.';
             if (mb_strlen($contact) < 2) $errors['contact_name'] = 'Add meg a kapcsolattartó nevét.';
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Érvénytelen email cím.';
-            if (empty($in['accept'])) $errors['accept'] = 'A megrendeléshez fogadd el a feltételeket.';
+            if (empty($in['accept'])) $errors['accept'] = 'A megrendeléshez fogadd el az ÁSZF-et.';
             if ($errors) respond(['error' => reset($errors), 'fields' => $errors], 422);
 
             $slug = make_slug($name);
@@ -101,7 +101,7 @@ try {
                 "Kedves $contact!\n\nKöszönjük, megkaptuk az Ügyintézési Segéd megrendelését.\n\nA havidíj: " . price_text() . ".\n"
                 . "Hamarosan felvesszük Önnel a kapcsolatot: egyeztetjük a chatbot témáit és válaszait, és elküldjük a díjbekérőt.\n"
                 . 'A chatbot az első befizetés után indul, és a beépítést is mi végezzük.'
-                . "\n\nA megadott adatok:\n$details\n\nKérdés esetén írjon: " . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu");
+                . "\nA szerződési feltételek: https://my-ai.hu/aszf/\n\nA megadott adatok:\n$details\n\nKérdés esetén írjon: " . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu");
             respond(['ok' => true]);
         }
 

@@ -113,6 +113,7 @@ function page_end(): void { ?>
     <span class="footer-links">
       <a href="/appok/">Appok</a>
       <a href="/adatkezeles/">Adatkezelési tájékoztató</a>
+      <a href="/aszf/">ÁSZF</a>
       <button type="button" class="footer-btn" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button>
     </span>
   </div>

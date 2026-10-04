@@ -78,7 +78,7 @@ app_hero('ugyintezesi-seged', '5 000 Ft + ÁFA / hó · nincs AI-díj',
           <input name="website_url_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
           <label class="check" style="display:flex;gap:10px;align-items:flex-start;font-weight:500">
             <input type="checkbox" name="accept" style="width:20px;height:20px;margin-top:3px">
-            <span>Megrendelem az Ügyintézési Segéd havidíjas szolgáltatást (<span data-price="net">5 000 Ft</span> + ÁFA / hó, díjbekérő alapján, átutalással, havonta lemondható). Az <a href="/adatkezeles/" target="_blank">adatkezelési tájékoztatót</a> megismertem.</span>
+            <span>Megrendelem az Ügyintézési Segéd havidíjas szolgáltatást (<span data-price="net">5 000 Ft</span> + ÁFA / hó, díjbekérő alapján, átutalással, havonta lemondható). Az <a href="/aszf/" target="_blank">ÁSZF-et</a> elfogadom, az <a href="/adatkezeles/" target="_blank">adatkezelési tájékoztatót</a> megismertem.</span>
           </label>
           <p class="order-msg" aria-live="polite" style="margin:0"></p>
           <button class="btn btn-primary" type="submit">Megrendelés elküldése</button>

@@ -156,6 +156,6 @@ header('Content-Type: text/html; charset=utf-8');
   <p>A tájékoztatót szükség szerint frissítjük; a mindenkori változat ezen az oldalon érhető el, a hatályba lépés dátumával.</p>
 </main>
 
-<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
+<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/aszf/">ÁSZF</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
 </body>
 </html>
