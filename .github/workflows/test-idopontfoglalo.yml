@@ -190,7 +190,7 @@ jobs:
           find public -name '*.php' -print0 | xargs -0 -n1 php -l
           php -d display_errors=1 -S 127.0.0.1:8009 -t public > public-server.log 2>&1 &
           sleep 1
-          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /ugyintezes/ /ugyintezes/chat.html /ugyintezes/widget.js /ugyintezes/ugyfelek/minta.json /ugyintezes/ugyfelek/my-ai.json /adatkezeles/; do
+          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /adatkezeles/; do
             code=$(curl -s -o page.html -w '%{http_code}' "http://127.0.0.1:8009$u")
             if [ "$code" != 200 ] || grep -qiE "fatal error|warning:|parse error|notice:|deprecated:" page.html; then
               echo "::error::$u hibás (HTTP $code)"; head -c 2000 page.html; exit 1
@@ -198,6 +198,9 @@ jobs:
             echo "ok $u"
           done
           test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 5 || { echo "::error::az Appok oldalon nem 5 kártya van"; exit 1; }
+          P=$(curl -s http://127.0.0.1:8009/appok/ugyintezesi-seged/)
+          if grep -q "Beépítés bármely weboldalba" <<<"$P"; then echo "::error::az Ügyintézési Segéd oldalán még ott a beépítési leírás"; exit 1; fi
+          grep -q "5 000 Ft + ÁFA" <<<"$P" && grep -q 'id="order-form"' <<<"$P" || { echo "::error::az Ügyintézési Segéd oldalán nincs ár / megrendelő űrlap"; exit 1; }
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/letoltes/)" = 301 || { echo "::error::a /letoltes/ nem irányít át"; exit 1; }
 
       - name: Szerver indítása
@@ -358,3 +361,58 @@ jobs:
         run: |
           cat bev-server.log
           echo "::error title=Bevásárlólista szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[302\]' bev-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  ugyintezes:
+    name: Ügyintézési Segéd – megrendelés, előfizetés, emlékeztetők
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: idopont
+          MYSQL_USER: idopont
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring
+
+      - name: PHP és JS szintaxis
+        run: |
+          find apps/ugyintezes -name '*.php' -print0 | xargs -0 -n1 php -l
+          for f in apps/ugyintezes/assets/*.js apps/ugyintezes/widget.js; do node --check "$f"; done
+          for f in apps/ugyintezes/ugyfelek/*.json; do jq -e '.temak | length > 0' "$f" >/dev/null || { echo "::error::$f hibás"; exit 1; }; done
+
+      - name: Szerver indítása (a levelek naplófájlba mennek)
+        run: |
+          bash tests/set-ugyintezes-config.sh
+          touch "$RUNNER_TEMP/mails.log"
+          TZ=Europe/Budapest php -d "sendmail_path=cat >> $RUNNER_TEMP/mails.log" -d opcache.enable_cli=0 -S 127.0.0.1:8007 -t apps/ugyintezes > seged-server.log 2>&1 &
+          sleep 2
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8007
+          DB_PASS: tesztjelszo
+        run: MAIL_LOG="$RUNNER_TEMP/mails.log" bash tests/ugyintezes.sh
+
+      - name: Felületi teszt (Chrome) – admin, ügyfél adatlap, chat
+        env:
+          BASE: http://127.0.0.1:8007
+        run: |
+          npm install --prefix tests/ui --no-audit --no-fund --silent
+          node tests/ui/ui-test.js ugyintezes
+
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: |
+          cat seged-server.log; tail -60 "$RUNNER_TEMP/mails.log"
+          echo "::error title=Ügyintézési Segéd szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' seged-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

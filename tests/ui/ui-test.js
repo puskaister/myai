@@ -3,7 +3,7 @@
 //   – a látható szövegben nincs "null", "undefined", "NaN" vagy "[object …]",
 //   – nem volt JavaScript-hiba.
 // Használat: BASE=http://127.0.0.1:8000 node ui-test.js <app>
-// app: idopontfoglalo | latogatok | evfordulok | bevasarlolista | chatbot
+// app: idopontfoglalo | latogatok | evfordulok | bevasarlolista | chatbot | ugyintezes
 'use strict';
 const puppeteer = require('puppeteer-core');
 
@@ -158,6 +158,30 @@ const flows = {
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 15000 });
     await textOk(page, 'chat: válasz megjelent');
+  },
+  async ugyintezes(page) {
+    await login(page, '/admin/');
+    await page.waitForSelector('.tabs', { timeout: 10000 });
+    await waitText(page, 'aktív előfizetés');
+    await settle(600);
+    await textOk(page, 'admin: ügyfelek');
+    await page.click('.list .item');
+    await page.waitForSelector('.modal textarea[name=kb_json]');
+    await settle(400);
+    await textOk(page, 'admin: ügyfél adatlap (befizetés, beépítő kód)');
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => document.querySelector('.modal-back')?.remove());
+    for (const tab of ['Beállítások', 'Fiók']) {
+      await clickText(page, '.tabs button', tab);
+      await settle(500);
+      await textOk(page, 'admin: ' + tab);
+    }
+    await page.goto(BASE + '/chat.html?u=my-ai', { waitUntil: 'networkidle0' });
+    await page.waitForSelector('#q');
+    await page.type('#q', 'mennyibe kerül a chatbot?');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 10000 });
+    await textOk(page, 'chat: válasz a tudásbázisból');
   },
 };
 

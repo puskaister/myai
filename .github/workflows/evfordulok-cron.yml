@@ -1,4 +1,4 @@
-name: Évfordulók – napi emlékeztető
+name: Napi kör – Évfordulók emlékeztetők, Ügyintézési Segéd előfizetések
 
 # Minden reggel meghívja az Évfordulók app emlékeztető-végpontját (cron.php)
 # a deploy/evfordulok.json minden telepítésénél. A kulcsot a DB_PASS secretből
@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['.github/workflows/evfordulok-cron.yml']   # a workflow módosításakor egyszer lefut (ellenőrzés)
+    paths: ['.github/workflows/evfordulok-cron.yml', 'deploy/ugyintezes.json']   # a workflow módosításakor egyszer lefut (ellenőrzés)
 
 jobs:
   remind:
@@ -28,6 +28,18 @@ jobs:
           SITE: https://my-ai.hu
         run: |
           fail=0
+          # Ügyintézési Segéd: lejárat előtti emlékeztetők, lejárt előfizetések
+          for row in $(jq -c '.instances[]' deploy/ugyintezes.json); do
+            dir=$(jq -r .dir <<<"$row"); prefix=$(jq -r .prefix <<<"$row")
+            key=$(php -r 'echo substr(hash_hmac("sha256", "cron|" . $argv[1], getenv("DB_PASS")), 0, 32);' "$prefix")
+            echo "::add-mask::$key"
+            if out=$(curl -fsS --max-time 180 "$SITE/$dir/cron.php?key=$key"); then
+              echo "/$dir: $out"
+              echo "::notice title=Ügyintézési Segéd /$dir::$(jq -r '"\(.date // "–"): \(.reminders // 0) emlékeztető, \(.expired // 0) lejárati értesítés, \(.failed // 0) sikertelen\(if (.errors // []) | length > 0 then " — " + ((.errors // []) | join("; ")) else "" end)\(if .skipped then " (" + .skipped + ")" else "" end)"' <<<"$out")"
+            else
+              echo "::error::/$dir lejárati köre sikertelen"; fail=1
+            fi
+          done
           for row in $(jq -c '.instances[]' deploy/evfordulok.json); do
             dir=$(jq -r .dir <<<"$row"); prefix=$(jq -r .prefix <<<"$row")
             key=$(php -r 'echo substr(hash_hmac("sha256", "cron|" . $argv[1], getenv("DB_PASS")), 0, 32);' "$prefix")

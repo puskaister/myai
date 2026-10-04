@@ -6,7 +6,8 @@
 <meta name="robots" content="noindex">
 <title>Ügyintézési Segéd</title>
 <!-- A widget.js ezt az oldalt tölti be iframe-be: chat.html?u=<ügyfél-azonosító>.
-     A tudásbázis az ugyfelek/<azonosító>.json fájlból jön (azonos domain, nincs CORS). -->
+     A tudásbázist a kb.php adja (azonos domain, nincs CORS): a demót és a my-ai.hu
+     saját buborékát mindig, egy ügyfélét csak érvényes előfizetésnél. -->
 <style>
 :root{
   --bg:#ffffff; --soft:#eef2f1; --ink:#15302f; --muted:#5b706e; --line:#d3dedc;
@@ -92,7 +93,13 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
 
   var id=(new URLSearchParams(location.search).get('u')||'minta').toLowerCase();
   if(!/^[a-z0-9-]{1,40}$/.test(id))id='minta';
-  fetch('ugyfelek/'+id+'.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+  fetch('kb.php?u='+encodeURIComponent(id),{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+    if(d.inactive){ // lejárt vagy szüneteltetett előfizetés
+      if(d.nev){document.getElementById('name').textContent=d.nev;document.title=d.nev}
+      document.getElementById('ask').hidden=true;
+      add('bot','<p>'+esc(d.uzenet||'A chat jelenleg nem elérhető.')+'</p>');
+      return;
+    }
     cfg=d;cfg.temak=Array.isArray(d.temak)?d.temak:[];
     if(d.nev){document.getElementById('name').textContent=d.nev;document.title=d.nev}
     var szin=new URLSearchParams(location.search).get('szin')||d.szin||'';

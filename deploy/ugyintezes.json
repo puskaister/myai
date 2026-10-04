@@ -1,0 +1,6 @@
+{
+  "_leiras": "Az Ügyintézési Segéd (szabályalapú chatbot, havidíjas) a my-ai.hu-n. A /ugyintezes/ alatt fut a demó, a chat (widget.js, chat.html, kb.php), a megrendelési API és az admin felület (előfizetések). Közös adatbázis, saját előtag.",
+  "instances": [
+    { "dir": "ugyintezes", "prefix": "seged_" }
+  ]
+}

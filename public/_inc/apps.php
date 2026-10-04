@@ -28,8 +28,8 @@ const APPS = [
     ],
     'ugyintezesi-seged' => [
         'name'    => 'Ügyintézési Segéd',
-        'short'   => 'Chatbot a weboldaladra, ami a te válaszaidból felel az érdeklődők kérdéseire. Egy sorral beépíthető, nincs AI-díj.',
-        'badge'   => 'Új · ingyenes',
+        'short'   => 'Chatbot a weboldaladra, ami a te válaszaidból felel az érdeklődők kérdéseire — éjjel-nappal, AI-díj nélkül. A beállítást és a beépítést mi végezzük.',
+        'badge'   => '5 000 Ft + ÁFA / hó',
         'mockup'  => 'mockup_ugyintezes',
         'for'     => 'Szolgáltató, webshop, iroda, ügyfélszolgálat',
     ],

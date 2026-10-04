@@ -20,7 +20,7 @@ $controller = [
     'email'   => 'info@my-ai.hu',
     'phone'   => '+36 30 584 5937',
 ];
-$updated = '2026. szeptember 29.';
+$updated = '2026. október 4.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -110,19 +110,20 @@ header('Content-Type: text/html; charset=utf-8');
   </table>
   <div class="box">Ha egy vállalkozás a saját időpontfoglalóját vagy chatbotját üzemelteti nálunk (pl. <em>my-ai.hu/cégnév</em> címen), az ott megadott adatok kezelője <strong>az adott vállalkozás</strong>; mi adatfeldolgozóként, az ő megbízásából tároljuk az adatokat. Ilyen esetben a vállalkozás adatkezelési tájékoztatója az irányadó.</div>
 
-  <h3>2.4. Chatbot</h3>
+  <h3>2.4. Ügyintézési Segéd (chatbot)</h3>
+  <p>A weboldalon és az ügyfeleink weboldalán működő Ügyintézési Segéd szabályalapú chatbot: a kérdésben szereplő kulcsszavak alapján, előre megírt válaszokból felel. A kérdések feldolgozása a látogató böngészőjében történik — <strong>a beírt kérdéseket nem tároljuk, és nem továbbítjuk sem nekünk, sem harmadik félnek</strong>, mesterséges intelligencia szolgáltatást nem használ. Kérjük, ne adj meg a chatben személyes adatot.</p>
+
+  <h3>2.5. Megrendelés és előfizetés (Ügyintézési Segéd)</h3>
   <table>
-    <tr><th>Adatok</th><td>A beszélgetés szövege és az abban megadott adatok (pl. név, elérhetőség, az érdeklődés tárgya), a beszélgetés időpontja, a kiinduló oldal címe, az IP-cím (visszaélések kiszűrésére).</td></tr>
-    <tr><th>Cél</th><td>Kérdések megválaszolása, az érdeklődés felmérése és továbbítása az érintett vállalkozásnak.</td></tr>
-    <tr><th>Jogalap</th><td>Szerződés megkötését megelőző lépések (GDPR 6. cikk (1) b) pont).</td></tr>
-    <tr><th>Időtartam</th><td>Amíg az érdeklődés kezeléséhez szükséges; kérésre töröljük.</td></tr>
+    <tr><th>Adatok</th><td>Cég / vállalkozás neve, kapcsolattartó neve, email cím, telefonszám, weboldal címe, számlázási név és cím, adószám, a megrendeléskor megadott üzenet, valamint a befizetések és az előfizetés érvényessége.</td></tr>
+    <tr><th>Cél</th><td>A megrendelés teljesítése, a szolgáltatás beállítása, díjbekérő és számla kiállítása, a lejárat előtti emlékeztetők küldése.</td></tr>
+    <tr><th>Jogalap</th><td>Szerződés teljesítése (GDPR 6. cikk (1) b) pont); a számlázási adatok tekintetében jogi kötelezettség teljesítése (GDPR 6. cikk (1) c) pont, a számvitelről szóló 2000. évi C. törvény).</td></tr>
+    <tr><th>Időtartam</th><td>Az előfizetés megszűnéséig; a számviteli bizonylatok adatait a számviteli törvény szerint 8 évig őrizzük.</td></tr>
   </table>
-  <p>A chatbot válaszait mesterséges intelligencia (az Anthropic Claude modellje) állítja elő; a válaszok tévedhetnek. A beszélgetés szövege a válasz elkészítéséhez az Anthropic szervereire kerül (lásd 3. pont). Kérjük, ne adj meg a chatben érzékeny adatot (pl. egészségügyi adatot, bankkártyaszámot).</p>
 
   <h2>3. Kik férhetnek hozzá az adatokhoz? (adatfeldolgozók)</h2>
   <table>
     <tr><th>DiMa.hu tárhelyszolgáltató</th><td>A weboldal és az adatbázis tárhelye (Magyarország).</td></tr>
-    <tr><th>Anthropic PBC (USA)</th><td>A chatbot válaszainak előállítása (csak a chatbot használatakor). Az adattovábbítás az Anthropic adatfeldolgozási feltételeiben foglalt garanciák — az Európai Bizottság által elfogadott általános adatvédelmi kikötések — alapján történik. Az Anthropic az API-n keresztül kapott adatokat alapértelmezés szerint nem használja modelljei tanítására.</td></tr>
     <tr><th>Email-szolgáltatás</th><td>A visszaigazoló és értesítő levelek kézbesítése a tárhelyszolgáltató levelezőrendszerén keresztül.</td></tr>
   </table>
   <p>Az adatokat más harmadik félnek nem adjuk át, kivéve, ha jogszabály kötelez rá (pl. hatósági megkeresés).</p>

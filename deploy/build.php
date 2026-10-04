@@ -16,6 +16,7 @@ $apps = [
     'latogatok'      => ['README.md', 'api/config.php', 'TELEPITES.md'],
     'evfordulok'     => ['README.md', 'api/config.php'],
     'bevasarlolista' => ['README.md', 'api/config.php'],
+    'ugyintezes'     => ['README.md', 'api/config.php'],
 ];
 
 function fail(string $msg): void {
