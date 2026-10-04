@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Online időpontfoglaló – my-ai.hu', 'Online időpontfoglaló vállalkozásoknak: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
-app_hero('idopontfoglalo', 'Vállalkozásoknak',
+page_start('Online időpontfoglaló – my-ai.hu', 'Online időpontfoglaló vállalkozásoknak, egyszeri 30 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
+app_hero('idopontfoglalo', 'Egyszeri 30 000 Ft + ÁFA · vállalkozásoknak',
     'Gumiszerviznek, fodrászatnak, rendelőnek, szervíznek — bárkinek, aki időpontra dolgozik. Az ügyfél pár koppintással foglal, te pedig egy helyen látsz mindent.',
     [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#kapcsolat', 'Ajánlatot kérek']]);
 ?>
@@ -65,6 +65,12 @@ app_hero('idopontfoglalo', 'Vállalkozásoknak',
         <li><strong>Beállítjuk a te arculatoddal:</strong> név, logó, színek, szolgáltatások, nyitvatartás, extra mezők (pl. rendszám).</li>
         <li><strong>Megkapod a saját címedet</strong> (a my-ai.hu-n vagy a saját domaineden), amit megoszthatsz a weboldaladon, Facebookon, QR-kódon.</li>
       </ol>
+      <div class="card" style="margin-top:24px;max-width:520px">
+        <h3>Ár</h3>
+        <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
+        <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 100 Ft)</p>
+        <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek</a>
+      </div>
     </div>
   </section>
 
