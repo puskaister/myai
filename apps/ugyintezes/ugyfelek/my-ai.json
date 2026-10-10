@@ -1,27 +1,93 @@
 {
-  "_leiras": "A my-ai.hu saját chatbotjának tudásbázisa: weboldal- és appkészítés. A tények a főoldalról (public/index.php) származnak; árat szándékosan nem tartalmaz. Az \"elsobbseg\": 1 mező döntetlennél előrébb sorolja a témát (pl. „mi az ára egy appnak” → Ár).",
   "nev": "my-ai.hu – Kérdezz tőlünk",
   "szin": "#4f46e5",
-  "udvozles": "Szia! Weboldal- vagy appkészítésen gondolkodsz? Kérdezz bátran, például az árról, a határidőről vagy arról, hogyan működik egy app App Store nélkül.",
-  "nem_ertem": "Erre most nem tudok pontos választ. Válassz az alábbi témák közül, vagy írj nekünk: info@my-ai.hu, +36 30 584 5937.",
+  "logo": "/assets/immobilis-logo.svg",
+  "udvozles": "Szia! A my-ai.hu segédje vagyok. Kérdezz az árakról, a kész appokról, az egyedi weboldal- és appfejlesztésről vagy a határidőről.\nA kérdéseidet nem tároljuk.",
+  "nem_ertem": "Erre most nem tudok pontos választ. Próbáld egyszerűbben, például: „mennyibe kerül az időpontfoglaló?”, vagy válassz a fenti témák közül.\nEmberrel is beszélhetsz: info@my-ai.hu, +36 30 584 5937.",
   "temak": [
     {
-      "id": "weboldal",
-      "title": "Weboldal készítés",
+      "id": "ar",
+      "title": "Árak",
       "keys": [
+        "mennyibe kerül",
+        "mennyibe",
+        "mennyi az ár",
+        "árak",
+        "ára",
+        "árat",
+        "árlista",
+        "költség",
+        "díj",
+        "olcsó",
+        "drága",
+        "büdzsé",
+        "keret",
+        "pénz",
+        "forint"
+      ],
+      "answer": "Áraink:\n- Online időpontfoglaló: egyszeri 30 000 Ft + ÁFA (bruttó 38 100 Ft)\n- Ügyintézési Segéd (chatbot): 5 000 Ft + ÁFA / hó (bruttó 6 350 Ft), havonta lemondható\n- Évfordulók, Bevásárlólista, Látogatószámláló: ingyenesen letölthető\n- Egyedi weboldal, app vagy rendszer: a feladattól függ, rövid egyeztetés után pontos árajánlatot adunk\nAjánlatkérés: E-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "kesz",
+      "title": "Kész appok",
+      "keys": [
+        "kész app",
+        "appok",
+        "appjai",
+        "meglévő",
+        "sablon",
+        "mit kínál",
+        "milyen app",
+        "termék",
+        "szolgáltatás"
+      ],
+      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz – egyszeri 30 000 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
+    },
+    {
+      "id": "egyedi",
+      "title": "Egyedi weboldal és app",
+      "keys": [
+        "egyedi",
         "weboldal",
         "honlap",
         "weblap",
         "bemutatkozó",
         "landing",
-        "oldal készít",
-        "webes rendszer"
+        "oldalt készít",
+        "webes rendszer",
+        "fejleszt",
+        "programoz"
       ],
-      "answer": "Egyedi weboldalakat és webes rendszereket készítünk, a vállalkozásod arculatával:\n- Bemutatkozó oldalak\n- Webshopok\n- Admin felületek és belső rendszerek\n- Ügyfélkapuk\nMinden oldal mobilon és számítógépen is kényelmesen használható. Nem sablont adunk el: a te igényedből indulunk ki."
+      "answer": "Egyedi weboldalakat, appokat és webes rendszereket fejlesztünk, rövid határidővel, a te arculatoddal és a te működésedre szabva:\n- Bemutatkozó oldalak és webshopok\n- Appok telefonra és webre: foglalás, rendelés, nyilvántartás, ügyféltájékoztatás\n- Admin felületek, belső rendszerek, ügyfélkapuk\nNem sablont adunk el: a te igényedből indulunk ki. Minden mobilon és számítógépen is kényelmesen használható."
+    },
+    {
+      "id": "kapcsolat",
+      "title": "Kapcsolat",
+      "keys": [
+        "kapcsolat",
+        "elérhető",
+        "elér",
+        "telefonszám",
+        "email",
+        "e-mail",
+        "hívj",
+        "hívhat",
+        "felhív",
+        "írj",
+        "írhat",
+        "beszél",
+        "ember",
+        "ügyintéző",
+        "visszahív",
+        "ajánlatot kér"
+      ],
+      "answer": "Írj vagy hívj, és megbeszéljük:\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937\nAz igényedet röviden is elég leírni, a részleteket közösen tisztázzuk.",
+      "elsobbseg": 1
     },
     {
       "id": "app",
-      "title": "App készítés telefonra",
+      "title": "App telefonra",
       "keys": [
         "app",
         "alkalmazás",
@@ -33,92 +99,72 @@
         "ipad",
         "tablet"
       ],
-      "answer": "Egy fejlesztés, ami iPhone-on, Androidon és böngészőben is fut:\n- Az ügyfeleid böngészőből nyitják meg, vagy egy koppintással a kezdőképernyőre teszik\n- Saját ikon, teljes képernyő, gyors indulás\n- Nincs regisztráció, letöltés vagy App Store\nTipikus felhasználás: foglalás, rendelés, nyilvántartás, ügyféltájékoztatás."
+      "answer": "Egy fejlesztés, ami iPhone-on, Androidon, tableten és böngészőben is fut:\n- Az ügyfeleid böngészőből nyitják meg, vagy egy koppintással a kezdőképernyőre teszik\n- Saját ikon, teljes képernyő, gyors indulás\n- Nincs letöltés és nincs App Store\nTipikus felhasználás: foglalás, rendelés, nyilvántartás, ügyféltájékoztatás."
     },
     {
       "id": "appstore",
-      "title": "App Store és letöltés",
+      "title": "App Store nélkül",
       "keys": [
         "app store",
+        "appstore",
         "play áruház",
         "google play",
-        "letölt",
-        "telepít",
-        "kezdőképernyő",
-        "pwa"
+        "áruház",
+        "letöltés nélkül",
+        "pwa",
+        "frissítés"
       ],
-      "answer": "Az appjaink App Store és letöltés nélkül működnek. A felhasználó megnyitja a linket, és ha szeretné, a telefonja kezdőképernyőjére teszi, ahol saját ikonnal, teljes képernyőn indul.\nElőnye, hogy a módosítások azonnal mindenkinél megjelennek, nem kell az áruházak jóváhagyására várni.",
+      "answer": "Az appjaink App Store és letöltés nélkül működnek. A felhasználó megnyitja a linket, és ha szeretné, a telefonja kezdőképernyőjére teszi, ahol saját ikonnal, teljes képernyőn indul.\nElőnyei:\n- Nincs regisztráció az áruházban és nincs tárhely-gond a telefonon\n- A módosítások azonnal mindenkinél megjelennek, nem kell jóváhagyásra várni\n- Ugyanaz az app minden eszközön",
+      "elsobbseg": 1
+    },
+    {
+      "id": "telefonra",
+      "title": "Telepítés a telefonra",
+      "keys": [
+        "kezdőképernyő",
+        "főképernyő",
+        "ikon",
+        "telepít",
+        "telepíthető",
+        "hogyan tegyem",
+        "safari",
+        "chrome"
+      ],
+      "answer": "Így teheted ki az appot a telefonod kezdőképernyőjére:\n1. Nyisd meg az app címét a telefonodon\n2. iPhone: Safari → Megosztás gomb → „Főképernyőhöz adás”\n3. Android: Chrome menü → „Alkalmazás telepítése”\nEzután saját ikonnal, teljes képernyőn indul, mint egy letöltött app.",
       "elsobbseg": 1
     },
     {
       "id": "hatarido",
-      "title": "Határidő, mennyi idő alatt készül el",
+      "title": "Határidő",
       "keys": [
         "határidő",
         "mennyi idő",
         "meddig tart",
         "mikor lesz kész",
+        "mikorra",
         "gyors",
         "sürgős",
-        "hamar"
+        "hamar",
+        "napok alatt"
       ],
-      "answer": "Rövid határidővel dolgozunk:\n1. Gyors egyeztetés az igényeidről\n2. Hamar kipróbálható első változat\n3. Folyamatos finomítás a visszajelzéseid alapján\nA pontos határidő a feladattól függ. Írd meg, mire van szükséged, és megmondjuk.",
-      "elsobbseg": 1
-    },
-    {
-      "id": "ar",
-      "title": "Ár, költség, árajánlat",
-      "keys": [
-        "mennyibe kerül",
-        "mennyibe",
-        "árak",
-        "ára",
-        "árat",
-        "árajánlat",
-        "ajánlat",
-        "költség",
-        "díj",
-        "fizet",
-        "olcsó",
-        "drága",
-        "büdzsé",
-        "keret"
-      ],
-      "answer": "Az ár a feladattól függ, mert minden fejlesztés a te igényeidre szabott. Pontos árajánlatot rövid egyeztetés után adunk.\nAjánlatkéréshez írd meg:\n- mit szeretnél (weboldal, app, belső rendszer)\n- kik fogják használni\n- van-e határidő\nE-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
+      "answer": "Rövid határidővel dolgozunk:\n1. Gyors egyeztetés az igényeidről\n2. Hamar kipróbálható első változat\n3. Folyamatos finomítás a visszajelzéseid alapján\nHónapokig tartó várakozás nélkül. A pontos határidő a feladattól függ: írd meg, mire van szükséged, és megmondjuk.",
       "elsobbseg": 1
     },
     {
       "id": "folyamat",
-      "title": "Hogyan zajlik a fejlesztés",
+      "title": "Hogyan zajlik a munka",
       "keys": [
         "hogyan működik",
         "folyamat",
         "menete",
         "lépések",
         "hogyan zajlik",
-        "kezd",
-        "indul",
-        "hogyan tovább"
+        "hogyan kezd",
+        "hogyan indul",
+        "mi a teendő"
       ],
-      "answer": "Három lépésben jutsz el a saját megoldásodig:\n1. Egyeztetünk: elmondod, hogyan dolgozol, milyen szolgáltatásaid vannak, mire van szükséged\n2. Beállítjuk a te arculatoddal: elkészül a kipróbálható változat a logóddal, színeiddel és tartalmaiddal, saját címmel\n3. Az ügyfeleid használják: weboldalról, Facebookról vagy QR-kódról nyitják meg",
+      "answer": "Három lépésben jutsz el a saját megoldásodig:\n1. Egyeztetünk: elmondod, hogyan dolgozol, milyen szolgáltatásaid vannak, mikor vagy nyitva, mire van szükséged\n2. Beállítjuk a te arculatoddal: rövid határidővel elkészül a kipróbálható változat a logóddal, színeiddel, tartalmaiddal és egy saját címmel\n3. Az ügyfeleid használják: weboldalról, Facebookról vagy QR-kódról nyitják meg, és ha szeretnék, a kezdőképernyőre teszik",
       "elsobbseg": 1
-    },
-    {
-      "id": "kesz",
-      "title": "Kész appok",
-      "keys": [
-        "kész app",
-        "meglévő",
-        "sablon",
-        "demó",
-        "időpontfoglaló",
-        "foglaló",
-        "évforduló",
-        "bevásárlólista",
-        "látogatószámláló",
-        "statisztika"
-      ],
-      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel\n- Bevásárlólista: szóbeli bevitellel, közös lista\n- Látogatószámláló: saját webstatisztika, ingyenesen letölthető\n- Ügyintézési Segéd: ez a chatbot\nRészletek és élő demók: my-ai.hu/appok/"
     },
     {
       "id": "webshop",
@@ -128,9 +174,8 @@
         "web shop",
         "online bolt",
         "webáruház",
-        "termék",
-        "rendelés",
-        "kosár"
+        "kosár",
+        "termékeket árul"
       ],
       "answer": "Webshopot is készítünk, a vállalkozásodra szabva: termékek, rendelés, admin felület a rendelések kezeléséhez. Mobilon és számítógépen is kényelmesen használható.\nÍrd meg, mit árulnál és hány termékkel, és egyeztetünk a részletekről."
     },
@@ -140,19 +185,20 @@
       "keys": [
         "belső rendszer",
         "nyilvántartás",
-        "admin",
         "adminisztráció",
+        "admin felület",
         "ügyfélkapu",
-        "cég",
+        "ügyfélkezel",
         "vállalat",
         "automatizál",
-        "excel"
+        "excel",
+        "papíron"
       ],
       "answer": "Belső rendszereket és admin felületeket is fejlesztünk: nyilvántartás, ügyfélkezelés, foglalások, ügyfélkapu.\nHa most Excelben vagy papíron vezetsz valamit, gyakran gyorsan kiváltható egy egyszerű webes rendszerrel, ami telefonon is működik."
     },
     {
       "id": "arculat",
-      "title": "Saját arculat, logó, színek",
+      "title": "Saját arculat",
       "keys": [
         "arculat",
         "logó",
@@ -160,56 +206,327 @@
         "dizájn",
         "design",
         "megjelenés",
-        "egyedi kinézet"
+        "kinézet",
+        "saját név"
       ],
-      "answer": "Minden megoldás a te arculatoddal készül: a logód, a színeid és a tartalmaid kerülnek bele, és saját címet kapsz, amit megoszthatsz az ügyfeleiddel."
+      "answer": "Minden megoldás a te arculatoddal készül: a neved, a logód, a színeid és a tartalmaid kerülnek bele.\nSaját címet kapsz (a my-ai.hu-n vagy a saját domaineden), amit megoszthatsz a weboldaladon, Facebookon vagy QR-kódon."
     },
     {
-      "id": "chatbot",
-      "title": "Chatbot a weboldalamra",
+      "id": "domain",
+      "title": "Saját cím, domain, tárhely",
       "keys": [
-        "chatbot",
-        "chat",
-        "bot",
-        "ügyfélszolgálat",
-        "gyik",
-        "kérdés válasz",
-        "widget",
-        "beépít"
+        "domain",
+        "saját cím",
+        "saját domain",
+        "tárhely",
+        "hosting",
+        "szerver",
+        "url",
+        "qr"
       ],
-      "answer": "Az Ügyintézési Segéd egy szabályalapú chatbot: a te témáidból és válaszaidból felel, AI-díj nélkül. Havidíja 5 000 Ft + ÁFA; a tudásbázis összeállítását és a weboldalba építést mi végezzük.\nMegrendelés: my-ai.hu/appok/ugyintezesi-seged/"
+      "answer": "Az időpontfoglalót a my-ai.hu-n (pl. my-ai.hu/cegneved) vagy a saját domaineden is megkaphatod.\nAz ingyenesen letölthető appokat (Évfordulók, Bevásárlólista, Látogatószámláló) a saját tárhelyeden futtatod: PHP és MySQL kell hozzá, ami szinte minden tárhelyen megvan.\nA címet megoszthatod a weboldaladon, Facebookon vagy QR-kódon."
     },
     {
       "id": "modositas",
-      "title": "Módosítás és frissítés később",
+      "title": "Módosítás később",
       "keys": [
         "módosít",
-        "frissít",
         "változtat",
         "karbantart",
         "bővít",
         "utólag",
-        "támogatás"
+        "támogatás",
+        "segítség",
+        "elakadtam"
       ],
-      "answer": "A módosítások azonnal mindenkinél megjelennek, nem kell frissítést telepíteni. Ha később bővítenéd vagy változtatnál rajta, írj nekünk, és megbeszéljük."
+      "answer": "A módosítások azonnal mindenkinél megjelennek, nem kell frissítést telepíteni.\nHa később bővítenéd vagy változtatnál, vagy elakadtál a telepítésben, írj nekünk, és segítünk.\nE-mail: info@my-ai.hu · Telefon: +36 30 584 5937"
     },
     {
-      "id": "kapcsolat",
-      "title": "Kapcsolat, elérhetőség",
+      "id": "idopontfoglalo",
+      "title": "Online időpontfoglaló",
       "keys": [
-        "kapcsolat",
-        "elérhető",
-        "telefon",
-        "email",
-        "e-mail",
-        "hívj",
-        "írj",
-        "beszél",
-        "ember",
-        "ügyintéző"
+        "időpontfoglal",
+        "időpont",
+        "foglal",
+        "foglaló",
+        "booking",
+        "gumiszerviz",
+        "gumis",
+        "fodrász",
+        "rendelő",
+        "szerviz",
+        "kozmetik",
+        "naptár"
       ],
-      "answer": "Írj vagy hívj, és megbeszéljük:\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937\nAz igényedet röviden is elég leírni, a részleteket közösen tisztázzuk.",
+      "answer": "Online időpontfoglaló vállalkozásoknak – egyszeri 30 000 Ft + ÁFA (bruttó 38 100 Ft).\n- Csak a valóban szabad időpontok foglalhatók, dupla foglalás nélkül\n- Párhuzamos helyek (pl. 2 emelő, 3 szék) és ebédszünet\n- Automatikus vagy kézi jóváhagyás, email visszaigazolással\n- Az ügyfél online lemondhatja és a naptárába mentheti\n- Saját mezők az űrlapon, pl. rendszám, gumiméret\n- Telefonos foglalások rögzítése, keresés az admin felületen\nA te nevedet, logódat és színeidet kapja. Élő demó: my-ai.hu/foglalas/"
+    },
+    {
+      "id": "evfordulok",
+      "title": "Évfordulók app",
+      "keys": [
+        "évforduló",
+        "születésnap",
+        "szülinap",
+        "névnap",
+        "emlékeztető",
+        "dátum",
+        "ünnep"
+      ],
+      "answer": "Az Évfordulók születésnapokat, névnapokat, évfordulókat és minden fontos dátumot tart nyilván:\n- Egyszeri, éves és havi alkalmak (a február 29-ét is jól kezeli)\n- Email-emlékeztető előtte napon, vagy aznap, pár nappal, egy héttel előtte\n- Kiírja, hányadik születésnap vagy évforduló következik\n- Megjegyzés minden alkalomhoz, pl. ajándékötlet\n- Feliratkozás az iPhone, a Google vagy az Outlook naptárában\n- Telefonra telepíthető, saját fiókkal, jelszóval védve\nIngyenesen letölthető a saját tárhelyedre, vagy kipróbálható: my-ai.hu/evfordulok/"
+    },
+    {
+      "id": "bevasarlolista",
+      "title": "Bevásárlólista app",
+      "keys": [
+        "bevásárl",
+        "bevásárlólista",
+        "lista",
+        "kenyér",
+        "tej",
+        "bolt",
+        "vásárlás",
+        "közös lista"
+      ],
+      "answer": "Bevásárlólista magyar szóbeli bevitellel:\n- Mondd be: „kenyér, tej meg két kiló alma”, és három tételt ír fel, mennyiséggel\n- Érti a „két kiló”, „fél”, „másfél liter”, „20 deka”, „egy csomag” kifejezéseket\n- Bolti sorrend: zöldség, pékáru, tejtermék, hús, tartós, ital, háztartás\n- Közös lista meghívó linkkel, a változások pár másodperc alatt mindenkinél\n- Gyakran vett tételek egy koppintással, gyenge térerőnél is működik\nIngyenesen letölthető a saját tárhelyedre, vagy kipróbálható: my-ai.hu/bevasarlas/"
+    },
+    {
+      "id": "hang",
+      "title": "Szóbeli bevitel, mikrofon",
+      "keys": [
+        "mikrofon",
+        "hangfelismer",
+        "hangos",
+        "szóbeli",
+        "bemond",
+        "diktál",
+        "beszédfelismer",
+        "nem érhető el"
+      ],
+      "answer": "A Bevásárlólista szóbeli bevitele a böngésző beépített hangfelismerését használja, ez Chrome-ban (Android, számítógép) és Safariban működik.\nHa azt írja, hogy a hangfelismerés nem érhető el:\n- Nyisd meg az appot Chrome-ban vagy Safariban\n- Engedélyezd a mikrofont a böngészőnek\n- Vagy használd a billentyűzet diktálás-gombját: a bemondott szöveget az app ugyanúgy tételekre bontja",
       "elsobbseg": 1
+    },
+    {
+      "id": "latogatoszamlalo",
+      "title": "Látogatószámláló",
+      "keys": [
+        "látogatószámláló",
+        "látogató",
+        "statisztika",
+        "webstatisztika",
+        "analytics",
+        "kattintás",
+        "forgalom",
+        "mérés"
+      ],
+      "answer": "Saját webstatisztika a weboldaladra, külső szolgáltatás nélkül, minden adat a saját tárhelyeden marad:\n- Látogatók és oldalmegtekintések napi és óránkénti grafikonon\n- Valódi eltöltött idő (csak amíg a lap látható)\n- Kattintások: melyik gombra, linkre kattintanak\n- Honnan jöttek: Google, Facebook, böngészők, eszközök\n- GDPR-barát: hozzájárulás-sáv, IP-anonimizálás, automatikus törlés, robotszűrés\nIngyenesen letölthető: my-ai.hu/appok/latogatoszamlalo/",
+      "elsobbseg": 1
+    },
+    {
+      "id": "letoltes",
+      "title": "Ingyenes letöltés és telepítés",
+      "keys": [
+        "ingyenes",
+        "ingyen",
+        "letölt",
+        "zip",
+        "saját tárhely",
+        "install",
+        "telepítési útmutató",
+        "telepítem",
+        "php",
+        "mysql"
+      ],
+      "answer": "Ingyenesen letölthető: Évfordulók, Bevásárlólista, Látogatószámláló. A letöltés gomb az app oldalán van (my-ai.hu/appok/).\nTelepítés röviden:\n1. Töltsd fel a kicsomagolt mappát a tárhelyedre\n2. Másold az api/config.example.php fájlt api/config.php néven, és írd bele az adatbázis adatait\n3. Nyisd meg az install.php oldalt, és hozd létre a fiókodat\nKell hozzá: PHP 7.4+ és MySQL/MariaDB, a telefonos appokhoz HTTPS is. A részletes útmutató a csomagban van (TELEPITES.md). Ha elakadsz, segítünk."
+    },
+    {
+      "id": "demo",
+      "title": "Élő demók",
+      "keys": [
+        "demó",
+        "demo",
+        "kipróbál",
+        "próba",
+        "teszt",
+        "megnéz",
+        "minta"
+      ],
+      "answer": "Ezeket próbálhatod ki most:\n- Időpontfoglaló: my-ai.hu/foglalas/ (Minta Gumiszerviz)\n- Évfordulók: my-ai.hu/evfordulok/\n- Bevásárlólista: my-ai.hu/bevasarlas/\n- Ügyintézési Segéd: my-ai.hu/ugyintezes/ – de ez a chat is az\nAz időpontfoglaló admin felületét kérésre adminként is megmutatjuk."
+    },
+    {
+      "id": "chatbot",
+      "title": "Ügyintézési Segéd (chatbot)",
+      "keys": [
+        "chatbot",
+        "chat",
+        "ügyintézési segéd",
+        "ügyfélszolgálat",
+        "gyik",
+        "widget",
+        "buborék",
+        "weboldalamra"
+      ],
+      "answer": "Az Ügyintézési Segéd egy szabályalapú chatbot a weboldaladra: a te témáidból és válaszaidból felel, éjjel-nappal, AI-díj nélkül.\nHavidíja 5 000 Ft + ÁFA (bruttó 6 350 Ft), havonta lemondható. Benne van:\n- A tudásbázist a te kérdéseidből és válaszaidból mi állítjuk össze\n- A chat-buborékot mi építjük be a weboldaladba (WordPress, Wix, Shopify vagy saját oldal)\n- Saját név és szín, a témák frissítése kérésre\nMegrendelés: my-ai.hu/appok/ugyintezesi-seged/"
+    },
+    {
+      "id": "megrendeles",
+      "title": "Chatbot megrendelése",
+      "keys": [
+        "megrendel",
+        "rendelés",
+        "hogyan rendel",
+        "igénylés",
+        "rendel"
+      ],
+      "answer": "Így rendelheted meg az Ügyintézési Segédet:\n1. Töltsd ki a megrendelő űrlapot: my-ai.hu/appok/ugyintezesi-seged/#megrendeles\n2. Felvesszük veled a kapcsolatot, és egyeztetjük a chat témáit és válaszait\n3. Elküldjük a díjbekérőt\n4. Az első befizetés után indul a chat, a beépítést is mi végezzük",
+      "elsobbseg": 1
+    },
+    {
+      "id": "fizetes",
+      "title": "Fizetés és számla",
+      "keys": [
+        "fizetés",
+        "fizetni",
+        "átutal",
+        "díjbekérő",
+        "számla",
+        "bankkártya",
+        "kártyával"
+      ],
+      "answer": "Az Ügyintézési Segéd díját előre fizeted, díjbekérő alapján, banki átutalással, 1, 3 vagy 12 hónapra. A befizetésről számlát állítunk ki.\nAz időpontfoglaló egyszeri díjáról az árajánlatban egyeztetünk.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "lejarat",
+      "title": "Lejárat és lemondás",
+      "keys": [
+        "lejár",
+        "lemond",
+        "felmond",
+        "megszüntet",
+        "hosszabbít",
+        "szünetel",
+        "nem fizet",
+        "visszatérít"
+      ],
+      "answer": "Az Ügyintézési Segéd előfizetéséről:\n- A lejárat előtt 7 és 1 nappal emailben emlékeztetünk\n- Ha a díj nem érkezik meg, a chat automatikusan szünetel, befizetés után újra működik\n- Bármikor lemondhatod emailben (info@my-ai.hu), a kifizetett időszak végén szűnik meg\n- A megkezdett időszak díját nem térítjük vissza\nRészletek: my-ai.hu/aszf/",
+      "elsobbseg": 2
+    },
+    {
+      "id": "ai",
+      "title": "Mesterséges intelligencia",
+      "keys": [
+        "mesterséges intelligencia",
+        "chatgpt",
+        "gpt",
+        "ai alapú",
+        "ai díj",
+        "robot"
+      ],
+      "answer": "Az Ügyintézési Segéd szabályalapú: a kérdésben lévő kulcsszavak alapján, előre megírt válaszokból felel. Nem használ mesterséges intelligenciát, ezért nem talál ki semmit, mindig azt mondja, amit beleírtál, és nincs AI-díj.\nHa egyedi igényed van, írj, és megbeszéljük."
+    },
+    {
+      "id": "ceg",
+      "title": "Rólunk, cégadatok",
+      "keys": [
+        "rólatok",
+        "rólunk",
+        "kik vagytok",
+        "ki üzemelteti",
+        "cég",
+        "immobilis",
+        "partners",
+        "székhely",
+        "cím",
+        "adószám",
+        "cégjegyzék",
+        "kft"
+      ],
+      "answer": "A my-ai.hu-t az Immobilis Partners KFT üzemelteti.\n- Székhely: 1238. Budapest, Molnár utca 65/b\n- Cégjegyzékszám: 01-09-684414\n- Adószám: 11941736-2-43\n- E-mail: info@my-ai.hu · Telefon: +36 30 584 5937\nEgyedi webes és alkalmazásigényeket fejlesztünk, rövid határidővel."
+    },
+    {
+      "id": "adatvedelem",
+      "title": "Adatkezelés, GDPR",
+      "keys": [
+        "adatkezel",
+        "adatvédelem",
+        "gdpr",
+        "személyes adat",
+        "adataim",
+        "töröl",
+        "naih",
+        "adat"
+      ],
+      "answer": "Röviden az adatkezelésről:\n- A chatbe írt kérdéseket nem tároljuk és nem továbbítjuk, a böngésződben dolgozzuk fel. Kérjük, ne adj meg itt személyes adatot.\n- Kapcsolatfelvételnél, foglalásnál és megrendelésnél csak a szükséges adatokat kezeljük\n- Az adatokat a DiMa.hu tárhelyén, Magyarországon tároljuk, harmadik félnek nem adjuk át\n- Kérheted az adataid kiadását, javítását vagy törlését: info@my-ai.hu\nTeljes tájékoztató: my-ai.hu/adatkezeles/"
+    },
+    {
+      "id": "sutik",
+      "title": "Sütik és statisztika",
+      "keys": [
+        "süti",
+        "cookie",
+        "követés",
+        "nyomkövet",
+        "hozzájárul",
+        "google analytics"
+      ],
+      "answer": "Látogatottsági statisztikát csak a hozzájárulásoddal mérünk, saját rendszerrel, külső elemzőszolgáltatás (pl. Google Analytics) nélkül, és reklámcélra nem adjuk át.\nAz adatokat legfeljebb 395 napig őrizzük. A hozzájárulást bármikor visszavonhatod az oldal alján a „Süti-beállítások” linkkel."
+    },
+    {
+      "id": "aszf",
+      "title": "ÁSZF, szerződési feltételek",
+      "keys": [
+        "ászf",
+        "aszf",
+        "általános szerződési",
+        "szerződés",
+        "feltétel",
+        "garancia",
+        "felelősség",
+        "panasz"
+      ],
+      "answer": "Az Ügyintézési Segéd szolgáltatás általános szerződési feltételei: my-ai.hu/aszf/\nA legfontosabbak:\n- A szolgáltatás vállalkozásoknak, egyéni vállalkozóknak és szervezeteknek szól\n- A díj előre fizetendő, havonta lemondható\n- A válaszok tartalmáért a megrendelő felel, a chat azt mondja, amit beleírtunk\n- Kérdést, panaszt az info@my-ai.hu címen jelezhetsz, 8 munkanapon belül válaszolunk"
+    },
+    {
+      "id": "biztonsag",
+      "title": "Biztonság",
+      "keys": [
+        "biztonság",
+        "biztonságos",
+        "jelszó",
+        "feltör",
+        "védelem",
+        "hacker"
+      ],
+      "answer": "- Minden cég adatai külön kezelve\n- Védett admin belépés, a jelszavakat csak visszafejthetetlen (hash) formában tároljuk\n- Robotok elleni védelem és titkosított (HTTPS) kapcsolat\nElfelejtett jelszó esetén az app belépési oldalán emailben új jelszót kérhetsz."
+    },
+    {
+      "id": "koszon",
+      "title": "Köszönöm",
+      "keys": [
+        "köszön",
+        "kösz",
+        "köszi",
+        "thanks",
+        "szuper",
+        "rendben"
+      ],
+      "answer": "Szívesen! Ha van még kérdésed, írd be bátran, vagy keress minket: info@my-ai.hu, +36 30 584 5937.",
+      "elsobbseg": -1
+    },
+    {
+      "id": "szia",
+      "title": "Üdvözlés",
+      "keys": [
+        "szia",
+        "hello",
+        "helló",
+        "jó napot",
+        "üdv",
+        "hali",
+        "sziasztok"
+      ],
+      "answer": "Szia! Miben segíthetek? Kérdezhetsz az árakról, a kész appokról, az egyedi fejlesztésről vagy a határidőről.",
+      "elsobbseg": -1
     }
   ]
 }

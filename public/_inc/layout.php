@@ -119,6 +119,9 @@ function page_end(): void { ?>
   </div>
 </footer>
 
+<!-- my-ai.hu chatbot (Ügyintézési Segéd, szabályalapú; tudásbázis: apps/ugyintezes/ugyfelek/my-ai.json) -->
+<script src="/ugyintezes/widget.js" data-ugyfel="my-ai" data-szin="#4f46e5" data-felirat="Kérdezz tőlünk" defer></script>
+
 <script>
   // Mobil menü: nyitás/zárás, és zárás, ha egy menüpontra kattintanak.
   (function () {

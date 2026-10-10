@@ -123,7 +123,6 @@ app_hero('ugyintezesi-seged', '5 000 Ft + ÁFA / hó · nincs AI-díj',
     })();
   </script>
 
-  <script src="/ugyintezes/widget.js" data-ugyfel="my-ai" data-szin="#4f46e5" data-felirat="Kérdezz tőlünk" defer></script>
 
 <?php
 contact_section('Kérdésed van a szolgáltatással kapcsolatban?', 'Írj vagy hívj — segítünk összeállítani a témákat, és megmutatjuk, hogyan működne a te weboldaladon.');

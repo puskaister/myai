@@ -198,6 +198,10 @@ jobs:
             echo "ok $u"
           done
           test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 5 || { echo "::error::az Appok oldalon nem 5 kártya van"; exit 1; }
+          for u in / /appok/ /appok/idopontfoglalo/ /adatkezeles/ /aszf/; do
+            test "$(curl -s "http://127.0.0.1:8009$u" | grep -c 'widget.js" data-ugyfel="my-ai"')" = 1 || { echo "::error::$u: a chatbot buborék nincs (vagy duplán van) beépítve"; exit 1; }
+          done
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/assets/immobilis-logo.svg)" = 200 || { echo "::error::hiányzik a chat logója"; exit 1; }
           P=$(curl -s http://127.0.0.1:8009/appok/ugyintezesi-seged/)
           if grep -q "Beépítés bármely weboldalba" <<<"$P"; then echo "::error::az Ügyintézési Segéd oldalán még ott a beépítési leírás"; exit 1; fi
           grep -q "5 000 Ft + ÁFA" <<<"$P" && grep -q 'id="order-form"' <<<"$P" && grep -q 'href="/aszf/"' <<<"$P" || { echo "::error::az Ügyintézési Segéd oldalán nincs ár / megrendelő űrlap"; exit 1; }
