@@ -1,6 +1,27 @@
 <?php
 declare(strict_types=1);
 
+// Az ügyfelek jelszóbeállító linkjei (meghívó és elfelejtett jelszó).
+const PORTAL_RESETS_SQL = "CREATE TABLE IF NOT EXISTS {portal_resets} (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT UNSIGNED NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_customer (customer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+// Meglévő telepítés frissítése (az első API-hívásnál, egyszer).
+function migrate_schema(): void {
+    if ((int) (setting_value('schema_version') ?? 1) >= 2) return;
+    if (!q_one("SHOW COLUMNS FROM {customers} LIKE 'portal_password_hash'")) {
+        q_exec('ALTER TABLE {customers} ADD COLUMN portal_password_hash VARCHAR(255) NULL AFTER paid_until');
+    }
+    if (!db()->query(sql_tables(PORTAL_RESETS_SQL))) throw new AppError('Adatbázis-frissítési hiba: ' . db()->error, 500);
+    set_setting_value('schema_version', '2');
+}
+
 function schema_statements(): array {
     $opts = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci';
     return [
@@ -36,6 +57,7 @@ function schema_statements(): array {
             kb_json MEDIUMTEXT NULL,
             status VARCHAR(10) NOT NULL DEFAULT 'pending',
             paid_until DATE NULL,
+            portal_password_hash VARCHAR(255) NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             INDEX idx_status (status, paid_until)
         ) $opts",
@@ -60,6 +82,8 @@ function schema_statements(): array {
             sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY uq_rem (customer_id, kind, period_until)
         ) $opts",
+
+        PORTAL_RESETS_SQL,
 
         "CREATE TABLE IF NOT EXISTS {rate_limits} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

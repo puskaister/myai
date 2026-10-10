@@ -77,6 +77,31 @@ P2=$(get "admin/customer&id=$CID" | jq -r .customer.paid_until)
 check "hosszabbítás a meglévő lejárattól (+3 hónap)" '[ "$(TZ=Europe/Budapest date -d "$P1 +3 month" +%F)" = "$P2" ]'
 r=$(save paused "$P2" "$KB"); check "szüneteltetve → a chat szünetel" 'curl -s "$BASE/kb.php?u=$SLUG" | jq -e ".inactive == true" >/dev/null'
 
+echo "== Ügyfél-fiók: saját belépés, csak a saját chatbot"
+J2="$(mktemp)"
+pget()  { curl -s "$BASE/api/?r=$1" -b "$J2" -c "$J2"; }
+ppost() { curl -s -w '\n%{http_code}' "$BASE/api/?r=$1" -b "$J2" -c "$J2" -H 'X-Requested-With: fetch' -H 'Content-Type: application/json' -d "$2"; }
+check "belépés nélkül nem éri el" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/?r=portal/kb")" = 401 ]'
+check "a fiók oldal betölt" 'curl -s "$BASE/fiok/" | grep -q "portal.js"'
+: > "$MAIL_LOG"
+r=$(post admin/customer/invite "{\"id\":$CID}"); check "belépési link elküldve az ügyfélnek" '[ "$(status "$r")" = 200 ] && grep -q "To: anna@kovacs.hu" "$MAIL_LOG"'
+TOKEN=$(grep -oE "fiok/\?token=[a-f0-9]{64}" "$MAIL_LOG" | head -1 | cut -d= -f2)
+check "a levélben ott a jelszóbeállító link" '[ ${#TOKEN} = 64 ]'
+r=$(ppost portal/password '{"token":"'"$TOKEN"'","password":"rovid"}'); check "rövid jelszó elutasítva" '[ "$(status "$r")" = 400 ]'
+r=$(ppost portal/password '{"token":"'"$TOKEN"'","password":"ugyfel123"}'); check "jelszó beállítva, belépve" '[ "$(status "$r")" = 200 ] && body "$r" | jq -e ".customer.slug == \"kovacs-iroda-kft\"" >/dev/null'
+r=$(ppost portal/password '{"token":"'"$TOKEN"'","password":"masik1234"}'); check "a link csak egyszer használható" '[ "$(status "$r")" = 400 ]'
+check "csak a saját tudástárát kapja" 'pget portal/kb | jq -e ".kb.temak[0].title == \"Nyitvatartás\"" >/dev/null'
+check "az admin felületet nem éri el" '[ "$(curl -s -o /dev/null -w "%{http_code}" -b "$J2" "$BASE/api/?r=admin/kb&bot=my-ai")" = 401 ]'
+r=$(ppost portal/kb/save '{"kb":{"nev":"Kovács Iroda","temak":[{"title":"Parkolás","keys":["parkol"],"answer":"Az udvarban ingyenes."},{"title":"Nyitvatartás","keys":["nyitva"],"answer":"H–P 8–16"}]}}')
+check "az ügyfél menti a saját tanítását" '[ "$(status "$r")" = 200 ]'
+check "a mentett tanítás megmarad (a chat aktív előfizetésnél ezt adja)" 'pget portal/kb | jq -e ".kb.temak[0].title == \"Parkolás\" and .live == false" >/dev/null'
+check "a my-ai.hu chatbotja érintetlen" 'curl -s "$BASE/kb.php?u=my-ai" | jq -e "[.temak[].title] | index(\"Parkolás\") == null" >/dev/null'
+check "az admin látja, hogy van belépése" 'get admin/customers | jq -e ".customers[0].has_portal == true and (.customers[0] | has(\"portal_password_hash\") | not)" >/dev/null'
+r=$(ppost portal/logout '{}'); r=$(ppost portal/login '{"email":"anna@kovacs.hu","password":"rossz-jelszo"}'); check "rossz jelszó: 401" '[ "$(status "$r")" = 401 ]'
+r=$(ppost portal/login '{"email":"anna@kovacs.hu","password":"ugyfel123"}'); check "belépés email + jelszóval" '[ "$(status "$r")" = 200 ]'
+: > "$MAIL_LOG"
+r=$(ppost portal/forgot '{"email":"anna@kovacs.hu"}'); check "elfelejtett jelszó: link emailben" '[ "$(status "$r")" = 200 ] && grep -q "1 óráig érvényes" "$MAIL_LOG"'
+
 echo "== Lejárati kör"
 check "rossz kulcs 403" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/cron.php?key=rossz")" = 403 ]'
 IN7=$(TZ=Europe/Budapest date -d "$TODAY +7 day" +%F)

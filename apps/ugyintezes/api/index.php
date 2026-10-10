@@ -4,10 +4,13 @@
 // Belépés: login, logout, me, forgot, reset
 // Admin: admin/customers, admin/customer, admin/customer/save, admin/customer/delete,
 //        admin/payment/add, admin/settings (+/save), admin/password,
-//        admin/kb (+/save, /reset): a tanító felület (a my-ai.hu saját chatbotja vagy egy ügyfélé)
+//        admin/kb (+/save, /reset): a tanító felület (a my-ai.hu saját chatbotja vagy egy ügyfélé),
+//        admin/customer/invite: belépési link az ügyfélnek
+// Ügyfél (fiok/): portal/login, logout, me, forgot, password, kb, kb/save — csak a saját chatbotja
 declare(strict_types=1);
 
 require __DIR__ . '/lib/core.php';
+require __DIR__ . '/lib/schema.php';
 
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
@@ -45,11 +48,41 @@ function embed_code(array $c): string {
     return '<script src="' . app_base_url() . '/widget.js"' . $attrs . ' defer></script>';
 }
 
+// Az ügyfél tanító felülete: belépés a saját email címével.
+function current_customer(): ?array {
+    if (empty($_SESSION['portal_customer_id'])) return null;
+    return q_one('SELECT * FROM {customers} WHERE id = ?', [(int) $_SESSION['portal_customer_id']]);
+}
+
+// Jelszóbeállító link egy ügyfélnek (meghívó: 7 nap, elfelejtett jelszó: 1 óra).
+function send_portal_link(array $c, bool $invite): void {
+    $token = bin2hex(random_bytes(32));
+    q_exec('DELETE FROM {portal_resets} WHERE customer_id = ? OR expires_at < ?', [(int) $c['id'], date('Y-m-d H:i:s')]);
+    q_exec('INSERT INTO {portal_resets} (customer_id, token_hash, expires_at) VALUES (?, ?, ?)',
+        [(int) $c['id'], hash('sha256', $token), date('Y-m-d H:i:s', time() + ($invite ? 7 * 86400 : 3600))]);
+    $link = app_base_url() . '/fiok/?token=' . $token;
+    $o = get_options();
+    $ok = send_app_email(mail_cfg(), (string) $c['email'], $invite ? 'Belépés a chatbotod tanításához – Ügyintézési Segéd' : 'Jelszó beállítása – Ügyintézési Segéd',
+        "Kedves {$c['contact_name']}!\n\n"
+        . ($invite ? "Mostantól te is taníthatod a(z) {$c['name']} chatbotját: témákat, kulcsszavakat és válaszokat adhatsz hozzá, módosíthatsz, és ki is próbálhatod, mit válaszolna.\n\nA jelszavadat ezen a linken állíthatod be (7 napig érvényes):\n\n"
+                   : "Új jelszót ezen a linken állíthatsz be (1 óráig érvényes):\n\n")
+        . "$link\n\nKésőbb itt léphetsz be: " . app_base_url() . "/fiok/ (felhasználónév: ez az email cím)\n\n"
+        . ($invite ? '' : "Ha nem te kérted, hagyd figyelmen kívül ezt a levelet.\n\n")
+        . 'Kérdés esetén írj: ' . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu");
+    if (!$ok) throw new AppError('A levelet nem sikerült elküldeni: ' . (($GLOBALS['mail_last']['error'] ?? '') ?: 'ismeretlen hiba'), 500);
+}
+
+function portal_view(array $c): array {
+    return ['name' => $c['name'], 'slug' => $c['slug'], 'email' => $c['email'], 'status' => $c['status'], 'paid_until' => $c['paid_until'],
+            'active_now' => is_subscription_active($c), 'chat_url' => '../chat.html?u=' . $c['slug']];
+}
+
 function customer_row(array $c): array {
     $c['active_now'] = is_subscription_active($c);
     $c['days_left'] = !empty($c['paid_until']) ? (int) round((strtotime($c['paid_until'] . ' 12:00') - strtotime(date('Y-m-d') . ' 12:00')) / 86400) : null;
     $c['has_kb'] = !empty($c['kb_json']);
-    unset($c['kb_json']);
+    $c['has_portal'] = !empty($c['portal_password_hash']);
+    unset($c['kb_json'], $c['portal_password_hash']);
     return $c;
 }
 
@@ -59,12 +92,16 @@ try {
     session_set_cookie_params(['lifetime' => 0, 'path' => dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/api/index.php')) ?: '/',
         'secure' => is_https_request(), 'httponly' => true, 'samesite' => 'Lax']);
     session_start();
+    migrate_schema();
 
     $route = (string) ($_GET['r'] ?? '');
     $isPost = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
     if ($isPost && ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'fetch') throw new AppError('Érvénytelen kérés.', 400);
     if (strpos($route, 'admin/') === 0 && !current_admin()) throw new AppError('Bejelentkezés szükséges.', 401);
-    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb'];
+    if (strpos($route, 'portal/') === 0 && !in_array($route, ['portal/login', 'portal/logout', 'portal/me', 'portal/forgot', 'portal/password'], true) && !current_customer()) {
+        throw new AppError('Bejelentkezés szükséges.', 401);
+    }
+    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'portal/me', 'portal/kb'];
     if (!in_array($route, $getOnly, true) && !$isPost) throw new AppError('Method not allowed', 405);
 
     switch ($route) {
@@ -190,7 +227,7 @@ try {
 
         case 'admin/customer/delete': {
             $id = (int) (input()['id'] ?? 0);
-            foreach (['{payments}', '{reminders}'] as $t) q_exec("DELETE FROM $t WHERE customer_id = ?", [$id]);
+            foreach (['{payments}', '{reminders}', '{portal_resets}'] as $t) q_exec("DELETE FROM $t WHERE customer_id = ?", [$id]);
             q_exec('DELETE FROM {customers} WHERE id = ?', [$id]);
             respond(['ok' => true]);
         }
@@ -231,6 +268,74 @@ try {
                 if (!q_one('SELECT id FROM {customers} WHERE id = ?', [$id])) throw new AppError('Nincs ilyen ügyfél.', 404);
                 q_exec('UPDATE {customers} SET kb_json = ? WHERE id = ?', [$json, $id]);
             }
+            respond(['ok' => true, 'temak' => count($kb['temak'])]);
+        }
+
+        case 'admin/customer/invite': {
+            $c = q_one('SELECT * FROM {customers} WHERE id = ?', [(int) (input()['id'] ?? 0)]);
+            if (!$c) throw new AppError('Nincs ilyen ügyfél.', 404);
+            send_portal_link($c, true);
+            respond(['ok' => true, 'email' => $c['email']]);
+        }
+
+        // ------------------------------------------------------------- ügyfél (fiok/)
+        case 'portal/login': {
+            rate_limit('plogin:' . client_ip(), 10, 900);
+            $in = input();
+            $email = str_in($in, 'email', 190);
+            $pw = (string) ($in['password'] ?? '');
+            $found = null;
+            foreach (q_all('SELECT * FROM {customers} WHERE email = ? AND portal_password_hash IS NOT NULL ORDER BY id', [$email]) as $c) {
+                if (password_verify($pw, (string) $c['portal_password_hash'])) { $found = $c; break; }
+            }
+            if (!$found) throw new AppError('Hibás email cím vagy jelszó.', 401);
+            session_regenerate_id(true);
+            $_SESSION['portal_customer_id'] = (int) $found['id'];
+            respond(['customer' => portal_view($found)]);
+        }
+
+        case 'portal/logout':
+            unset($_SESSION['portal_customer_id']);
+            respond(['ok' => true]);
+
+        case 'portal/me': {
+            $c = current_customer();
+            respond(['customer' => $c ? portal_view($c) : null]);
+        }
+
+        case 'portal/forgot': {
+            rate_limit('pforgot:' . client_ip(), 5, 3600);
+            foreach (q_all('SELECT * FROM {customers} WHERE email = ?', [str_in(input(), 'email', 190)]) as $c) {
+                try { send_portal_link($c, false); } catch (AppError $e) { error_log('[ugyintezes] portal forgot: ' . $e->getMessage()); }
+            }
+            respond(['ok' => true]); // nem áruljuk el, van-e ilyen cím
+        }
+
+        case 'portal/password': {
+            rate_limit('preset:' . client_ip(), 10, 3600);
+            $in = input();
+            $token = (string) ($in['token'] ?? '');
+            $row = preg_match('/^[a-f0-9]{64}$/', $token)
+                ? q_one('SELECT id, customer_id FROM {portal_resets} WHERE token_hash = ? AND used_at IS NULL AND expires_at > ?', [hash('sha256', $token), date('Y-m-d H:i:s')]) : null;
+            if (!$row) throw new AppError('A link érvénytelen vagy lejárt. Kérj újat az „Elfelejtett jelszó” gombbal.');
+            if (strlen((string) ($in['password'] ?? '')) < 8) throw new AppError('A jelszó legalább 8 karakter legyen.');
+            q_exec('UPDATE {customers} SET portal_password_hash = ? WHERE id = ?', [password_hash((string) $in['password'], PASSWORD_DEFAULT), (int) $row['customer_id']]);
+            q_exec('UPDATE {portal_resets} SET used_at = ? WHERE id = ?', [date('Y-m-d H:i:s'), (int) $row['id']]);
+            session_regenerate_id(true);
+            $_SESSION['portal_customer_id'] = (int) $row['customer_id'];
+            respond(['customer' => portal_view(current_customer())]);
+        }
+
+        case 'portal/kb': {
+            $c = current_customer();
+            $kb = json_decode((string) ($c['kb_json'] ?? ''), true) ?: ['nev' => $c['name'], 'temak' => []];
+            respond(['name' => $c['name'], 'kb' => $kb, 'chat_url' => '../chat.html?u=' . $c['slug'], 'live' => is_subscription_active($c)]);
+        }
+
+        case 'portal/kb/save': {
+            $c = current_customer();
+            $kb = normalize_kb(is_array(input()['kb'] ?? null) ? input()['kb'] : []);
+            q_exec('UPDATE {customers} SET kb_json = ? WHERE id = ?', [json_encode($kb, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), (int) $c['id']]);
             respond(['ok' => true, 'temak' => count($kb['temak'])]);
         }
 

@@ -35,6 +35,7 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if (q_one('SELECT id FROM {admins} LIMIT 1')) throw new AppError('A telepítés már megtörtént.');
             save_options(array_merge(default_options(), ['admin_email' => $email]));
             q_exec('INSERT INTO {admins} (name, email, password_hash) VALUES (?, ?, ?)', [$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
+            set_setting_value('schema_version', '2');
             q_exec("INSERT INTO {settings} (k, v) VALUES ('installed', 'true') ON DUPLICATE KEY UPDATE v = 'true'");
             $state = 'done';
         } catch (AppError $e) {

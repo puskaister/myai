@@ -24,12 +24,6 @@ header('Cache-Control: no-store');
 <style>
   :root { --primary: #17695f; --on-primary: #ffffff; }
   @media (prefers-color-scheme: dark) { :root { --primary: #4fb3a5; --on-primary: #06201d; } }
-  .topics { display: grid; gap: 8px; }
-  .topic { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: var(--card); }
-  .topic.open { border-color: var(--primary); }
-  .savebar { position: sticky; bottom: 12px; z-index: 5; margin-top: 14px; }
-  .savebar.dirty { border-color: var(--primary); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
-  .teach > * + * { margin-top: 14px; }
   .kb { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; min-height: 220px; }
   .snippet { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; background: var(--soft); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; word-break: break-all; user-select: all; }
   .badge.active { background: color-mix(in srgb, var(--success) 15%, var(--card)); color: var(--success); }
@@ -48,6 +42,8 @@ header('Cache-Control: no-store');
   </div>
 </header>
 <main id="admin" class="container wide"></main>
+<script src="<?= $v('assets/common.js') ?>"></script>
+<script src="<?= $v('assets/teach.js') ?>"></script>
 <script src="<?= $v('assets/admin.js') ?>"></script>
 </body>
 </html>

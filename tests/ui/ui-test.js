@@ -187,6 +187,14 @@ const flows = {
       await settle(500);
       await textOk(page, 'admin: ' + tab);
     }
+    // ügyfél-fiók: a tests/ugyintezes.sh által beállított jelszóval
+    await login(page, '/fiok/', 'anna@kovacs.hu', 'ugyfel123');
+    await page.waitForSelector('#kb-test', { timeout: 10000 });
+    await settle(500);
+    await textOk(page, 'ügyfél-fiók: tanítás');
+    await page.type('#kb-test', 'hol lehet parkolni?');
+    await waitText(page, 'Az udvarban ingyenes.');
+    await textOk(page, 'ügyfél-fiók: kipróbálás');
     await page.goto(BASE + '/chat.html?u=my-ai', { waitUntil: 'networkidle0' });
     await page.waitForSelector('#q');
     await page.type('#q', 'mennyibe kerül a chatbot?');

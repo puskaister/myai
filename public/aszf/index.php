@@ -21,7 +21,7 @@ $provider = [
     'email'    => 'info@my-ai.hu',
     'phone'    => '+36 30 584 5937',
 ];
-$updated = '2026. október 4.';
+$updated = '2026. október 10.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -96,7 +96,8 @@ header('Content-Type: text/html; charset=utf-8');
   <ul>
     <li>a tudásbázis összeállítását a Megrendelő által megadott információk alapján, és havonta észszerű mértékű módosítását;</li>
     <li>a chatbot működtetését a Szolgáltató szerverén;</li>
-    <li>a beépítő kód átadását, és kérésre a beépítést a Megrendelő weboldalába, ha ehhez a Megrendelő hozzáférést biztosít.</li>
+    <li>a beépítő kód átadását, és kérésre a beépítést a Megrendelő weboldalába, ha ehhez a Megrendelő hozzáférést biztosít;</li>
+    <li>saját belépést a tanító felülethez (my-ai.hu/ugyintezes/fiok/), ahol a Megrendelő a tudásbázist maga is szerkesztheti és kipróbálhatja.</li>
   </ul>
   <p>3.3. A látogatók kérdéseit a chatbot a látogató böngészőjében dolgozza fel; a kérdéseket a Szolgáltató nem tárolja és nem továbbítja.</p>
   <p>3.4. A Szolgáltató a folyamatos elérhetőségre törekszik, de nem garantálja a megszakítás nélküli működést. Karbantartás, a tárhelyszolgáltató hibája vagy külső ok miatti rövid kiesés nem jelent szerződésszegést.</p>
@@ -121,7 +122,8 @@ header('Content-Type: text/html; charset=utf-8');
   <p>6.5. Ha a díj a lejárattól számított 90 napon belül nem érkezik meg, a szerződés megszűnik, és a Szolgáltató a tudásbázist törölheti.</p>
 
   <h2>7. A Megrendelő kötelezettségei</h2>
-  <p>7.1. A Megrendelő felel a tudásbázishoz átadott információk (például árak, nyitvatartás, ügyintézési tudnivalók) valóságáért, naprakészségéért és jogszerűségéért. A változásokat a Megrendelő jelzi a Szolgáltatónak.</p>
+  <p>7.1. A Megrendelő felel a tudásbázishoz átadott információk (például árak, nyitvatartás, ügyintézési tudnivalók) valóságáért, naprakészségéért és jogszerűségéért. A változásokat a Megrendelő jelzi a Szolgáltatónak, vagy a tanító felületen maga módosítja; az így módosított tartalomért is a Megrendelő felel.</p>
+  <p>7.4. A Megrendelő a tanító felület jelszavát titokban tartja; a belépési adataival végzett módosításokért felel.</p>
   <p>7.2. A Megrendelő a beépítő kódot csak a saját, a megrendelésben megjelölt vagy a Szolgáltatóval egyeztetett weboldalán használhatja.</p>
   <p>7.3. A szolgáltatás nem használható jogszabályba ütköző, megtévesztő vagy harmadik személy jogait sértő célra.</p>
 

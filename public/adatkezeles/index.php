@@ -20,7 +20,7 @@ $controller = [
     'email'   => 'info@my-ai.hu',
     'phone'   => '+36 30 584 5937',
 ];
-$updated = '2026. október 4.';
+$updated = '2026. október 10.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -115,7 +115,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <h3>2.5. Megrendelés és előfizetés (Ügyintézési Segéd)</h3>
   <table>
-    <tr><th>Adatok</th><td>Cég / vállalkozás neve, kapcsolattartó neve, email cím, telefonszám, weboldal címe, számlázási név és cím, adószám, a megrendeléskor megadott üzenet, valamint a befizetések és az előfizetés érvényessége.</td></tr>
+    <tr><th>Adatok</th><td>Cég / vállalkozás neve, kapcsolattartó neve, email cím, telefonszám, weboldal címe, számlázási név és cím, adószám, a megrendeléskor megadott üzenet, a befizetések és az előfizetés érvényessége, valamint a tanító felület belépési adatai (email cím, a jelszó csak visszafejthetetlen, hash formában) és a chatbot tudásbázisa.</td></tr>
     <tr><th>Cél</th><td>A megrendelés teljesítése, a szolgáltatás beállítása, díjbekérő és számla kiállítása, a lejárat előtti emlékeztetők küldése.</td></tr>
     <tr><th>Jogalap</th><td>Szerződés teljesítése (GDPR 6. cikk (1) b) pont); a számlázási adatok tekintetében jogi kötelezettség teljesítése (GDPR 6. cikk (1) c) pont, a számvitelről szóló 2000. évi C. törvény).</td></tr>
     <tr><th>Időtartam</th><td>Az előfizetés megszűnéséig; a számviteli bizonylatok adatait a számviteli törvény szerint 8 évig őrizzük.</td></tr>

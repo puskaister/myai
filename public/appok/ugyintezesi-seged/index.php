@@ -21,7 +21,7 @@ app_hero('ugyintezesi-seged', '5 000 Ft + ÁFA / hó · nincs AI-díj',
           <li>Ékezet nélkül és szótővel is érti a kérdést („mennyibe kerul”, „kell app store?”)</li>
           <li>Gyorsgombok a leggyakoribb témákhoz, kapcsolódó témák ajánlása</li>
           <li>Ha nem érti a kérdést, felajánlja a témákat és az élő ügyfélszolgálat elérhetőségét</li>
-          <li>Tudásbázis-szerkesztő: témák, kulcsszavak és válaszok programozás nélkül</li>
+          <li>Saját belépés: a témákat, kulcsszavakat és válaszokat te is taníthatod, programozás nélkül, és ki is próbálhatod</li>
           <li>Bármely weboldalon működik (WordPress, Wix, Shopify, saját oldal) — a beépítést mi végezzük</li>
         </ul>
       </div>
@@ -58,6 +58,7 @@ app_hero('ugyintezesi-seged', '5 000 Ft + ÁFA / hó · nincs AI-díj',
             <li>Nincs AI-díj, nincs forgalomarányos költség</li>
           </ul>
           <p class="meta">A chat az első befizetés után indul. Lejárat előtt emailben emlékeztetünk.</p>
+          <p class="meta">A témákat és válaszokat saját belépéssel te is bármikor bővítheted. Már ügyfelünk vagy? <a href="/ugyintezes/fiok/">Belépés a chatbotod tanításához →</a></p>
         </div>
 
         <form class="card form" id="order-form" novalidate>

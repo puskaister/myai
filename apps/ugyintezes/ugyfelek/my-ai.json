@@ -391,7 +391,7 @@
         "buborék",
         "weboldalamra"
       ],
-      "answer": "Az Ügyintézési Segéd egy szabályalapú chatbot a weboldaladra: a te témáidból és válaszaidból felel, éjjel-nappal, AI-díj nélkül.\nHavidíja 5 000 Ft + ÁFA (bruttó 6 350 Ft), havonta lemondható. Benne van:\n- A tudásbázist a te kérdéseidből és válaszaidból mi állítjuk össze\n- A chat-buborékot mi építjük be a weboldaladba (WordPress, Wix, Shopify vagy saját oldal)\n- Saját név és szín, a témák frissítése kérésre\nMegrendelés: my-ai.hu/appok/ugyintezesi-seged/"
+      "answer": "Az Ügyintézési Segéd egy szabályalapú chatbot a weboldaladra: a te témáidból és válaszaidból felel, éjjel-nappal, AI-díj nélkül.\nHavidíja 5 000 Ft + ÁFA (bruttó 6 350 Ft), havonta lemondható. Benne van:\n- A tudásbázist a te kérdéseidből és válaszaidból mi állítjuk össze\n- A chat-buborékot mi építjük be a weboldaladba (WordPress, Wix, Shopify vagy saját oldal)\n- Saját név és szín, a témák frissítése kérésre\n- Saját belépés, ahol te is taníthatod\nMegrendelés: my-ai.hu/appok/ugyintezesi-seged/"
     },
     {
       "id": "megrendeles",
@@ -404,6 +404,26 @@
         "rendel"
       ],
       "answer": "Így rendelheted meg az Ügyintézési Segédet:\n1. Töltsd ki a megrendelő űrlapot: my-ai.hu/appok/ugyintezesi-seged/#megrendeles\n2. Felvesszük veled a kapcsolatot, és egyeztetjük a chat témáit és válaszait\n3. Elküldjük a díjbekérőt\n4. Az első befizetés után indul a chat, a beépítést is mi végezzük",
+      "elsobbseg": 1
+    },
+    {
+      "id": "tanitas",
+      "title": "Saját chatbotom tanítása",
+      "keys": [
+        "tanít",
+        "saját belépés",
+        "ügyfélbelépés",
+        "belép",
+        "bejelentkez",
+        "jelsz",
+        "szerkeszt",
+        "új téma",
+        "kulcsszó",
+        "tudásbázis",
+        "fiók",
+        "chatbotom"
+      ],
+      "answer": "Az Ügyintézési Segéd ügyfeleként saját belépést kapsz, és magad is taníthatod a chatbotodat:\n- Témákat, kulcsszavakat és válaszokat adhatsz hozzá és módosíthatsz\n- Kipróbálhatod, mit válaszolna egy kérdésre\n- Mentés után a chat azonnal az új tudással válaszol\nBelépés: my-ai.hu/ugyintezes/fiok/ (a megrendeléskor megadott email címmel). Jelszót az „Elfelejtett jelszó / még nincs jelszavam” linkkel állíthatsz be.",
       "elsobbseg": 1
     },
     {
@@ -518,7 +538,6 @@
       "keys": [
         "biztonság",
         "biztonságos",
-        "jelszó",
         "feltör",
         "védelem",
         "hacker"
