@@ -171,6 +171,17 @@ const flows = {
     await textOk(page, 'admin: ügyfél adatlap (befizetés, beépítő kód)');
     await page.keyboard.press('Escape');
     await page.evaluate(() => document.querySelector('.modal-back')?.remove());
+    await clickText(page, '.tabs button', 'Tanítás');
+    await page.waitForSelector('#kb-test');
+    await page.type('#kb-test', 'mennyibe kerül az időpontfoglaló?');
+    await waitText(page, 'Téma szerkesztése');
+    await textOk(page, 'tanítás: kipróbálás');
+    await clickText(page, 'button', 'Téma szerkesztése');
+    await page.waitForSelector('.topic.open textarea');
+    await textOk(page, 'tanítás: téma szerkesztése');
+    await page.click('#kb-test', { clickCount: 3 });
+    await page.type('#kb-test', 'zsiráf');
+    await waitText(page, 'Új téma ebből a kérdésből');
     for (const tab of ['Beállítások', 'Fiók']) {
       await clickText(page, '.tabs button', tab);
       await settle(500);

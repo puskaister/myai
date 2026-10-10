@@ -3,7 +3,8 @@
 // Nyilvános: order (megrendelés a my-ai.hu oldalról), price
 // Belépés: login, logout, me, forgot, reset
 // Admin: admin/customers, admin/customer, admin/customer/save, admin/customer/delete,
-//        admin/payment/add, admin/settings (+/save), admin/password
+//        admin/payment/add, admin/settings (+/save), admin/password,
+//        admin/kb (+/save, /reset): a tanító felület (a my-ai.hu saját chatbotja vagy egy ügyfélé)
 declare(strict_types=1);
 
 require __DIR__ . '/lib/core.php';
@@ -63,7 +64,7 @@ try {
     $isPost = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
     if ($isPost && ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'fetch') throw new AppError('Érvénytelen kérés.', 400);
     if (strpos($route, 'admin/') === 0 && !current_admin()) throw new AppError('Bejelentkezés szükséges.', 401);
-    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings'];
+    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb'];
     if (!in_array($route, $getOnly, true) && !$isPost) throw new AppError('Method not allowed', 405);
 
     switch ($route) {
@@ -202,6 +203,40 @@ try {
             $until = add_payment((int) ($in['id'] ?? 0), $months, str_in($in, 'note', 200), $amount);
             respond(['ok' => true, 'paid_until' => $until]);
         }
+
+        // ------------------------------------------------------------- tanítás
+        // bot: "my-ai" (a weboldal saját chatbotja) vagy customer=<id>
+        case 'admin/kb': {
+            if (($_GET['bot'] ?? '') === OWN_KB) {
+                $own = own_kb_override();
+                $kb = json_decode($own ?: (string) file_get_contents(dirname(__DIR__) . '/ugyfelek/' . OWN_KB . '.json'), true);
+                respond(['bot' => OWN_KB, 'name' => 'my-ai.hu (a weboldal chatbotja)', 'kb' => $kb, 'source' => $own ? 'db' : 'file',
+                         'chat_url' => '../chat.html?u=' . OWN_KB, 'live' => true]);
+            }
+            $c = q_one('SELECT * FROM {customers} WHERE id = ?', [(int) ($_GET['customer'] ?? 0)]);
+            if (!$c) throw new AppError('Nincs ilyen ügyfél.', 404);
+            $kb = json_decode((string) ($c['kb_json'] ?? ''), true) ?: ['nev' => $c['name'], 'temak' => []];
+            respond(['bot' => 'c' . $c['id'], 'name' => $c['name'], 'kb' => $kb, 'source' => 'db',
+                     'chat_url' => '../chat.html?u=' . $c['slug'], 'live' => is_subscription_active($c)]);
+        }
+
+        case 'admin/kb/save': {
+            $in = input();
+            $kb = normalize_kb(is_array($in['kb'] ?? null) ? $in['kb'] : []);
+            $json = json_encode($kb, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            if (($in['bot'] ?? '') === OWN_KB) {
+                set_setting_value('kb:' . OWN_KB, $json);
+            } else {
+                $id = (int) ($in['customer'] ?? 0);
+                if (!q_one('SELECT id FROM {customers} WHERE id = ?', [$id])) throw new AppError('Nincs ilyen ügyfél.', 404);
+                q_exec('UPDATE {customers} SET kb_json = ? WHERE id = ?', [$json, $id]);
+            }
+            respond(['ok' => true, 'temak' => count($kb['temak'])]);
+        }
+
+        case 'admin/kb/reset': // a my-ai.hu chatbotja vissza az alap (fájl) tudástárra
+            q_exec('DELETE FROM {settings} WHERE k = ?', ['kb:' . OWN_KB]);
+            respond(['ok' => true]);
 
         case 'admin/settings':
             respond(['options' => get_options(), 'cron_url' => app_base_url() . '/cron.php?key=' . cron_key(), 'me' => current_admin()]);

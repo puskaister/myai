@@ -44,6 +44,16 @@ check "visszaigazolás az ügyfélnek, értesítés az adminnak" 'grep -q "To: a
 echo "== Admin: ügyfél, tudásbázis, befizetés"
 check "belépés nélkül tiltott" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/?r=admin/customers")" = 401 ]'
 r=$(post login '{"email":"admin@example.com","password":"titkos123"}'); check "belépés" '[ "$(status "$r")" = 200 ]'
+echo "== Tanítás: a my-ai.hu chatbotja"
+K=$(get "admin/kb&bot=my-ai")
+check "alap tudástár (fájlból)" 'jq -e ".source == \"file\" and (.kb.temak | length) >= 30" <<<"$K" >/dev/null'
+NEW=$(jq -c '.kb | .temak = ([{"title":"Tanított téma","keys":["zebracsikos"],"answer":"Ezt az adminban tanítottuk.","elsobbseg":9}] + .temak)' <<<"$K")
+r=$(post admin/kb/save "{\"bot\":\"my-ai\",\"kb\":$NEW}"); check "tanítás mentve" '[ "$(status "$r")" = 200 ]'
+check "a chat azonnal a tanított tudással válaszol" 'curl -s "$BASE/kb.php?u=my-ai" | jq -e ".temak[0].title == \"Tanított téma\" and .temak[0].elsobbseg == 5 and .logo" >/dev/null'
+check "az admin a tanított változatot mutatja" 'get "admin/kb&bot=my-ai" | jq -e ".source == \"db\"" >/dev/null'
+r=$(post admin/kb/save '{"bot":"my-ai","kb":{"temak":[{"title":"","answer":"x"}]}}'); check "hiányos téma elutasítva" '[ "$(status "$r")" = 400 ]'
+r=$(post admin/kb/save '{"bot":"my-ai","kb":{"logo":"javascript:alert(1)","temak":[{"title":"a","answer":"b"}]}}'); check "veszélyes logó-cím elutasítva" '[ "$(status "$r")" = 400 ]'
+r=$(post admin/kb/reset '{"bot":"my-ai"}'); check "vissza az alapra" '[ "$(status "$r")" = 200 ] && curl -s "$BASE/kb.php?u=my-ai" | jq -e ".temak[0].title != \"Tanított téma\"" >/dev/null'
 L=$(get admin/customers)
 CID=$(jq '.customers[0].id' <<<"$L"); SLUG=$(jq -r '.customers[0].slug' <<<"$L")
 check "a robot megrendelése nem került be" '[ "$(jq ".customers | length" <<<"$L")" = 1 ]'
@@ -55,6 +65,7 @@ save() { post admin/customer/save "{\"id\":$CID,\"name\":\"Kovács Iroda Kft.\",
 KB=$(jq -Rs . <<<'{"nev":"Kovács Iroda","udvozles":"Jó napot!","temak":[{"title":"Nyitvatartás","keys":["nyitva"],"answer":"H–P 8–16"}]}')
 r=$(save pending "" '"{nem json"'); check "hibás tudásbázis elutasítva" '[ "$(status "$r")" = 400 ]'
 r=$(save pending "" "$KB"); check "tudásbázis mentve" '[ "$(status "$r")" = 200 ]'
+check "a tanító felület az ügyfél tudástárát mutatja" 'get "admin/kb&customer=$CID" | jq -e ".kb.temak[0].title == \"Nyitvatartás\" and .live == false" >/dev/null'
 check "befizetés előtt a chat szünetel" 'curl -s "$BASE/kb.php?u=$SLUG" | jq -e ".inactive == true" >/dev/null'
 r=$(post admin/payment/add "{\"id\":$CID,\"months\":1,\"note\":\"átutalás\"}")
 check "befizetés: +1 hónap, aktív" '[ "$(status "$r")" = 200 ] && [ "$(body "$r" | jq -r .paid_until)" \> "$TODAY" ]'

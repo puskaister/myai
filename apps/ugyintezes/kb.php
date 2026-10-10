@@ -1,6 +1,7 @@
 <?php
 // A chatablak (chat.html) innen kéri a tudásbázist: kb.php?u=<ügyfél-azonosító>.
-// – a beépített demó és a my-ai.hu saját buboréka (minta, my-ai) mindig működik, fájlból;
+// – a beépített demó és a my-ai.hu saját buboréka (minta, my-ai) mindig működik, fájlból
+//   (a my-ai az admin felületen tanított változatot adja, ha van);
 // – egy ügyfélé csak érvényes (kifizetett, aktív) előfizetésnél, különben "szünetel".
 declare(strict_types=1);
 
@@ -13,6 +14,10 @@ header('X-Content-Type-Options: nosniff');
 $id = strtolower((string) ($_GET['u'] ?? 'minta'));
 if (!preg_match('/^[a-z0-9-]{1,40}$/', $id)) $id = 'minta';
 
+if ($id === OWN_KB) {
+    try { $own = app_installed() ? own_kb_override() : null; } catch (Throwable $e) { $own = null; }
+    if ($own) { echo $own; exit; }
+}
 if (in_array($id, BUILTIN_KBS, true)) {
     readfile(__DIR__ . '/ugyfelek/' . $id . '.json');
     exit;

@@ -53,19 +53,54 @@ function make_slug(string $name): string {
     return $s;
 }
 
-// A tudásbázis ellenőrzése (a demó szerkesztőjének kimásolt formátuma).
+// A tudásbázis ellenőrzése és tisztítása (a tanító felület és a demó szerkesztőjének
+// formátuma): {nev, szin, logo, udvozles, nem_ertem, temak: [{id, title, keys, answer, elsobbseg}]}.
 function validate_kb(string $json): array {
     $d = json_decode($json, true);
     if (!is_array($d)) throw new AppError('A tudásbázis nem érvényes JSON.');
+    return normalize_kb($d);
+}
+
+function normalize_kb(array $d): array {
+    $s = fn ($v, int $max): string => mb_substr(trim(is_scalar($v) ? (string) $v : ''), 0, $max);
     $temak = $d['temak'] ?? null;
-    if (!is_array($temak) || !$temak) throw new AppError('A tudásbázisban nincs egyetlen téma sem ("temak").');
-    foreach ($temak as $i => $t) {
-        if (!is_array($t) || trim((string) ($t['title'] ?? '')) === '' || trim((string) ($t['answer'] ?? '')) === '') {
-            throw new AppError('A(z) ' . ($i + 1) . '. témából hiányzik a cím vagy a válasz.');
-        }
-    }
+    if (!is_array($temak) || !$temak) throw new AppError('A tudásbázisban nincs egyetlen téma sem.');
     if (count($temak) > 300) throw new AppError('Legfeljebb 300 téma lehet.');
-    return $d;
+    $out = [];
+    foreach (['nev' => 120, 'udvozles' => 2000, 'nem_ertem' => 2000] as $k => $max) {
+        if ($s($d[$k] ?? '', $max) !== '') $out[$k] = $s($d[$k], $max);
+    }
+    if (preg_match('/^#[0-9a-fA-F]{6}$/', $s($d['szin'] ?? '', 7))) $out['szin'] = strtolower($s($d['szin'], 7));
+    $logo = $s($d['logo'] ?? '', 300);
+    if ($logo !== '') {
+        if (!preg_match('~^(/(?!/)|https://)[^\s"\'<>]+$~', $logo)) throw new AppError('A logó címe /-rel vagy https://-sel kezdődjön.');
+        $out['logo'] = $logo;
+    }
+    $ids = [];
+    $out['temak'] = [];
+    foreach (array_values($temak) as $i => $t) {
+        $title = is_array($t) ? $s($t['title'] ?? '', 150) : '';
+        $answer = is_array($t) ? $s($t['answer'] ?? '', 5000) : '';
+        if ($title === '' || $answer === '') throw new AppError('A(z) ' . ($i + 1) . '. témából hiányzik a cím vagy a válasz.');
+        $keys = $t['keys'] ?? [];
+        if (is_string($keys)) $keys = explode(',', $keys);
+        $keys = array_values(array_unique(array_filter(array_map(fn ($k) => $s($k, 80), is_array($keys) ? $keys : []), fn ($k) => $k !== '')));
+        $id = trim((string) preg_replace('/[^a-z0-9_-]+/', '-', strtolower($s($t['id'] ?? '', 40))), '-') ?: 't' . ($i + 1);
+        for ($base = $id, $n = 2; isset($ids[$id]); $n++) $id = $base . '-' . $n;
+        $ids[$id] = true;
+        $row = ['id' => $id, 'title' => $title, 'keys' => array_slice($keys, 0, 40), 'answer' => $answer];
+        $prio = max(-3, min(5, (int) ($t['elsobbseg'] ?? 0)));
+        if ($prio !== 0) $row['elsobbseg'] = $prio;
+        $out['temak'][] = $row;
+    }
+    return $out;
+}
+
+// A my-ai.hu saját buborékának tudástára: ha az admin felületen tanították, az
+// adatbázisból; különben az alap fájlból (ugyfelek/my-ai.json).
+const OWN_KB = 'my-ai';
+function own_kb_override(): ?string {
+    return setting_value('kb:' . OWN_KB);
 }
 
 function mail_cfg(): array {

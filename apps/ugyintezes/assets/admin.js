@@ -1,11 +1,11 @@
 // Ügyintézési Segéd admin: ügyfelek (megrendelések, előfizetések, tudásbázis,
-// beépítő kód, befizetések), beállítások, fiók.
+// beépítő kód, befizetések), tanítás (témák szerkesztése és kipróbálása), beállítások, fiók.
 (function () {
   'use strict';
 
   const root = document.getElementById('admin');
   const STATUS = { pending: 'Megrendelve', active: 'Aktív', paused: 'Szüneteltetve' };
-  const state = { tab: 'customers', list: null, settings: null };
+  const state = { tab: 'customers', list: null, settings: null, teach: null };
 
   // ---------------------------------------------------------------- segédek
   function el(tag, attrs, ...children) {
@@ -117,15 +117,17 @@
   }
 
   // ---------------------------------------------------------------- keret
-  const TABS = [['customers', 'Ügyfelek'], ['settings', 'Beállítások'], ['account', 'Fiók']];
+  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['settings', 'Beállítások'], ['account', 'Fiók']];
   function render() {
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, l]) => el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => go(k) }, l)));
-    fill(root, tabs, { customers: viewCustomers, settings: viewSettings, account: viewAccount }[state.tab]());
+    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, settings: viewSettings, account: viewAccount }[state.tab]());
   }
   async function go(tab) {
+    if (state.tab === 'teach' && tab !== 'teach' && state.teach?.dirty && !confirm('A tanítás nem mentett változásai elvesznek. Továbblépsz?')) return;
     state.tab = tab;
     try {
-      if (tab === 'customers') state.list = await api('admin/customers');
+      if (tab === 'customers' || (tab === 'teach' && !state.list)) state.list = await api('admin/customers');
+      if (tab === 'teach' && !state.teach) await loadTeach({ bot: 'my-ai' });
       if (tab === 'settings' || tab === 'account') state.settings = await api('admin/settings');
     } catch (e) { fail(e); }
     render();
@@ -208,10 +210,173 @@
       el('div', { class: 'snippet' }, d.embed),
       el('div', { class: 'row' },
         el('button', { class: 'btn small ghost', type: 'button', onclick: () => copy(d.embed) }, 'Kód másolása'),
+        el('button', { class: 'btn small', type: 'button', onclick: async () => { close(); state.tab = 'teach'; await loadTeach({ customer: c.id }); render(); } }, 'Tanítás (témák szerkesztése)'),
         c.has_kb ? el('a', { class: 'btn small ghost', href: '../chat.html?u=' + encodeURIComponent(c.slug), target: '_blank', rel: 'noopener' }, 'Chat kipróbálása ↗') : null),
       el('p', { class: 'muted', style: 'margin:0;font-size:.88rem' }, 'Azonosító: ' + c.slug + '. A chat csak aktív, kifizetett előfizetésnél válaszol; lejárat után ezt írja: „A chat jelenleg nem elérhető.”'));
 
     const close = modal(c.name, el('div', {}, pay, embed, f));
+  }
+
+
+  // ---------------------------------------------------------------- tanítás
+  // A chatbot témái (kulcsszavak → válasz) szerkesztése és kipróbálása. A mentett
+  // tudástárat a chat azonnal használja. Az egyeztetés ugyanaz, mint a chat.html-ben.
+  const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  function matchTopics(temak, q) {
+    const nq = ' ' + norm(q) + ' ';
+    return temak.map((t, i) => {
+      let score = 0;
+      const hits = [];
+      (t.keys || []).forEach((k) => { const nk = norm(k); if (nk && nq.indexOf(nk) > -1) { score += nk.indexOf(' ') > -1 ? 3 : 2; hits.push(k); } });
+      if (t.title && nq.indexOf(norm(t.title)) > -1) { score += 3; hits.push('cím'); }
+      if (score > 0) score += Number(t.elsobbseg) || 0;
+      return { i, t, score, hits };
+    }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score);
+  }
+  const PRIO = [[-1, 'Alacsony (pl. köszönés)'], [0, 'Normál'], [1, 'Magasabb (pl. ár, határidő)'], [2, 'Kiemelt']];
+  const STOP = new Set('a az és meg is hogy van nem mi mit mik ki kik egy de ha vagy kell lehet tud tudok tudsz mennyi hogyan milyen mikor hol miért szeretnék szeretnek kérem kérlek'.split(' '));
+
+  async function loadTeach(who) {
+    try {
+      const d = await api('admin/kb', who.customer ? { customer: who.customer } : { bot: 'my-ai' });
+      const kb = JSON.parse(JSON.stringify(d.kb || {}));
+      kb.temak = Array.isArray(kb.temak) ? kb.temak : [];
+      kb.temak.forEach((t) => { t.keys = Array.isArray(t.keys) ? t.keys : []; });
+      state.teach = { who, d, kb, dirty: false, open: -1, filter: '', test: '' };
+    } catch (e) { fail(e); }
+  }
+
+  function viewTeach() {
+    const T = state.teach;
+    if (!T) return el('p', { class: 'muted' }, 'Betöltés…');
+    const kb = T.kb;
+    const dirty = () => { if (!T.dirty) { T.dirty = true; saveBar.classList.add('dirty'); status.textContent = 'Nem mentett változások'; } };
+    const rerender = () => render();
+
+    // melyik chatbot
+    const customers = state.list ? state.list.customers : [];
+    const pick = el('select', { 'aria-label': 'Melyik chatbotot tanítod?', onchange: async () => {
+      if (T.dirty && !confirm('A nem mentett változások elvesznek. Másik chatbotra váltasz?')) { pick.value = T.who.customer ? 'c' + T.who.customer : 'my-ai'; return; }
+      const v = pick.value;
+      await loadTeach(v === 'my-ai' ? { bot: 'my-ai' } : { customer: Number(v.slice(1)) });
+      render();
+    } },
+    el('option', { value: 'my-ai', selected: !T.who.customer }, 'my-ai.hu – a weboldal chatbotja'),
+    customers.map((c) => el('option', { value: 'c' + c.id, selected: T.who.customer === c.id }, c.name + ' (' + c.slug + ')')));
+
+    const head = el('div', { class: 'card form' },
+      el('div', { class: 'row between' },
+        el('h2', { style: 'margin:0' }, 'Tanítás'),
+        el('div', { class: 'row' },
+          T.d.source === 'db' && !T.who.customer ? el('span', { class: 'badge active' }, 'Tanított változat') : (!T.who.customer ? el('span', { class: 'badge' }, 'Alap tudástár') : null),
+          el('a', { class: 'btn small ghost', href: T.d.chat_url, target: '_blank', rel: 'noopener' }, 'Chat megnyitása ↗'))),
+      field('Melyik chatbotot tanítod?', pick),
+      el('p', { class: 'muted', style: 'margin:0' }, 'A chatbot a kérdésben lévő kulcsszavak alapján választ témát, és a téma válaszát adja. Ha egy kérdésre rosszul vagy nem válaszol, próbáld ki lent, és adj hozzá kulcsszót vagy új témát. Mentés után a chat azonnal az új tudással válaszol.'),
+      T.who.customer && !T.d.live ? el('p', { class: 'alert', style: 'margin:0' }, 'Ennek az ügyfélnek nincs aktív előfizetése, ezért a chatje most nem válaszol a weboldalán (a tanítás ettől még menthető).') : null);
+
+    // kipróbálás
+    const testOut = el('div', { class: 'note', 'aria-live': 'polite' });
+    const runTest = () => {
+      const q = testIn.value.trim();
+      T.test = q;
+      if (!q) return fill(testOut, el('span', { class: 'muted' }, 'Írj be egy kérdést, ahogy egy látogató kérdezné.'));
+      const res = matchTopics(kb.temak, q);
+      if (!res.length) {
+        const words = [...new Set(norm(q).split(' ').filter((w) => w.length > 3 && !STOP.has(w)))].slice(0, 4);
+        return fill(testOut,
+          el('p', { style: 'margin:0 0 6px' }, el('strong', {}, 'Erre nem tudna válaszolni'), ' — ezt mondaná: „' + (kb.nem_ertem || 'Ezt sajnos nem értettem.') + '”'),
+          el('button', { class: 'btn small', type: 'button', onclick: () => {
+            kb.temak.push({ id: '', title: q.replace(/[?!.]+$/, ''), keys: words, answer: '' });
+            T.open = kb.temak.length - 1; T.filter = ''; T.dirty = true; rerender();
+            setTimeout(() => document.querySelector('.topic.open textarea')?.focus(), 50);
+          } }, 'Új téma ebből a kérdésből'));
+      }
+      const best = res[0];
+      const more = res.slice(1, 3).filter((x) => x.score >= best.score - 1);
+      fill(testOut,
+        el('p', { style: 'margin:0 0 4px' }, 'Válasz: ', el('strong', {}, best.t.title), el('span', { class: 'muted' }, ' · találat: ' + best.hits.join(', ') + ' · pont: ' + best.score)),
+        el('div', { style: 'white-space:pre-wrap;margin:6px 0' }, best.t.answer || '(még nincs válasz)'),
+        more.length ? el('p', { class: 'muted', style: 'margin:0' }, 'Kapcsolódó (felajánlja): ' + more.map((x) => x.t.title + ' (' + x.score + ')').join(' · ')) : null,
+        res.length > 1 ? el('p', { class: 'muted', style: 'margin:4px 0 0;font-size:.85rem' }, 'Rossz témát választott? Adj a jó témának pontosabb (többszavas) kulcsszót, vagy emeld az elsőbbségét.') : null,
+        el('button', { class: 'btn small ghost', type: 'button', style: 'margin-top:6px', onclick: () => { T.open = best.i; T.filter = ''; rerender(); } }, 'Téma szerkesztése'));
+    };
+    const testIn = el('input', { id: 'kb-test', placeholder: 'pl. mennyibe kerül egy weboldal?', value: T.test, oninput: runTest });
+    const test = el('div', { class: 'card form' }, el('h3', { style: 'margin:0' }, 'Kipróbálás'), testIn, testOut);
+    runTest();
+
+    // általános
+    const gen = el('details', { class: 'card form' },
+      el('summary', { style: 'font-weight:700;cursor:pointer' }, 'Általános: név, üdvözlés, ha nem érti'),
+      el('div', { class: 'grid2' },
+        field('A chat neve (fejléc)', el('input', { value: kb.nev || '', oninput: (e) => { kb.nev = e.target.value; dirty(); } })),
+        field('Szín', el('input', { type: 'color', value: kb.szin || '#4f46e5', oninput: (e) => { kb.szin = e.target.value; dirty(); } }))),
+      field('Logó címe (nem kötelező)', el('input', { value: kb.logo || '', placeholder: '/assets/logo.svg vagy https://…', oninput: (e) => { kb.logo = e.target.value; dirty(); } })),
+      field('Üdvözlés', el('textarea', { oninput: (e) => { kb.udvozles = e.target.value; dirty(); } }, kb.udvozles || '')),
+      field('Ha nem érti a kérdést', el('textarea', { oninput: (e) => { kb.nem_ertem = e.target.value; dirty(); } }, kb.nem_ertem || '')));
+
+    // témák
+    const f = norm(T.filter);
+    const shown = kb.temak.map((t, i) => [t, i]).filter(([t]) => !f || norm(t.title + ' ' + t.keys.join(' ') + ' ' + t.answer).includes(f));
+    const move = (i, d) => { const j = i + d; if (j < 0 || j >= kb.temak.length) return; [kb.temak[i], kb.temak[j]] = [kb.temak[j], kb.temak[i]]; if (T.open === i) T.open = j; T.dirty = true; rerender(); };
+    const topic = ([t, i]) => {
+      const isOpen = T.open === i;
+      const headRow = el('div', { class: 'row between', style: 'gap:6px' },
+        el('button', { class: 'link-btn', type: 'button', style: 'text-align:left;flex:1;min-width:0;text-decoration:none;color:inherit', 'aria-expanded': isOpen ? 'true' : 'false', onclick: () => { T.open = isOpen ? -1 : i; rerender(); } },
+          el('strong', {}, (i < 4 ? '★ ' : '') + (t.title || '(új téma)')),
+          el('span', { class: 'muted', style: 'display:block;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap' }, t.keys.length ? t.keys.join(', ') : 'nincs kulcsszó')),
+        el('div', { class: 'row', style: 'gap:4px' },
+          el('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Feljebb', title: 'Feljebb', disabled: i === 0, onclick: () => move(i, -1) }, '↑'),
+          el('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Lejjebb', title: 'Lejjebb', disabled: i === kb.temak.length - 1, onclick: () => move(i, 1) }, '↓')));
+      if (!isOpen) return el('div', { class: 'topic' }, headRow);
+      return el('div', { class: 'topic open' }, headRow,
+        el('div', { class: 'form', style: 'margin-top:10px' },
+          field('Téma címe', el('input', { value: t.title, oninput: (e) => { t.title = e.target.value; dirty(); } }), 'Ez lesz a válasz címe; ha a kérdésben szerepel, az is találat.'),
+          field('Kulcsszavak (vesszővel elválasztva)', el('input', { value: t.keys.join(', '), oninput: (e) => { t.keys = e.target.value.split(',').map((k) => k.trim()).filter(Boolean); dirty(); } }),
+            'Szótő is jó: a „foglal” illik a „foglalás”, „foglalni” szóra. Ékezet és kis/nagybetű nem számít. A többszavas kulcsszó erősebb.'),
+          field('Válasz', el('textarea', { rows: 7, oninput: (e) => { t.answer = e.target.value; dirty(); } }, t.answer),
+            'Új sor = új bekezdés. Felsorolás: a sor elején „- ”, számozott lépések: „1. ”.'),
+          el('div', { class: 'row between' },
+            field('Elsőbbség (ha több téma is illik)', el('select', { onchange: (e) => { t.elsobbseg = Number(e.target.value); dirty(); } },
+              PRIO.map(([v, l]) => el('option', { value: v, selected: (Number(t.elsobbseg) || 0) === v }, l)))),
+            el('button', { class: 'btn ghost small', type: 'button', style: 'color:var(--danger)', onclick: () => {
+              if (!confirm('Törlöd ezt a témát: „' + (t.title || 'új téma') + '”?')) return;
+              kb.temak.splice(i, 1); T.open = -1; T.dirty = true; rerender();
+            } }, 'Téma törlése'))));
+    };
+    const search = el('input', { type: 'search', placeholder: 'Keresés a témákban…', value: T.filter, 'aria-label': 'Keresés a témákban', oninput: (e) => {
+      T.filter = e.target.value; rerender();
+      const s = document.querySelector('.topics-search'); if (s) { s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
+    } });
+    search.classList.add('topics-search');
+    const topics = el('div', { class: 'card form' },
+      el('div', { class: 'row between' }, el('h3', { style: 'margin:0' }, 'Témák (' + kb.temak.length + ')'),
+        el('button', { class: 'btn small', type: 'button', onclick: () => { kb.temak.push({ id: '', title: '', keys: [], answer: '' }); T.open = kb.temak.length - 1; T.filter = ''; T.dirty = true; rerender(); setTimeout(() => document.querySelector('.topic.open input')?.focus(), 50); } }, '+ Új téma')),
+      el('p', { class: 'muted', style: 'margin:0;font-size:.88rem' }, '★ Az első 4 téma gyorsgombként jelenik meg a chat alján. A sorrendet a nyilakkal állíthatod.'),
+      search,
+      shown.length ? el('div', { class: 'topics' }, shown.map(topic)) : el('p', { class: 'muted' }, kb.temak.length ? 'Nincs találat.' : 'Még nincs téma. Kezdd az „+ Új téma” gombbal.'));
+
+    // mentés
+    const status = el('span', { class: 'muted' }, T.dirty ? 'Nem mentett változások' : 'Minden mentve');
+    const save = async () => {
+      const body = Object.assign(T.who.customer ? { customer: T.who.customer } : { bot: 'my-ai' }, { kb });
+      try {
+        const r = await api('admin/kb/save', {}, body);
+        toast('Mentve – a chat már ezzel válaszol (' + r.temak + ' téma)');
+        const open = T.open, test = T.test;
+        await loadTeach(T.who); state.teach.open = open; state.teach.test = test; render();
+      } catch (e) { fail(e); }
+    };
+    const saveBar = el('div', { class: 'card row between savebar' + (T.dirty ? ' dirty' : '') },
+      status,
+      el('div', { class: 'row' },
+        !T.who.customer && T.d.source === 'db' ? el('button', { class: 'btn ghost small', type: 'button', onclick: async () => {
+          if (!confirm('Visszaállítod az alap tudástárat? A tanított változat törlődik.')) return;
+          try { await api('admin/kb/reset', {}, { bot: 'my-ai' }); toast('Visszaállítva az alapra'); await loadTeach({ bot: 'my-ai' }); render(); } catch (e) { fail(e); }
+        } }, 'Vissza az alapra') : null,
+        el('button', { class: 'btn ghost small', type: 'button', onclick: () => copy(JSON.stringify(kb, null, 2)) }, 'Másolás (JSON)'),
+        el('button', { class: 'btn', type: 'button', onclick: save }, 'Mentés')));
+
+    return el('div', { class: 'teach' }, head, el('div', { class: 'grid2' }, test, gen), topics, saveBar);
   }
 
   // ---------------------------------------------------------------- beállítások
@@ -271,6 +436,7 @@
       if (m) openCustomer(Number(m[1]));
     } catch (e) { fail(e); }
   }
+  window.addEventListener('beforeunload', (e) => { if (state.teach?.dirty) { e.preventDefault(); e.returnValue = ''; } });
   const resetToken = new URLSearchParams(location.search).get('reset');
   if (resetToken) showReset(resetToken);
   else start();
