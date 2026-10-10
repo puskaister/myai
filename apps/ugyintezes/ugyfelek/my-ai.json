@@ -82,8 +82,34 @@
         "visszahív",
         "ajánlatot kér"
       ],
-      "answer": "Írj vagy hívj, és megbeszéljük:\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937\nAz igényedet röviden is elég leírni, a részleteket közösen tisztázzuk.",
+      "answer": "Írj vagy hívj, és megbeszéljük:\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937 (8:00 és 17:00 között)\nAz igényedet röviden is elég leírni, a részleteket közösen tisztázzuk.",
       "elsobbseg": 1
+    },
+    {
+      "id": "nyitvatartas",
+      "title": "Nyitvatartás, mikor hívható",
+      "keys": [
+        "nyitvatartás",
+        "nyitva",
+        "nyitás",
+        "zárás",
+        "munkaidő",
+        "ügyfélfogadás",
+        "mikor hívható",
+        "mikor hívhat",
+        "hány órától",
+        "hány óráig",
+        "meddig vagytok",
+        "mikor érhető",
+        "személyesen",
+        "bemehetek",
+        "iroda",
+        "hol vagytok",
+        "hétvégén",
+        "este"
+      ],
+      "answer": "Online webműhely vagyunk: mindent online és telefonon intézünk, személyes ügyfélfogadás nincs.\n- Telefonon 8:00 és 17:00 között hívható: +36 30 584 5937\n- E-mailt bármikor írhatsz: info@my-ai.hu\n- Ez a chat éjjel-nappal válaszol",
+      "elsobbseg": 2
     },
     {
       "id": "app",
