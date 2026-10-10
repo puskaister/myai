@@ -192,8 +192,8 @@ const flows = {
     await page.waitForSelector('#kb-test', { timeout: 10000 });
     await settle(500);
     await textOk(page, 'ügyfél-fiók: tanítás');
-    await page.type('#kb-test', 'hol lehet parkolni?');
-    await waitText(page, 'Az udvarban ingyenes.');
+    await page.type('#kb-test', 'mikor vagytok nyitva?'); // a tests/ugyintezes.sh végén mentett tudástár
+    await waitText(page, 'H–P 8–16');
     await textOk(page, 'ügyfél-fiók: kipróbálás');
     await page.goto(BASE + '/chat.html?u=my-ai', { waitUntil: 'networkidle0' });
     await page.waitForSelector('#q');
