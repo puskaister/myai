@@ -147,6 +147,8 @@ foreach ($apps as $app => $skip) {
 // nincs config.php (jelszó), a README helyett a vásárlói útmutató van.
 $downloads = [
     'latogatoszamlalo' => ['app' => 'latogatok', 'skip' => ['README.md', 'api/config.php']],
+    'evfordulok'       => ['app' => 'evfordulok', 'skip' => ['README.md', 'api/config.php']],
+    'bevasarlolista'   => ['app' => 'bevasarlolista', 'skip' => ['README.md', 'api/config.php']],
 ];
 foreach ($downloads as $name => $d) {
     $hash = zip_dir("$root/apps/{$d['app']}", "$dist/letoltes/files/$name.zip", "$name/", $d['skip']);

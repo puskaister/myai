@@ -234,6 +234,13 @@ jobs:
           unzip -l "$Z" | grep -q "latogatoszamlalo/api/config.example.php"
           if unzip -l "$Z" | grep -q "api/config.php$"; then echo "::error::A csomagban benne maradt a config.php (jelszó)!"; exit 1; fi
           if unzip -l "$Z" | grep -q "README.md"; then echo "::error::A belső README a csomagban maradt"; exit 1; fi
+          for n in evfordulok bevasarlolista; do
+            Z2=dist/letoltes/files/$n.zip
+            for f in install.php TELEPITES.md api/config.example.php manifest.php sw.js; do
+              unzip -l "$Z2" | grep -q " $n/$f$" || { echo "::error::$n.zip: hiányzik $f"; exit 1; }
+            done
+            if unzip -l "$Z2" | grep -qE "api/config.php$|README.md$"; then echo "::error::$n.zip: config.php vagy belső README a csomagban!"; exit 1; fi
+          done
           rm -rf /tmp/pkg && mkdir /tmp/pkg && unzip -q "$Z" -d /tmp/pkg
           sed -e "s/'localhost'/'127.0.0.1'/" -e "s/'adatbazis_neve'/'idopont'/" -e "s/'adatbazis_felhasznalo'/'idopont'/" \
               -e "s/'adatbazis_jelszo'/'tesztjelszo'/" -e "s/'stat_'/'pkg_'/" \

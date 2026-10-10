@@ -15,14 +15,14 @@ const APPS = [
     'evfordulok' => [
         'name'    => 'Évfordulók',
         'short'   => 'Születésnapok, névnapok, évfordulók egy helyen — előtte napon emailben szólunk. Telefonra telepíthető.',
-        'badge'   => 'Új',
+        'badge'   => 'Ingyenesen letölthető',
         'mockup'  => 'mockup_evfordulok',
         'for'     => 'Család, barátok, ügyfél-születésnapok',
     ],
     'bevasarlolista' => [
         'name'    => 'Bevásárlólista',
         'short'   => 'Mondd be, és felírja: „kenyér, tej meg két kiló alma”. Közös lista a családdal, bolti sorrendben.',
-        'badge'   => 'Új · szóbeli bevitel',
+        'badge'   => 'Ingyenesen letölthető · szóbeli bevitel',
         'mockup'  => 'mockup_bevasarlolista',
         'for'     => 'Család, pár, lakótársak',
     ],
@@ -84,5 +84,28 @@ function app_hero(string $slug, string $eyebrow, string $lead, array $buttons): 
       </div>
     </div>
   </section>
+<?php
+}
+
+// Letölthető csomag adatai (a deploy készíti a /letoltes/files/ mappába).
+// 'button': a letöltés gomb felirata ikonnal; üres 'size' = nincs csomag (pl. helyi gépen).
+function download_info(string $name): array {
+    $files = dirname(__DIR__) . '/letoltes/files';
+    $zip = "$files/$name.zip";
+    $size = is_file($zip) ? max(1, (int) round(filesize($zip) / 1024)) . ' KB' : '';
+    return [
+        'url'     => '/letoltes/?fajl=' . $name,
+        'size'    => $size,
+        'version' => is_file("$files/$name.version") ? trim((string) file_get_contents("$files/$name.version")) : '',
+        'updated' => is_file($zip) ? date('Y. m. d.', (int) filemtime($zip)) : '',
+        'button'  => '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> Letöltés' . ($size !== '' ? ' (zip, ' . e($size) . ')' : ''),
+    ];
+}
+
+// Letöltés gomb + verzió sor a telepítési szakasz végére.
+function download_block(array $dl, string $track): void {
+    if ($dl['size'] === '') return; ?>
+        <div class="cta" style="margin-top:22px"><a class="btn btn-primary" href="<?= e($dl['url']) ?>" data-track="<?= e($track) ?>"><?= $dl['button'] ?></a></div>
+        <p class="meta">Verzió: <?= e($dl['version']) ?> · Frissítve: <?= e($dl['updated']) ?> · A részletes telepítési útmutató a csomagban van (TELEPITES.md).</p>
 <?php
 }

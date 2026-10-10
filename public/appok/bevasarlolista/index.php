@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Bevásárlólista – szóbeli bevitellel – my-ai.hu', 'Közös bevásárlólista magyar szóbeli bevitellel: mondd be, hogy „kenyér, tej meg két kiló alma”, és felírja. Bolti sorrendben, a családdal megosztva, telefonra telepíthető.', 'appok');
-app_hero('bevasarlolista', 'Telefonra telepíthető app · szóbeli bevitel',
+$dl = download_info('bevasarlolista');
+
+page_start('Bevásárlólista – szóbeli bevitellel – my-ai.hu', 'Közös bevásárlólista magyar szóbeli bevitellel: mondd be, hogy „kenyér, tej meg két kiló alma”, és felírja. Bolti sorrendben, a családdal megosztva, telefonra telepíthető. Ingyenesen letölthető.', 'appok');
+app_hero('bevasarlolista', 'Ingyenesen letölthető · szóbeli bevitel',
     'Mondd be, és felírja: „kenyér, tej meg két kiló alma”. A tételek bolti sorrendbe kerülnek, a családdal közösen használhatod, és gyenge térerőnél is működik.',
-    [['/bevasarlas/', 'App megnyitása →'], ['#hogyan-mukodik', 'Hogyan működik?']]);
+    [['/bevasarlas/', 'App megnyitása →'], $dl['size'] !== '' ? [$dl['url'], $dl['button']] : ['#letoltes', 'Letöltés'], ['#hogyan-mukodik', 'Hogyan működik?']]);
 ?>
   <section class="soft">
     <div class="wrap">
@@ -54,6 +56,26 @@ app_hero('bevasarlolista', 'Telefonra telepíthető app · szóbeli bevitel',
         </div>
       </div>
       <p class="meta" style="margin-top:18px">A hangfelismerés Chrome-ban (Android, számítógép) és Safariban működik. Ahol nem elérhető, a billentyűzet diktálás-gombjával ugyanígy bemondhatod a tételeket.</p>
+    </div>
+  </section>
+
+  <section class="soft" id="letoltes">
+    <div class="wrap">
+      <h2>Ingyenes letöltés a saját tárhelyedre</h2>
+      <p class="lead" style="margin-top:12px">Futtasd a saját domaineden: a listák nálad maradnak, és a családod saját fiókkal csatlakozhat.</p>
+      <div class="req">
+        <span class="chip">PHP 7.4+ (8.x ajánlott)</span>
+        <span class="chip">MySQL / MariaDB</span>
+        <span class="chip">HTTPS a domainen (mikrofonhoz)</span>
+        <span class="chip">Nincs Composer, nincs build</span>
+      </div>
+      <ol class="steps-list">
+        <li>Töltsd fel a kicsomagolt <code>bevasarlolista</code> mappát a tárhelyedre.</li>
+        <li>Másold az <code>api/config.example.php</code>-t <code>api/config.php</code> néven, és írd bele az adatbázis adatait.</li>
+        <li>Nyisd meg a <code>/bevasarlolista/install.php</code> oldalt, és hozd létre a saját fiókodat.</li>
+        <li>Az appban a „Megosztás” gombbal hívd meg a családot, és tedd ki a telefonod főképernyőjére.</li>
+      </ol>
+      <?php download_block($dl, 'Letöltés: bevásárlólista'); ?>
     </div>
   </section>
 

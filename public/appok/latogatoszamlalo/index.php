@@ -6,17 +6,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-$files = dirname(__DIR__, 2) . '/letoltes/files';
-$zip = "$files/latogatoszamlalo.zip";
-$size = is_file($zip) ? max(1, (int) round(filesize($zip) / 1024)) . ' KB' : '';
-$version = is_file("$files/latogatoszamlalo.version") ? trim((string) file_get_contents("$files/latogatoszamlalo.version")) : '';
-$updated = is_file($zip) ? date('Y. m. d.', (int) filemtime($zip)) : '';
-$download = '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> Letöltés' . ($size !== '' ? ' (zip, ' . e($size) . ')' : '');
+$dl = download_info('latogatoszamlalo');
 
 page_start('Látogatószámláló – ingyenes letöltés – my-ai.hu', 'Saját webstatisztika a weboldaladra: látogatók, eltöltött idő, kattintások, böngészők — külső szolgáltatás nélkül, a saját tárhelyeden. Ingyenesen letölthető.', 'appok');
 app_hero('latogatoszamlalo', 'Ingyenesen letölthető',
     'Lásd, hányan jönnek, honnan érkeznek, mennyi időt töltenek az oldaladon és mire kattintanak — külső szolgáltatás nélkül, minden adat a saját tárhelyeden marad.',
-    $size !== '' ? [['/letoltes/?fajl=latogatoszamlalo', $download], ['#telepites', 'Telepítés']] : [['#telepites', 'Telepítés']]);
+    $dl['size'] !== '' ? [[$dl['url'], $dl['button']], ['#telepites', 'Telepítés']] : [['#telepites', 'Telepítés']]);
 ?>
   <section class="soft">
     <div class="wrap">
@@ -47,10 +42,7 @@ app_hero('latogatoszamlalo', 'Ingyenesen letölthető',
         <li>Nyisd meg a <code>/stats/install.php</code> oldalt, és hozd létre az admin fiókot.</li>
         <li>Illeszd be a két soros kódot a weboldalad <code>&lt;head&gt;</code> részébe — a pontos kódot az irányítópult Beállítások fülén is megtalálod.</li>
       </ol>
-      <?php if ($size !== ''): ?>
-        <div class="cta" style="margin-top:22px"><a class="btn btn-primary" href="/letoltes/?fajl=latogatoszamlalo" data-track="Letöltés: látogatószámláló"><?= $download ?></a></div>
-        <p class="meta">Verzió: <?= e($version) ?> · Frissítve: <?= e($updated) ?> · A részletes telepítési útmutató a csomagban van (TELEPITES.md).</p>
-      <?php endif; ?>
+      <?php download_block($dl, 'Letöltés: látogatószámláló'); ?>
     </div>
   </section>
 

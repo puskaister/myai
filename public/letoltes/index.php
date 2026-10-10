@@ -10,6 +10,14 @@ $products = [
         'name'  => 'Látogatószámláló',
         'price' => 'Ingyenes',
     ],
+    'evfordulok' => [
+        'name'  => 'Évfordulók',
+        'price' => 'Ingyenes',
+    ],
+    'bevasarlolista' => [
+        'name'  => 'Bevásárlólista',
+        'price' => 'Ingyenes',
+    ],
 ];
 
 $file = (string) ($_GET['fajl'] ?? '');

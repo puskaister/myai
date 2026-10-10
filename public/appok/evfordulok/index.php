@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Évfordulók – my-ai.hu', 'Születésnapok, névnapok, évfordulók egy helyen: előtte napon emailben szól, a telefonodon mindig látod, mi következik. Telefonra telepíthető app.', 'appok');
-app_hero('evfordulok', 'Telefonra telepíthető app',
+$dl = download_info('evfordulok');
+
+page_start('Évfordulók – ingyenes letöltés – my-ai.hu', 'Születésnapok, névnapok, évfordulók egy helyen: előtte napon emailben szól, a telefonodon mindig látod, mi következik. Telefonra telepíthető app, ingyenesen letölthető a saját tárhelyedre.', 'appok');
+app_hero('evfordulok', 'Ingyenesen letölthető · telefonra telepíthető',
     'Születésnapok, névnapok, évfordulók és minden fontos dátum egy helyen — előtte napon emailben szólunk, a telefonodon pedig mindig látod, mi következik.',
-    [['/evfordulok/', 'App megnyitása →'], ['#hogyan-telepit', 'Telepítés a telefonra']]);
+    [['/evfordulok/', 'App megnyitása →'], $dl['size'] !== '' ? [$dl['url'], $dl['button']] : ['#letoltes', 'Letöltés'], ['#hogyan-telepit', 'Telepítés a telefonra']]);
 ?>
   <section class="soft">
     <div class="wrap">
@@ -65,6 +67,26 @@ app_hero('evfordulok', 'Telefonra telepíthető app',
         <li><strong>iPhone:</strong> Safari → Megosztás gomb → „Főképernyőhöz adás”. <strong>Android:</strong> Chrome menü → „Alkalmazás telepítése”.</li>
         <li>Kész: az Évfordulók saját ikonnal ott van a kezdőképernyőn, és az ikonon a jelvény mutatja, ha ma vagy holnap van valami.</li>
       </ol>
+    </div>
+  </section>
+
+  <section id="letoltes">
+    <div class="wrap">
+      <h2>Ingyenes letöltés a saját tárhelyedre</h2>
+      <p class="lead" style="margin-top:12px">Futtasd a saját domaineden: a dátumok és az email címek nálad maradnak, és a családod vagy a céged is használhatja.</p>
+      <div class="req">
+        <span class="chip">PHP 7.4+ (8.x ajánlott)</span>
+        <span class="chip">MySQL / MariaDB</span>
+        <span class="chip">HTTPS a domainen</span>
+        <span class="chip">Napi CRON az emlékeztetőkhöz</span>
+      </div>
+      <ol class="steps-list">
+        <li>Töltsd fel a kicsomagolt <code>evfordulok</code> mappát a tárhelyedre.</li>
+        <li>Másold az <code>api/config.example.php</code>-t <code>api/config.php</code> néven, és írd bele az adatbázis adatait.</li>
+        <li>Nyisd meg az <code>/evfordulok/install.php</code> oldalt, és hozd létre a saját fiókodat.</li>
+        <li>Állítsd be a tárhely CRON-jában a napi emlékeztető címét — az app Beállítások fülén, a Felhasználók (admin) részben találod.</li>
+      </ol>
+      <?php download_block($dl, 'Letöltés: évfordulók'); ?>
     </div>
   </section>
 
