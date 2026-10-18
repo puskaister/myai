@@ -34,7 +34,7 @@ jobs:
         run: find apps/idopontfoglalo -name '*.php' -print0 | xargs -0 -n1 php -l
 
       - name: JavaScript szintaxis-ellenőrzés
-        run: for f in apps/idopontfoglalo/assets/*.js apps/idopontfoglalo/sw.js; do node --check "$f"; done
+        run: for f in apps/idopontfoglalo/assets/*.js apps/idopontfoglalo/sw.js apps/idopontfoglalo/widget.js; do node --check "$f"; done
 
       - name: PHP szerver indítása
         run: |
@@ -245,6 +245,15 @@ jobs:
             done
             if unzip -l "$Z2" | grep -qE "api/config.php$|README.md$"; then echo "::error::$n.zip: config.php vagy belső README a csomagban!"; exit 1; fi
           done
+          # fizetős csomag: csak a védett mappában, letöltőkóddal
+          P=dist/ugyintezes/csomagok/idopontfoglalo.zip
+          for f in install.php TELEPITES.md widget.js api/config.example.php admin/index.php uploads/.htaccess; do
+            unzip -l "$P" | grep -q " idopontfoglalo/$f$" || { echo "::error::idopontfoglalo.zip: hiányzik $f"; exit 1; }
+          done
+          if unzip -l "$P" | grep -qE "api/config.php$|README.md$"; then echo "::error::idopontfoglalo.zip: config.php vagy belső README a csomagban!"; exit 1; fi
+          grep -q "Require all denied" dist/ugyintezes/csomagok/.htaccess || { echo "::error::a fizetős csomag mappája nincs védve"; exit 1; }
+          if ls dist/letoltes/files | grep -q idopontfoglalo; then echo "::error::a fizetős csomag a nyilvános letöltések közé került!"; exit 1; fi
+          echo "::notice title=Önálló időpontfoglaló::csomag $(du -k "$P" | cut -f1) KB, verzió $(cat dist/ugyintezes/csomagok/idopontfoglalo.version)"
           rm -rf /tmp/pkg && mkdir /tmp/pkg && unzip -q "$Z" -d /tmp/pkg
           sed -e "s/'localhost'/'127.0.0.1'/" -e "s/'adatbazis_neve'/'idopont'/" -e "s/'adatbazis_felhasznalo'/'idopont'/" \
               -e "s/'adatbazis_jelszo'/'tesztjelszo'/" -e "s/'stat_'/'pkg_'/" \
@@ -401,10 +410,12 @@ jobs:
           find apps/ugyintezes -name '*.php' -print0 | xargs -0 -n1 php -l
           for f in apps/ugyintezes/assets/*.js apps/ugyintezes/widget.js; do node --check "$f"; done
           for f in apps/ugyintezes/ugyfelek/*.json; do jq -e '.temak | length > 0' "$f" >/dev/null || { echo "::error::$f hibás"; exit 1; }; done
+          node tests/ugyintezes-kb.test.js
 
       - name: Szerver indítása (a levelek naplófájlba mennek)
         run: |
           bash tests/set-ugyintezes-config.sh
+          mkdir -p apps/ugyintezes/csomagok && printf 'PK-teszt-csomag' > apps/ugyintezes/csomagok/idopontfoglalo.zip
           touch "$RUNNER_TEMP/mails.log"
           TZ=Europe/Budapest php -d "sendmail_path=cat >> $RUNNER_TEMP/mails.log" -d opcache.enable_cli=0 -S 127.0.0.1:8007 -t apps/ugyintezes > seged-server.log 2>&1 &
           sleep 2

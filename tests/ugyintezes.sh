@@ -102,6 +102,23 @@ r=$(ppost portal/login '{"email":"anna@kovacs.hu","password":"ugyfel123"}'); che
 : > "$MAIL_LOG"
 r=$(ppost portal/forgot '{"email":"anna@kovacs.hu"}'); check "elfelejtett jelszó: link emailben" '[ "$(status "$r")" = 200 ] && grep -q "1 óráig érvényes" "$MAIL_LOG"'
 
+echo "== Letöltőkódok (önálló időpontfoglaló)"
+check "kód nélkül: űrlap" 'curl -s "$BASE/letoltes.php" | grep -q "Letöltés kóddal"'
+check "érvénytelen kód: 404" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/letoltes.php?kod=IDO-AAAA-BBBB-CCCC")" = 404 ]'
+check "termék a listán, a csomag megvan" 'get admin/licenses | jq -e ".products[0].id == \"idopontfoglalo\" and .products[0].ready == true" >/dev/null'
+r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Teszt Gumiszerviz","buyer_email":"rossz-cim"}'); check "hibás email: elutasítva" '[ "$(status "$r")" = 400 ]'
+: > "$MAIL_LOG"
+r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Teszt Gumiszerviz","buyer_email":"vevo@example.com","max_downloads":2,"send":true}')
+LCODE=$(body "$r" | jq -r .code)
+check "kód elkészült és elküldve" '[ "$(status "$r")" = 200 ] && [[ "$LCODE" =~ ^IDO-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$ ]] && grep -q "To: vevo@example.com" "$MAIL_LOG" && grep -q "letoltes.php?kod=$LCODE" "$MAIL_LOG"'
+check "letöltés kóddal (kisbetűvel is)" '[ "$(curl -s -o /dev/null -w "%{http_code} %{content_type}" "$BASE/letoltes.php?kod=$(tr A-Z a-z <<<"$LCODE")")" = "200 application/zip" ]'
+curl -s -o /dev/null "$BASE/letoltes.php?kod=$LCODE"
+check "a letöltések száma korlátozott" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/letoltes.php?kod=$LCODE")" = 403 ] && get admin/licenses | jq -e ".licenses[0].downloads == 2" >/dev/null'
+r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Másik","buyer_email":"masik@example.com"}'); C2=$(body "$r" | jq -r .code)
+post admin/license/toggle "{\"id\":$(get admin/licenses | jq '.licenses[0].id')}" >/dev/null
+check "letiltott kód: 403" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/letoltes.php?kod=$C2")" = 403 ]'
+check "ügyfél nem éri el a kódokat" '[ "$(curl -s -o /dev/null -w "%{http_code}" -b "$J2" "$BASE/api/?r=admin/licenses")" = 401 ]'
+
 echo "== Lejárati kör"
 check "rossz kulcs 403" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/cron.php?key=rossz")" = 403 ]'
 IN7=$(TZ=Europe/Budapest date -d "$TODAY +7 day" +%F)

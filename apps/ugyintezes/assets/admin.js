@@ -5,7 +5,7 @@
 
   const root = document.getElementById('admin');
   const STATUS = { pending: 'Megrendelve', active: 'Aktív', paused: 'Szüneteltetve' };
-  const state = { tab: 'customers', list: null, settings: null, teach: null };
+  const state = { tab: 'customers', list: null, settings: null, teach: null, licenses: null };
 
   // ---------------------------------------------------------------- segédek (assets/common.js)
   const { el, fill, toast, field, huDate, copy, fail } = window.Ugy;
@@ -74,10 +74,10 @@
   }
 
   // ---------------------------------------------------------------- keret
-  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['settings', 'Beállítások'], ['account', 'Fiók']];
+  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['licenses', 'Letöltőkódok'], ['settings', 'Beállítások'], ['account', 'Fiók']];
   function render() {
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, l]) => el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => go(k) }, l)));
-    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, settings: viewSettings, account: viewAccount }[state.tab]());
+    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, licenses: viewLicenses, settings: viewSettings, account: viewAccount }[state.tab]());
   }
   async function go(tab) {
     if (state.tab === 'teach' && tab !== 'teach' && state.teach?.dirty && !confirm('A tanítás nem mentett változásai elvesznek. Továbblépsz?')) return;
@@ -86,6 +86,7 @@
       if (tab === 'customers' || (tab === 'teach' && !state.list)) state.list = await api('admin/customers');
       if (tab === 'teach' && !state.teach) await loadTeach({ bot: 'my-ai' });
       if (tab === 'settings' || tab === 'account') state.settings = await api('admin/settings');
+      if (tab === 'licenses') state.licenses = await api('admin/licenses');
     } catch (e) { fail(e); }
     render();
   }
@@ -215,6 +216,61 @@
       reload: () => loadTeach(T.who),
       reset: own && T.d.source === 'db' ? () => api('admin/kb/reset', {}, { bot: 'my-ai' }) : null,
     });
+  }
+
+  // ---------------------------------------------------------------- letöltőkódok
+  // Fizetős csomag (pl. önálló időpontfoglaló) vásárlás utáni kiadása: személyes kód + link.
+  function viewLicenses() {
+    const d = state.licenses;
+    if (!d) return el('p', { class: 'muted' }, 'Betöltés…');
+    const product = d.products[0];
+    const result = el('div');
+    const f = el('form', { class: 'card form' },
+      el('h2', {}, 'Új letöltőkód'),
+      el('p', { class: 'muted', style: 'margin:0' }, 'Ha a vásárló kifizette a csomagot, itt készíts neki kódot. Emailben megkapja a letöltési linket és a telepítés lépéseit.'),
+      d.products.length > 1 ? field('Termék', el('select', { name: 'product' }, d.products.map((p) => el('option', { value: p.id }, p.name + ' – ' + p.price))))
+        : el('input', { type: 'hidden', name: 'product', value: product.id }),
+      el('p', { style: 'margin:0' }, el('strong', {}, product.name), ' · ', product.price, product.ready ? el('span', { class: 'muted' }, ' · csomag verzió: ' + product.version) : el('span', { class: 'badge expired' }, 'a csomag még nincs feltöltve')),
+      el('div', { class: 'grid2' },
+        field('Vásárló neve / cég', el('input', { name: 'buyer_name', required: true })),
+        field('Email', el('input', { name: 'buyer_email', type: 'email', required: true }))),
+      el('div', { class: 'grid2' },
+        field('Megjegyzés (pl. számlaszám)', el('input', { name: 'note' })),
+        field('Letöltések száma legfeljebb', el('input', { name: 'max_downloads', type: 'number', min: 1, max: 100, value: 10 }))),
+      el('label', { class: 'check' }, el('input', { type: 'checkbox', name: 'send', checked: true }), 'Küldés emailben a vásárlónak'),
+      el('button', { class: 'btn', type: 'submit' }, 'Kód készítése'),
+      result);
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const r = await api('admin/license/create', {}, { product: f.product.value, buyer_name: f.buyer_name.value, buyer_email: f.buyer_email.value, note: f.note.value, max_downloads: Number(f.max_downloads.value), send: f.send.checked });
+        toast(r.sent ? 'Kód elkészült és elküldve' : 'Kód elkészült');
+        state.licenses = await api('admin/licenses');
+        render();
+        const box = document.querySelector('#new-license');
+        if (box) fill(box, el('p', { class: 'ok', style: 'margin:0' }, 'Új kód: ', el('strong', {}, r.code), r.sent ? ' (elküldve emailben)' : ''), el('div', { class: 'snippet' }, r.link));
+      } catch (err) { fail(err); }
+    });
+    result.id = 'new-license';
+
+    const list = el('div', { class: 'card form' },
+      el('h2', {}, 'Kiadott kódok (' + d.licenses.length + ')'),
+      d.licenses.length ? el('div', { class: 'list' }, d.licenses.map((l) => el('div', { class: 'item', style: 'grid-template-columns:1fr auto;cursor:default' },
+        el('div', {},
+          el('div', { class: 'who' }, l.buyer_name + ' · ', el('code', {}, l.code)),
+          el('div', { class: 'what' }, l.buyer_email + ' · ' + String(l.created_at).slice(0, 10) + ' · letöltve: ' + l.downloads + '/' + l.max_downloads + (l.last_download_at ? ' (utoljára ' + String(l.last_download_at).slice(0, 16) + ')' : '') + (l.note ? ' · ' + l.note : ''))),
+        el('div', { class: 'row', style: 'gap:6px;justify-content:flex-end' },
+          el('span', { class: 'badge ' + (l.disabled ? 'expired' : 'active') }, l.disabled ? 'Letiltva' : 'Érvényes'),
+          el('button', { class: 'btn small ghost', type: 'button', onclick: () => copy(l.link) }, 'Link másolása'),
+          el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
+            if (!confirm('Újra elküldöd a letöltési linket ide: ' + l.buyer_email + '?')) return;
+            try { await api('admin/license/send', {}, { id: l.id }); toast('Elküldve'); } catch (e) { fail(e); }
+          } }, 'Újraküldés'),
+          el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
+            try { await api('admin/license/toggle', {}, { id: l.id }); state.licenses = await api('admin/licenses'); render(); } catch (e) { fail(e); }
+          } }, l.disabled ? 'Engedélyezés' : 'Letiltás'))))) : el('p', { class: 'muted' }, 'Még nincs kiadott kód.'));
+
+    return el('div', { class: 'grid2' }, f, list);
   }
 
   // ---------------------------------------------------------------- beállítások

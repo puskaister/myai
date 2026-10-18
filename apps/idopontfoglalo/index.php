@@ -21,6 +21,8 @@ $iconV = substr(md5($primary . $s['theme']['logo']), 0, 8);
 // Olvasható szövegszín a cég színén (fehér vagy sötét).
 [$r, $g, $b] = sscanf($primary, '#%02x%02x%02x');
 $onPrimary = (0.299 * $r + 0.587 * $g + 0.114 * $b) > 160 ? '#111827' : '#ffffff';
+// Beágyazva (widget.js, iframe-ben): nincs „Telepítés appként” gomb, és a magasságot jelezzük a befogadó oldalnak.
+$embedded = isset($_GET['beagyazva']);
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -41,7 +43,7 @@ header('Content-Type: text/html; charset=utf-8');
 <link rel="stylesheet" href="<?= $v('assets/style.css') ?>">
 <style>:root { --primary: <?= h($primary) ?>; --on-primary: <?= $onPrimary ?>; }</style>
 </head>
-<body>
+<body<?= $embedded ? ' class="embedded"' : '' ?>>
 <header class="topbar">
   <div class="topbar-inner">
     <?php if ($public['theme']['logo']): ?>
@@ -68,10 +70,21 @@ header('Content-Type: text/html; charset=utf-8');
     <?php if ($biz['phone'] && $biz['email']): ?> · <?php endif; ?>
     <?php if ($biz['email']): ?><a href="mailto:<?= h($biz['email']) ?>"><?= h($biz['email']) ?></a><?php endif; ?>
   </div>
-  <button type="button" id="install-btn" class="link-btn" hidden>Telepítés appként</button>
+  <?php if (!$embedded): ?><button type="button" id="install-btn" class="link-btn" hidden>Telepítés appként</button><?php endif; ?>
 </footer>
 
 <script>window.BOOT = <?= json_encode(['settings' => $public, 'services' => $services], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
 <script src="<?= $v('assets/app.js') ?>"></script>
+<?php if ($embedded): ?>
+<script>
+  // a befogadó oldal (widget.js) ehhez igazítja az iframe magasságát
+  (function () {
+    if (window.parent === window || !window.ResizeObserver) return;
+    var send = function () { window.parent.postMessage({ idopont: 'height', h: document.documentElement.scrollHeight }, '*'); };
+    new ResizeObserver(send).observe(document.body);
+    send();
+  })();
+</script>
+<?php endif; ?>
 </body>
 </html>

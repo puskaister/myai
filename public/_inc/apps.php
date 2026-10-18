@@ -8,7 +8,7 @@ const APPS = [
     'idopontfoglalo' => [
         'name'    => 'Online időpontfoglaló',
         'short'   => 'Az ügyfeleid pár koppintással foglalnak, te egy helyen látsz mindent — a vállalkozásod saját arculatával.',
-        'badge'   => '30 000 Ft + ÁFA, egyszeri',
+        'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
         'mockup'  => 'mockup_booking',
         'for'     => 'Gumiszerviz, fodrászat, rendelő, szerviz',
     ],

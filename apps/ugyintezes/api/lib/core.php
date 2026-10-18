@@ -13,6 +13,7 @@ require __DIR__ . '/db.php';
 require __DIR__ . '/mailer.php';
 require __DIR__ . '/settings.php';
 require __DIR__ . '/billing.php';
+require __DIR__ . '/licenses.php';
 
 class AppError extends Exception {
     public int $status;
@@ -65,7 +66,7 @@ function table_prefix(): string {
 }
 
 function sql_tables(string $sql): string {
-    return preg_replace_callback('/\{(settings|admins|customers|payments|reminders|rate_limits|password_resets|portal_resets)\}/', fn ($m) => table_prefix() . $m[1], $sql);
+    return preg_replace_callback('/\{(settings|admins|customers|payments|reminders|rate_limits|password_resets|portal_resets|licenses)\}/', fn ($m) => table_prefix() . $m[1], $sql);
 }
 
 // Paraméterezett lekérdezés; a típusokat az értékekből állapítja meg.

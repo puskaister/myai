@@ -155,4 +155,18 @@ foreach ($downloads as $name => $d) {
     file_put_contents("$dist/letoltes/files/$name.version", substr($hash, 0, 12) . "\n");
     echo "  letöltés → /letoltes/files/$name.zip (" . round(filesize("$dist/letoltes/files/$name.zip") / 1024) . " KB)\n";
 }
+// Fizetős csomagok: csak személyes letöltőkóddal tölthetők le (ugyintezes/letoltes.php,
+// a kódokat az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni). A mappa kívülről nem érhető el.
+$paid = [
+    'idopontfoglalo' => ['app' => 'idopontfoglalo', 'skip' => ['README.md', 'api/config.php']],
+];
+if (is_dir("$dist/ugyintezes")) {
+    $paidDir = "$dist/ugyintezes/csomagok";
+    foreach ($paid as $name => $d) {
+        $hash = zip_dir("$root/apps/{$d['app']}", "$paidDir/$name.zip", "$name/", $d['skip']);
+        file_put_contents("$paidDir/$name.version", substr($hash, 0, 12) . "\n");
+        echo "  fizetős csomag → /ugyintezes/csomagok/$name.zip (" . round(filesize("$paidDir/$name.zip") / 1024) . " KB, csak kóddal)\n";
+    }
+    file_put_contents("$paidDir/.htaccess", "Require all denied\n");
+}
 echo "dist/ kész.\n";

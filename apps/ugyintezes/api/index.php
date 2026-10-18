@@ -5,7 +5,8 @@
 // Admin: admin/customers, admin/customer, admin/customer/save, admin/customer/delete,
 //        admin/payment/add, admin/settings (+/save), admin/password,
 //        admin/kb (+/save, /reset): a tanító felület (a my-ai.hu saját chatbotja vagy egy ügyfélé),
-//        admin/customer/invite: belépési link az ügyfélnek
+//        admin/customer/invite: belépési link az ügyfélnek,
+//        admin/licenses, admin/license/create|toggle|send: letöltőkódok a fizetős csomagokhoz
 // Ügyfél (fiok/): portal/login, logout, me, forgot, password, kb, kb/save — csak a saját chatbotja
 declare(strict_types=1);
 
@@ -101,7 +102,7 @@ try {
     if (strpos($route, 'portal/') === 0 && !in_array($route, ['portal/login', 'portal/logout', 'portal/me', 'portal/forgot', 'portal/password'], true) && !current_customer()) {
         throw new AppError('Bejelentkezés szükséges.', 401);
     }
-    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'portal/me', 'portal/kb'];
+    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'admin/licenses', 'portal/me', 'portal/kb'];
     if (!in_array($route, $getOnly, true) && !$isPost) throw new AppError('Method not allowed', 405);
 
     switch ($route) {
@@ -269,6 +270,50 @@ try {
                 q_exec('UPDATE {customers} SET kb_json = ? WHERE id = ?', [$json, $id]);
             }
             respond(['ok' => true, 'temak' => count($kb['temak'])]);
+        }
+
+        // ------------------------------------------------------------- letöltőkódok
+        case 'admin/licenses': {
+            $products = [];
+            foreach (PAID_PRODUCTS as $k => $p) {
+                $f = paid_file($k);
+                $products[] = ['id' => $k, 'name' => $p['name'], 'price' => $p['price'], 'ready' => is_file($f),
+                               'version' => is_file(substr($f, 0, -4) . '.version') ? trim((string) file_get_contents(substr($f, 0, -4) . '.version')) : ''];
+            }
+            $rows = q_all('SELECT * FROM {licenses} ORDER BY id DESC');
+            foreach ($rows as &$r) $r['link'] = license_link($r);
+            respond(['products' => $products, 'licenses' => $rows]);
+        }
+
+        case 'admin/license/create': {
+            $in = input();
+            $product = (string) ($in['product'] ?? '');
+            if (!isset(PAID_PRODUCTS[$product])) throw new AppError('Ismeretlen termék.');
+            $name = str_in($in, 'buyer_name', 150);
+            $email = str_in($in, 'buyer_email', 190);
+            if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) throw new AppError('A vásárló neve és egy érvényes email cím kötelező.');
+            $max = max(1, min(100, (int) ($in['max_downloads'] ?? 10)));
+            $code = make_license_code($product);
+            q_exec('INSERT INTO {licenses} (code, product, buyer_name, buyer_email, note, max_downloads) VALUES (?, ?, ?, ?, ?, ?)',
+                [$code, $product, $name, $email, str_in($in, 'note', 500), $max]);
+            $l = q_one('SELECT * FROM {licenses} WHERE code = ?', [$code]);
+            $sent = false;
+            if (!empty($in['send'])) { send_license_email($l); $sent = true; }
+            respond(['ok' => true, 'code' => $code, 'link' => license_link($l), 'sent' => $sent]);
+        }
+
+        case 'admin/license/toggle': {
+            $l = q_one('SELECT * FROM {licenses} WHERE id = ?', [(int) (input()['id'] ?? 0)]);
+            if (!$l) throw new AppError('Nincs ilyen kód.', 404);
+            q_exec('UPDATE {licenses} SET disabled = ? WHERE id = ?', [$l['disabled'] ? 0 : 1, (int) $l['id']]);
+            respond(['ok' => true, 'disabled' => !$l['disabled']]);
+        }
+
+        case 'admin/license/send': {
+            $l = q_one('SELECT * FROM {licenses} WHERE id = ?', [(int) (input()['id'] ?? 0)]);
+            if (!$l) throw new AppError('Nincs ilyen kód.', 404);
+            send_license_email($l);
+            respond(['ok' => true, 'email' => $l['buyer_email']]);
         }
 
         case 'admin/customer/invite': {

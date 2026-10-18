@@ -21,7 +21,7 @@ $provider = [
     'email'    => 'info@my-ai.hu',
     'phone'    => '+36 30 584 5937',
 ];
-$updated = '2026. október 10.';
+$updated = '2026. október 18.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -34,7 +34,7 @@ header('Content-Type: text/html; charset=utf-8');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ÁSZF – my-ai.hu</title>
-<meta name="description" content="Az Ügyintézési Segéd havidíjas chatbot-szolgáltatás általános szerződési feltételei.">
+<meta name="description" content="Az Ügyintézési Segéd havidíjas chatbot-szolgáltatás és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
 <meta name="theme-color" content="#4f46e5">
 <style>
   :root { --bg: #fff; --text: #0f172a; --muted: #5b6477; --border: #e6e8f0; --soft: #f5f6fb; --accent: #4f46e5; color-scheme: light; }
@@ -71,7 +71,7 @@ header('Content-Type: text/html; charset=utf-8');
   <h1>Általános Szerződési Feltételek</h1>
   <p class="muted">Ügyintézési Segéd havidíjas szolgáltatás · Hatályos: <?= $e($updated) ?></p>
 
-  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Ügyintézési Segéd chatbot-szolgáltatás igénybevételének feltételeit. A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
+  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Ügyintézési Segéd chatbot-szolgáltatás igénybevételének, valamint az önálló időpontfoglaló szoftvercsomag megvásárlásának és használatának feltételeit (13. pont). A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
 
   <h2>1. A szolgáltató</h2>
   <table>
@@ -129,7 +129,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <h2>8. Felelősség</h2>
   <p>8.1. A chatbot a tudásbázisban szereplő válaszokat adja. Előfordulhat, hogy egy kérdést nem ismer fel, vagy nem a legmegfelelőbb választ adja. A Szolgáltató nem felel a válaszok alapján hozott döntésekért, és a 7.1. pont szerinti tartalomért sem.</p>
-  <p>8.2. A Szolgáltató szerződésszegéssel okozott kárért való felelőssége – a szándékosan, súlyos gondatlansággal, illetve az emberi életet, testi épséget vagy egészséget megsértő szerződésszegés kivételével – a Megrendelő által a kár bekövetkezését megelőző 3 hónapban megfizetett díj összegéig terjed.</p>
+  <p>8.2. A Szolgáltató szerződésszegéssel okozott kárért való felelőssége – a szándékosan, súlyos gondatlansággal, illetve az emberi életet, testi épséget vagy egészséget megsértő szerződésszegés kivételével – a Megrendelő által a kár bekövetkezését megelőző 3 hónapban megfizetett díj összegéig, az önálló időpontfoglalónál a megfizetett egyszeri díj összegéig terjed.</p>
 
   <h2>9. Szellemi tulajdon</h2>
   <p>A chatbot szoftvere a Szolgáltató tulajdona; a Megrendelő a szerződés időtartamára nem kizárólagos, át nem ruházható használati jogot kap. A tudásbázis tartalma a Megrendelőé; a szerződés megszűnésekor kérésére a Szolgáltató átadja.</p>
@@ -143,6 +143,13 @@ header('Content-Type: text/html; charset=utf-8');
 
   <h2>12. Az ÁSZF módosítása</h2>
   <p>A Szolgáltató az ÁSZF-et módosíthatja; a módosítást legalább 15 nappal a hatálybalépés előtt emailben közli a Megrendelőkkel. A mindenkori változat ezen az oldalon érhető el. Ha a Megrendelő a módosítást nem fogadja el, a hatálybalépésig felmondhat.</p>
+
+  <h2>13. Önálló időpontfoglaló (szoftvercsomag)</h2>
+  <p>13.1. Az önálló időpontfoglaló a Megrendelő saját tárhelyére telepíthető foglalási rendszer telepítőcsomagja. Egyszeri díja <strong>49 000 Ft + ÁFA</strong> (bruttó 62 230 Ft), kivéve, ha a megrendeléskor a termékoldalon más díj szerepelt. A megrendelés emailben történik; a szerződés a díjbekérő elküldésével jön létre. A díj kifizetése után a Szolgáltató emailben személyes letöltőkódot küld, amellyel a csomag a my-ai.hu-ról letölthető (legfeljebb a levélben megadott számú alkalommal).</p>
+  <p>13.2. Felhasználási jog: a Megrendelő a csomagot egy vállalkozás saját foglalási rendszereként, egy telepítésben (és ugyanannak a vállalkozásnak egy tesztpéldányában), határozatlan ideig használhatja, és saját célra módosíthatja. A csomag vagy módosított változata nem ruházható át, nem adható tovább, nem értékesíthető, és szolgáltatásként sem kínálható harmadik félnek. A szoftver szerzői joga a Szolgáltatónál marad.</p>
+  <p>13.3. A telepítés és az üzemeltetés (tárhely, adatbázis, biztonsági mentés, levelezés) a Megrendelő feladata. A foglalásokban kezelt személyes adatok adatkezelője a Megrendelő.</p>
+  <p>13.4. A Szolgáltató a csomagot a vásárláskori állapotában adja át. A jelzett hibákat észszerű időn belül javítja, a telepítésben emailben vagy telefonon segít. A Megrendelő által módosított részekért a Szolgáltató nem felel.</p>
+  <p>13.5. A letöltőkód személyes: a Megrendelő nem adhatja át harmadik félnek. Visszaélés esetén a Szolgáltató a kódot letilthatja.</p>
 </main>
 
 <footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/adatkezeles/">Adatkezelési tájékoztató</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>

@@ -22,6 +22,7 @@ status() { tail -n1 <<<"$1"; }
 echo "== Telepítés"
 code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/")
 check "a főoldal telepítés előtt átirányít" '[ "$code" = 302 ]'
+check "a beépítő script elérhető" 'curl -s "$BASE/widget.js" | grep -q "beagyazva=1"'
 check "a telepítő űrlapja megjelenik" 'curl -s "$BASE/install.php" | grep -q "Időpontfoglaló telepítése"'
 out=$(curl -s "$BASE/install.php" --data-urlencode business='Teszt Gumiszerviz' -d preset=gumiszerviz -d name=Admin \
   -d email=admin@example.com -d password=titkos123 -d password2=titkos123 -d dbpass=rossz)
@@ -42,6 +43,7 @@ for spec in "s=192" "s=512" "s=512&m=1" "s=180"; do
 done
 
 echo "== Nyilvános API"
+check "beágyazott mód: nincs telepítés gomb, magasságjelzés" 'P=$(curl -s "$BASE/?beagyazva=1"); grep -q "class=\"embedded\"" <<<"$P" && grep -q "idopont: .height." <<<"$P" && ! grep -q "install-btn" <<<"$P"'
 cfg=$(api_get config)
 check "config: 5 szolgáltatás a gumiszerviz csomagból" '[ "$(jq ".services | length" <<<"$cfg")" = 5 ]'
 check "config: a rendszám kötelező extra mező" 'jq -e ".settings.fields[0].key == \"plate\" and .settings.fields[0].required" <<<"$cfg" >/dev/null'

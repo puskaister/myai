@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Online időpontfoglaló – my-ai.hu', 'Online időpontfoglaló vállalkozásoknak, egyszeri 30 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
-app_hero('idopontfoglalo', 'Egyszeri 30 000 Ft + ÁFA · vállalkozásoknak',
+page_start('Online időpontfoglaló – my-ai.hu', 'Online időpontfoglaló vállalkozásoknak, egyszeri 30 000 Ft + ÁFA, vagy önálló változat a saját tárhelyre 49 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
+app_hero('idopontfoglalo', 'Egyszeri díj, havidíj nélkül · vállalkozásoknak',
     'Gumiszerviznek, fodrászatnak, rendelőnek, szervíznek — bárkinek, aki időpontra dolgozik. Az ügyfél pár koppintással foglal, te pedig egy helyen látsz mindent.',
-    [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#kapcsolat', 'Ajánlatot kérek']]);
+    [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#arak', 'Árak és változatok']]);
 ?>
   <section class="soft">
     <div class="wrap">
@@ -65,12 +65,46 @@ app_hero('idopontfoglalo', 'Egyszeri 30 000 Ft + ÁFA · vállalkozásoknak',
         <li><strong>Beállítjuk a te arculatoddal:</strong> név, logó, színek, szolgáltatások, nyitvatartás, extra mezők (pl. rendszám).</li>
         <li><strong>Megkapod a saját címedet</strong> (a my-ai.hu-n vagy a saját domaineden), amit megoszthatsz a weboldaladon, Facebookon, QR-kódon.</li>
       </ol>
-      <div class="card" style="margin-top:24px;max-width:520px">
-        <h3>Ár</h3>
-        <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
-        <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 100 Ft)</p>
-        <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek</a>
+    </div>
+  </section>
+
+  <section id="arak">
+    <div class="wrap">
+      <h2>Két változat, egyszeri díjjal</h2>
+      <div class="grid two" style="margin-top:22px">
+        <div class="card">
+          <h3>Nálunk üzemeltetve</h3>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 100 Ft)</p>
+          <ul class="checks">
+            <li>Mi állítjuk be a te arculatoddal</li>
+            <li>A my-ai.hu-n fut (pl. my-ai.hu/cegneved), tárhely nélkül</li>
+            <li>Weboldalba építhető gombbal vagy linkkel</li>
+          </ul>
+          <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek</a>
+        </div>
+        <div class="card" id="onallo">
+          <h3>Önálló változat a saját tárhelyedre</h3>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">49 000 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 62 230 Ft)</p>
+          <ul class="checks">
+            <li>A teljes rendszer telepítőcsomagja: elviszed, a saját tárhelyeden fut</li>
+            <li>Az adatok nálad maradnak, havidíj nélkül</li>
+            <li>A saját weboldaladba építheted: lebegő „Időpontfoglalás” gomb vagy beágyazva</li>
+            <li>Részletes telepítési útmutató; a telepítésben szívesen segítünk</li>
+            <li>Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS</li>
+          </ul>
+          <a class="btn btn-primary" href="mailto:info@my-ai.hu?subject=<?= rawurlencode('Önálló időpontfoglaló megrendelése') ?>">Megrendelem</a>
+          <p class="meta" style="margin-top:12px">A díjbekérő kifizetése után emailben személyes letöltőkódot küldünk.</p>
+        </div>
       </div>
+      <form class="card form" method="get" action="/ugyintezes/letoltes.php" style="margin-top:22px;max-width:620px">
+        <h3 style="margin:0">Már megvásároltad? Letöltés kóddal</h3>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <input name="kod" required placeholder="IDO-XXXX-XXXX-XXXX" aria-label="Letöltőkód" autocomplete="off" style="flex:1;min-width:200px;text-transform:uppercase">
+          <button class="btn btn-primary" type="submit">Letöltés</button>
+        </div>
+      </form>
     </div>
   </section>
 

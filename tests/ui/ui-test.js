@@ -182,7 +182,7 @@ const flows = {
     await page.click('#kb-test', { clickCount: 3 });
     await page.type('#kb-test', 'zsiráf');
     await waitText(page, 'Új téma ebből a kérdésből');
-    for (const tab of ['Beállítások', 'Fiók']) {
+    for (const tab of ['Letöltőkódok', 'Beállítások', 'Fiók']) {
       await clickText(page, '.tabs button', tab);
       await settle(500);
       await textOk(page, 'admin: ' + tab);

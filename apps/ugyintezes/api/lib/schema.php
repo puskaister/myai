@@ -12,14 +12,35 @@ const PORTAL_RESETS_SQL = "CREATE TABLE IF NOT EXISTS {portal_resets} (
     INDEX idx_customer (customer_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
+// Személyes letöltőkódok a fizetős csomagokhoz (pl. önálló időpontfoglaló).
+const LICENSES_SQL = "CREATE TABLE IF NOT EXISTS {licenses} (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(32) NOT NULL UNIQUE,
+    product VARCHAR(40) NOT NULL,
+    buyer_name VARCHAR(150) NOT NULL,
+    buyer_email VARCHAR(190) NOT NULL,
+    note VARCHAR(500) NOT NULL DEFAULT '',
+    max_downloads SMALLINT UNSIGNED NOT NULL DEFAULT 10,
+    downloads SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    last_download_at DATETIME NULL,
+    disabled TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
 // Meglévő telepítés frissítése (az első API-hívásnál, egyszer).
 function migrate_schema(): void {
-    if ((int) (setting_value('schema_version') ?? 1) >= 2) return;
+    $ver = (int) (setting_value('schema_version') ?? 1);
+    if ($ver >= 3) return;
+    if ($ver < 2) migrate_v2();
+    if (!db()->query(sql_tables(LICENSES_SQL))) throw new AppError('Adatbázis-frissítési hiba: ' . db()->error, 500);
+    set_setting_value('schema_version', '3');
+}
+
+function migrate_v2(): void {
     if (!q_one("SHOW COLUMNS FROM {customers} LIKE 'portal_password_hash'")) {
         q_exec('ALTER TABLE {customers} ADD COLUMN portal_password_hash VARCHAR(255) NULL AFTER paid_until');
     }
     if (!db()->query(sql_tables(PORTAL_RESETS_SQL))) throw new AppError('Adatbázis-frissítési hiba: ' . db()->error, 500);
-    set_setting_value('schema_version', '2');
 }
 
 function schema_statements(): array {
@@ -84,6 +105,7 @@ function schema_statements(): array {
         ) $opts",
 
         PORTAL_RESETS_SQL,
+        LICENSES_SQL,
 
         "CREATE TABLE IF NOT EXISTS {rate_limits} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

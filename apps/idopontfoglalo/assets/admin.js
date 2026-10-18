@@ -454,6 +454,23 @@
     return f;
   }
 
+  // Beépítő kód a cég saját weboldalához (widget.js).
+  function embedCard(base, color) {
+    const btnCode = '<script src="' + base + '/widget.js" data-szin="' + color + '" data-szoveg="Időpontfoglalás" defer></script>';
+    const inlineCode = '<div id="idopontfoglalo"></div>\n<script src="' + base + '/widget.js" data-hely="#idopontfoglalo" defer></script>';
+    const snippet = (code) => el('div', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap' },
+      el('pre', { style: 'flex:1;min-width:0;margin:0;white-space:pre-wrap;word-break:break-all;font-size:.82rem;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px' }, code),
+      el('button', { class: 'btn small ghost', type: 'button', onclick: () => navigator.clipboard?.writeText(code).then(() => toast('Kimásolva'), () => toast('Jelöld ki és másold ki kézzel.', true)) }, 'Másolás'));
+    return el('details', { class: 'card form', style: 'margin-bottom:16px' },
+      el('summary', { style: 'font-weight:700;cursor:pointer' }, 'Beépítés a weboldaladba'),
+      el('p', { class: 'muted', style: 'margin:0' }, 'Illeszd be az egyik kódot a weboldaladba (WordPressben pl. egy „Egyéni HTML” blokkba). A foglaló a saját oldaladon nyílik meg, az ügyfélnek nem kell elnavigálnia.'),
+      el('strong', {}, '1. Lebegő „Időpontfoglalás” gomb a jobb alsó sarokban (a </body> elé):'),
+      snippet(btnCode),
+      el('strong', {}, '2. A foglaló beágyazva, az oldal egy adott helyén:'),
+      snippet(inlineCode),
+      el('p', { class: 'muted', style: 'margin:0;font-size:.88rem' }, 'Tipp: bármely meglévő gombod is megnyithatja a felugró foglalót, ha a gombra ezt teszed: data-idopontfoglalo. Vagy egyszerűen linkeld a foglalási oldalt: ' + base + '/'));
+  }
+
   function viewSettings() {
     const s = state.data.settings;
     const biz = s.business;
@@ -489,6 +506,7 @@
 
     return el('div', {},
       el('div', { class: 'note', style: 'margin-bottom:16px' }, 'Foglalási oldal címe: ', el('a', { href: state.data.base_url + '/', target: '_blank', rel: 'noopener' }, state.data.base_url + '/')),
+      embedCard(state.data.base_url, s.theme.primary),
       el('div', { class: 'grid2' },
         formCard('Cégadatok', 'Megjelenik a foglalási oldalon és az emailekben.', [
           field('Cég neve *', el('input', { name: 'name', required: true, value: biz.name })),
