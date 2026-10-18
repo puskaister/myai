@@ -277,8 +277,9 @@ try {
             $products = [];
             foreach (PAID_PRODUCTS as $k => $p) {
                 $f = paid_file($k);
+                $vf = dirname($f) . '/' . $k . '.version';
                 $products[] = ['id' => $k, 'name' => $p['name'], 'price' => $p['price'], 'ready' => is_file($f),
-                               'version' => is_file(substr($f, 0, -4) . '.version') ? trim((string) file_get_contents(substr($f, 0, -4) . '.version')) : ''];
+                               'version' => is_file($vf) ? trim((string) file_get_contents($vf)) : ''];
             }
             $rows = q_all('SELECT * FROM {licenses} ORDER BY id DESC');
             foreach ($rows as &$r) $r['link'] = license_link($r);

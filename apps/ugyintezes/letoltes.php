@@ -52,5 +52,5 @@ if (!is_file($file)) page('A csomag most nem érhető el', '<p>Kérjük, próbá
 q_exec('UPDATE {licenses} SET downloads = downloads + 1, last_download_at = ? WHERE id = ?', [date('Y-m-d H:i:s'), (int) $l['id']]);
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename="' . $l['product'] . '.zip"');
-header('Content-Length: ' . filesize($file));
-readfile($file);
+header('Content-Length: ' . paid_zip_size($file));
+paid_zip_output($file);

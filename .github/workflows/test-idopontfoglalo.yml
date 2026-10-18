@@ -245,13 +245,15 @@ jobs:
             done
             if unzip -l "$Z2" | grep -qE "api/config.php$|README.md$"; then echo "::error::$n.zip: config.php vagy belső README a csomagban!"; exit 1; fi
           done
-          # fizetős csomag: csak a védett mappában, letöltőkóddal
-          P=dist/ugyintezes/csomagok/idopontfoglalo.zip
+          # fizetős csomag: PHP-fájlba csomagolva (közvetlenül megnyitva semmit nem ad ki), letöltőkóddal
+          W=dist/ugyintezes/csomagok/idopontfoglalo.zip.php
+          head -1 "$W" | grep -q "^<?php http_response_code(404); exit; ?>$" || { echo "::error::a fizetős csomag nincs védő PHP-sorral ellátva"; exit 1; }
+          P=/tmp/idopontfoglalo.zip && tail -n +2 "$W" > "$P"
+          ls dist/ugyintezes/csomagok/*.zip 2>/dev/null && { echo "::error::védtelen .zip a csomagok mappában!"; exit 1; }
           for f in install.php TELEPITES.md widget.js api/config.example.php admin/index.php uploads/.htaccess; do
             unzip -l "$P" | grep -q " idopontfoglalo/$f$" || { echo "::error::idopontfoglalo.zip: hiányzik $f"; exit 1; }
           done
           if unzip -l "$P" | grep -qE "api/config.php$|README.md$"; then echo "::error::idopontfoglalo.zip: config.php vagy belső README a csomagban!"; exit 1; fi
-          grep -q "Require all denied" dist/ugyintezes/csomagok/.htaccess || { echo "::error::a fizetős csomag mappája nincs védve"; exit 1; }
           if ls dist/letoltes/files | grep -q idopontfoglalo; then echo "::error::a fizetős csomag a nyilvános letöltések közé került!"; exit 1; fi
           echo "::notice title=Önálló időpontfoglaló::csomag $(du -k "$P" | cut -f1) KB, verzió $(cat dist/ugyintezes/csomagok/idopontfoglalo.version)"
           rm -rf /tmp/pkg && mkdir /tmp/pkg && unzip -q "$Z" -d /tmp/pkg
@@ -415,7 +417,7 @@ jobs:
       - name: Szerver indítása (a levelek naplófájlba mennek)
         run: |
           bash tests/set-ugyintezes-config.sh
-          mkdir -p apps/ugyintezes/csomagok && printf 'PK-teszt-csomag' > apps/ugyintezes/csomagok/idopontfoglalo.zip
+          mkdir -p apps/ugyintezes/csomagok && printf '<?php http_response_code(404); exit; ?>\nPK-teszt-csomag' > apps/ugyintezes/csomagok/idopontfoglalo.zip.php
           touch "$RUNNER_TEMP/mails.log"
           TZ=Europe/Budapest php -d "sendmail_path=cat >> $RUNNER_TEMP/mails.log" -d opcache.enable_cli=0 -S 127.0.0.1:8007 -t apps/ugyintezes > seged-server.log 2>&1 &
           sleep 2

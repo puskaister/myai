@@ -2,11 +2,13 @@
 declare(strict_types=1);
 
 // Fizetős, letölthető csomagok és a személyes letöltőkódok.
-// A csomagokat a deploy készíti a csomagok/ mappába (kívülről nem érhető el);
-// letölteni csak a letoltes.php?kod=… címen, érvényes kóddal lehet.
+// A csomagokat a deploy készíti a csomagok/ mappába <név>.zip.php néven: a zip egy kilépő
+// PHP-sor mögött van, így közvetlenül megnyitva semmit nem ad ki (nginx alatt is).
+// Letölteni csak a letoltes.php?kod=… címen, érvényes kóddal lehet.
+const PAID_GUARD = "<?php http_response_code(404); exit; ?>\n"; // ugyanez: deploy/build.php
 
 const PAID_PRODUCTS = [
-    'idopontfoglalo' => ['name' => 'Önálló online időpontfoglaló', 'file' => 'idopontfoglalo.zip', 'price' => '49 000 Ft + ÁFA'],
+    'idopontfoglalo' => ['name' => 'Önálló online időpontfoglaló', 'file' => 'idopontfoglalo.zip.php', 'price' => '49 000 Ft + ÁFA'],
 ];
 
 function paid_file(string $product): string {
@@ -14,6 +16,17 @@ function paid_file(string $product): string {
 }
 
 // Pl. IDO-7K4M-Q2XP-9WRT (összetéveszthető karakterek nélkül).
+// A csomag zip-tartalmának mérete és kiírása (a védő PHP-sor nélkül).
+function paid_zip_size(string $file): int {
+    return max(0, filesize($file) - strlen(PAID_GUARD));
+}
+function paid_zip_output(string $file): void {
+    $h = fopen($file, 'rb');
+    fseek($h, strlen(PAID_GUARD));
+    fpassthru($h);
+    fclose($h);
+}
+
 function make_license_code(string $product): string {
     $abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     do {

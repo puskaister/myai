@@ -156,16 +156,22 @@ foreach ($downloads as $name => $d) {
     echo "  letöltés → /letoltes/files/$name.zip (" . round(filesize("$dist/letoltes/files/$name.zip") / 1024) . " KB)\n";
 }
 // Fizetős csomagok: csak személyes letöltőkóddal tölthetők le (ugyintezes/letoltes.php,
-// a kódokat az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni). A mappa kívülről nem érhető el.
+// a kódokat az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni).
+// A zip egy .php fájlba kerül egy kilépő PHP-sor mögé: közvetlenül megnyitva a szerver
+// lefuttatja és üres 404-et ad — nginx alatt is (ott a .htaccess nem véd).
+const PAID_GUARD = "<?php http_response_code(404); exit; ?>\n"; // ugyanez: apps/ugyintezes/api/lib/licenses.php
 $paid = [
     'idopontfoglalo' => ['app' => 'idopontfoglalo', 'skip' => ['README.md', 'api/config.php']],
 ];
 if (is_dir("$dist/ugyintezes")) {
     $paidDir = "$dist/ugyintezes/csomagok";
     foreach ($paid as $name => $d) {
-        $hash = zip_dir("$root/apps/{$d['app']}", "$paidDir/$name.zip", "$name/", $d['skip']);
+        $tmp = "$root/dist-$name.zip";
+        $hash = zip_dir("$root/apps/{$d['app']}", $tmp, "$name/", $d['skip']);
+        file_put_contents("$paidDir/$name.zip.php", PAID_GUARD . file_get_contents($tmp));
+        unlink($tmp);
         file_put_contents("$paidDir/$name.version", substr($hash, 0, 12) . "\n");
-        echo "  fizetős csomag → /ugyintezes/csomagok/$name.zip (" . round(filesize("$paidDir/$name.zip") / 1024) . " KB, csak kóddal)\n";
+        echo "  fizetős csomag → /ugyintezes/csomagok/$name.zip.php (" . round(filesize("$paidDir/$name.zip.php") / 1024) . " KB, csak kóddal)\n";
     }
     file_put_contents("$paidDir/.htaccess", "Require all denied\n");
 }
