@@ -42,7 +42,7 @@
         "termék",
         "szolgáltatás"
       ],
-      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz – egyszeri 30 000 Ft + ÁFA, önálló változat 49 000 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
+      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz – egyszeri 30 000 Ft + ÁFA\n- Önálló időpontfoglaló a saját tárhelyedre – egyszeri 49 000 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
     },
     {
       "id": "egyedi",
@@ -305,7 +305,7 @@
         "önálló változat",
         "szerverem"
       ],
-      "answer": "Az időpontfoglaló önálló változatát megvásárolhatod, és a saját tárhelyeden futtathatod – egyszeri 49 000 Ft + ÁFA (bruttó 62 230 Ft), havidíj nélkül.\n- A teljes rendszer telepítőcsomagját kapod, az adatok nálad maradnak\n- A saját weboldaladba építheted: lebegő „Időpontfoglalás” gomb vagy az oldalba ágyazva (WordPressben is)\n- Részletes telepítési útmutató, a telepítésben segítünk\n- Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS\nMegrendelés: info@my-ai.hu. A díjbekérő kifizetése után személyes letöltőkódot küldünk, amivel a my-ai.hu/appok/idopontfoglalo/ oldalon letöltheted.",
+      "answer": "Az időpontfoglaló önálló változatát megvásárolhatod, és a saját tárhelyeden futtathatod – egyszeri 49 000 Ft + ÁFA (bruttó 62 230 Ft), havidíj nélkül.\n- A teljes rendszer telepítőcsomagját kapod, az adatok nálad maradnak\n- A saját weboldaladba építheted: lebegő „Időpontfoglalás” gomb vagy az oldalba ágyazva (WordPressben is)\n- Részletes telepítési útmutató, a telepítésben segítünk\n- Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS\nMegrendelés: info@my-ai.hu. A díjbekérő kifizetése után személyes letöltőkódot küldünk.\nRészletek és követelmények: my-ai.hu/appok/onallo-idopontfoglalo/",
       "elsobbseg": 2
     },
     {

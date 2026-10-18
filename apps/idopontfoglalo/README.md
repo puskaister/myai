@@ -26,7 +26,7 @@ Minden cég ugyanabba az adatbázisba kerül, saját táblanév-előtaggal (pl. 
 1. Hozz létre egy MySQL adatbázist a cég tárhelyén. Ha a cégnek is van hozzáférése a tárhelyhez, mindenképp saját adatbázist kapjon, ne a közöset.
 2. Töltsd fel a mappa tartalmát a cég webhelyére (akár almappába, pl. `/foglalas`).
 3. Hozd létre az `api/config.php`-t az `api/config.example.php` alapján.
-4. Nyisd meg az `install.php`-t. Add meg a cég nevét, válassz kiinduló csomagot (gumiszerviz, fodrászat, rendelő, általános), és hozd létre az admin fiókot. Ellenőrzésképp az adatbázis jelszavát kéri, hogy idegen ne tudja elsőként telepíteni.
+4. Nyisd meg az `install.php`-t. Add meg a cég nevét, válassz kiinduló csomagot (gumiszerviz, fodrászat, autószerelő, fogászat, rendelő, általános), és hozd létre az admin fiókot. Ellenőrzésképp az adatbázis jelszavát kéri, hogy idegen ne tudja elsőként telepíteni.
 5. Az admin felületen szabd testre.
 
 Ha ugyanabban az adatbázisban már van egy előtag nélküli telepítés, az előtagos telepítő felajánlja az átvételét. Ilyenkor a táblákat átnevezi, az adatok megmaradnak.

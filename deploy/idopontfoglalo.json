@@ -1,7 +1,31 @@
 {
-  "_leiras": "Az időpontfoglaló telepítései a my-ai.hu-n. Mind ugyanazt az adatbázist használja (DB_* secretek), cégenként saját táblanév-előtaggal. Új cég: új sor, push, majd https://my-ai.hu/<dir>/install.php",
+  "_leiras": "Az időpontfoglaló telepítései a my-ai.hu-n. Mind ugyanazt az adatbázist használja (DB_* secretek), cégenként saját táblanév-előtaggal. Új cég: új sor, push, majd https://my-ai.hu/<dir>/install.php Opcionális: \"preset\" (szakmai csomag) és \"name\" (minta cégnév) a telepítő előtöltéséhez.",
   "instances": [
-    { "dir": "foglalas", "prefix": "foglalas_" },
-    { "dir": "gumipont", "prefix": "gumipont_" }
+    {
+      "dir": "foglalas",
+      "prefix": "foglalas_"
+    },
+    {
+      "dir": "gumipont",
+      "prefix": "gumipont_"
+    },
+    {
+      "dir": "fodraszat",
+      "prefix": "fodraszat_",
+      "preset": "fodraszat",
+      "name": "Minta Fodrászat"
+    },
+    {
+      "dir": "autoszerviz",
+      "prefix": "autoszerviz_",
+      "preset": "autoszerelo",
+      "name": "Minta Autószerviz"
+    },
+    {
+      "dir": "fogorvos",
+      "prefix": "fogorvos_",
+      "preset": "fogorvos",
+      "name": "Minta Fogászat"
+    }
   ]
 }

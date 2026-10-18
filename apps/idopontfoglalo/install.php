@@ -94,6 +94,8 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POS
         }
     }
 }
+// Előre kitöltött értékek a config.php-ból (a deploy írja bemutató példányoknál).
+$defaults = (array) ((app_config() ?? [])['install_defaults'] ?? []);
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -144,12 +146,12 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POS
       <?php endif; ?>
       <form method="post" class="form">
         <label>Cég / vállalkozás neve
-          <input name="business" required value="<?= h($_POST['business'] ?? '') ?>" placeholder="pl. Kovács Gumiszerviz">
+          <input name="business" required value="<?= h($_POST['business'] ?? $defaults['business'] ?? '') ?>" placeholder="pl. Kovács Gumiszerviz">
         </label>
         <label>Kiinduló csomag
           <select name="preset">
             <?php foreach (presets() as $key => $p): ?>
-              <option value="<?= h($key) ?>" <?= ($_POST['preset'] ?? '') === $key ? 'selected' : '' ?>><?= h($p['label']) ?></option>
+              <option value="<?= h($key) ?>" <?= ($_POST['preset'] ?? $defaults['preset'] ?? '') === $key ? 'selected' : '' ?>><?= h($p['label']) ?></option>
             <?php endforeach; ?>
           </select>
           <small>Szolgáltatások, nyitvatartás és extra mezők kezdőértékei — később minden átírható.</small>

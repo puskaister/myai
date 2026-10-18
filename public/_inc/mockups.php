@@ -115,3 +115,34 @@ function mockup_ugyintezes(): void { ?>
   </div>
 </div>
 <?php }
+
+// Önálló időpontfoglaló: a vásárló saját weboldala, rajta a lebegő gombbal és a felugró foglalóval.
+function mockup_onallo(): void { ?>
+<div aria-hidden="true">
+  <div class="browser site-mock">
+    <div class="browser-bar"><i></i><i></i><i></i><span>kovacs-gumiszerviz.hu</span></div>
+    <div class="site-page">
+      <div class="site-nav"><b>Kovács Gumiszerviz</b><span>Szolgáltatások</span><span>Árak</span><span>Kapcsolat</span></div>
+      <div class="site-hero">
+        <div class="site-h">Gumicsere, centírozás,<br>tárolás Budapesten</div>
+        <div class="site-l" style="width:78%"></div><div class="site-l" style="width:64%"></div><div class="site-l" style="width:70%"></div>
+        <div class="site-cta">Szolgáltatásaink</div>
+      </div>
+      <div class="site-cols"><div></div><div></div><div></div></div>
+      <div class="site-modal">
+        <div class="site-modal-top"><b>Időpontfoglalás</b><span>×</span></div>
+        <div class="site-modal-body">
+          <div class="t">Szezonális gumicsere · 30 perc</div>
+          <div class="mini-cal">
+            <i>H</i><i>K</i><i>Sze</i><i>Cs</i><i>P</i><i>Szo</i><i>V</i>
+            <s>13</s><s>14</s><s class="off">15</s><s class="sel">16</s><s>17</s><s>18</s><s class="off">19</s>
+          </div>
+          <div class="mini-slots"><s>08:00</s><s class="sel">09:30</s><s>10:00</s><s>13:30</s></div>
+          <div class="mini-btn">Időpont lefoglalása</div>
+        </div>
+      </div>
+      <div class="site-fab">📅 Időpontfoglalás</div>
+    </div>
+  </div>
+</div>
+<?php }

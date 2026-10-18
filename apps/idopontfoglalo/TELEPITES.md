@@ -24,7 +24,7 @@ Köszönjük, hogy megvásároltad az önálló időpontfoglalót. Ez a csomag a
 2. **Hozz létre egy adatbázist** a tárhely kezelőfelületén.
 3. **Másold** az `api/config.example.php` fájlt `api/config.php` néven, és írd bele az adatbázis adatait. Az adatbázis-szerver neve a tárhelyszolgáltatótól függ: gyakran `localhost`, néha egy IP-cím.
 4. **Az `uploads` mappa** legyen írható (a logó és az ikonok ide kerülnek). A legtöbb tárhelyen alapból az.
-5. **Nyisd meg** a `https://a-domained.hu/foglalas/install.php` oldalt. Add meg a vállalkozásod nevét, válassz kiinduló csomagot (gumiszerviz, fodrászat, rendelő vagy általános), és hozd létre az admin fiókodat. Ellenőrzésképp az adatbázis jelszavát kéri.
+5. **Nyisd meg** a `https://a-domained.hu/foglalas/install.php` oldalt. Add meg a vállalkozásod nevét, válassz kiinduló csomagot (gumiszerviz, fodrászat, autószerelő műhely, fogászat, rendelő vagy általános), és hozd létre az admin fiókodat. Ellenőrzésképp az adatbázis jelszavát kéri.
 6. **Szabd testre** az admin felületen (`/foglalas/admin/`): szolgáltatások, nyitvatartás, logó, színek, szövegek, értesítési email.
 
 ## Beépítés a weboldaladba

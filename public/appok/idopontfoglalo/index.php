@@ -6,7 +6,7 @@ require dirname(__DIR__, 2) . '/_inc/layout.php';
 
 page_start('Online időpontfoglaló – my-ai.hu', 'Online időpontfoglaló vállalkozásoknak, egyszeri 30 000 Ft + ÁFA, vagy önálló változat a saját tárhelyre 49 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
 app_hero('idopontfoglalo', 'Egyszeri díj, havidíj nélkül · vállalkozásoknak',
-    'Gumiszerviznek, fodrászatnak, rendelőnek, szervíznek — bárkinek, aki időpontra dolgozik. Az ügyfél pár koppintással foglal, te pedig egy helyen látsz mindent.',
+    'Gumiszervizeknek: az ügyfél pár koppintással foglal gumicserére, centírozásra vagy defektjavításra, te pedig egy helyen látsz mindent.',
     [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#arak', 'Árak és változatok']]);
 ?>
   <section class="soft">
@@ -16,15 +16,12 @@ app_hero('idopontfoglalo', 'Egyszeri díj, havidíj nélkül · vállalkozásokn
       <div style="margin-top:22px">
       <ul class="checks feature-list">
         <li>Csak a valóban szabad időpontok foglalhatók — ütközés és dupla foglalás nélkül</li>
-        <li>Párhuzamos helyek (pl. 2 emelő, 3 szék) és ebédszünet kezelése</li>
+        <li>Párhuzamos helyek (pl. 2 emelő) és ebédszünet kezelése</li>
         <li>Automatikus vagy kézi jóváhagyás, email visszaigazolással</li>
         <li>Az ügyfél online lemondhatja és a naptárába mentheti</li>
         <li>Saját mezők az űrlapon, pl. rendszám, autó típusa, gumiméret</li>
         <li>Telefonos foglalások rögzítése és gyors keresés az admin felületen</li>
       </ul>
-      </div>
-      <div class="uses" aria-label="Kinek ajánljuk">
-        <span class="chip">Gumiszerviz</span><span class="chip">Autószerviz</span><span class="chip">Fodrászat</span><span class="chip">Kozmetika</span><span class="chip">Rendelő</span><span class="chip">Tanácsadás</span>
       </div>
     </div>
   </section>
@@ -95,7 +92,7 @@ app_hero('idopontfoglalo', 'Egyszeri díj, havidíj nélkül · vállalkozásokn
             <li>Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS</li>
           </ul>
           <a class="btn btn-primary" href="mailto:info@my-ai.hu?subject=<?= rawurlencode('Önálló időpontfoglaló megrendelése') ?>">Megrendelem</a>
-          <p class="meta" style="margin-top:12px">A díjbekérő kifizetése után emailben személyes letöltőkódot küldünk.</p>
+          <p class="meta" style="margin-top:12px">A díjbekérő kifizetése után emailben személyes letöltőkódot küldünk. <a href="/appok/onallo-idopontfoglalo/">Részletek és követelmények →</a></p>
         </div>
       </div>
       <form class="card form" method="get" action="/ugyintezes/letoltes.php" style="margin-top:22px;max-width:620px">

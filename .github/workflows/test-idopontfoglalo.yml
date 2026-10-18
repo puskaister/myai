@@ -190,14 +190,14 @@ jobs:
           find public -name '*.php' -print0 | xargs -0 -n1 php -l
           php -d display_errors=1 -S 127.0.0.1:8009 -t public > public-server.log 2>&1 &
           sleep 1
-          for u in / /appok/ /appok/idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /adatkezeles/ /aszf/; do
+          for u in / /appok/ /appok/idopontfoglalo/ /appok/onallo-idopontfoglalo/ /appok/evfordulok/ /appok/bevasarlolista/ /appok/latogatoszamlalo/ /appok/ugyintezesi-seged/ /adatkezeles/ /aszf/; do
             code=$(curl -s -o page.html -w '%{http_code}' "http://127.0.0.1:8009$u")
             if [ "$code" != 200 ] || grep -qiE "fatal error|warning:|parse error|notice:|deprecated:" page.html; then
               echo "::error::$u hibás (HTTP $code)"; head -c 2000 page.html; exit 1
             fi
             echo "ok $u"
           done
-          test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 5 || { echo "::error::az Appok oldalon nem 5 kártya van"; exit 1; }
+          test "$(curl -s http://127.0.0.1:8009/appok/ | grep -c 'Tovább →')" = 6 || { echo "::error::az Appok oldalon nem 6 kártya van"; exit 1; }
           for u in / /appok/ /appok/idopontfoglalo/ /adatkezeles/ /aszf/; do
             test "$(curl -s "http://127.0.0.1:8009$u" | grep -c 'widget.js" data-ugyfel="my-ai"')" = 1 || { echo "::error::$u: a chatbot buborék nincs (vagy duplán van) beépítve"; exit 1; }
           done

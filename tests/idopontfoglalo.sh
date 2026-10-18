@@ -23,6 +23,7 @@ echo "== Telepítés"
 code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/")
 check "a főoldal telepítés előtt átirányít" '[ "$code" = 302 ]'
 check "a beépítő script elérhető" 'curl -s "$BASE/widget.js" | grep -q "beagyazva=1"'
+check "a szakmai csomagok a telepítőben" 'F=$(curl -s "$BASE/install.php"); grep -q "Fodrászat / szépségszalon" <<<"$F" && grep -q "Autószerelő műhely" <<<"$F" && grep -q "Fogászat / fogorvosi rendelő" <<<"$F"'
 check "a telepítő űrlapja megjelenik" 'curl -s "$BASE/install.php" | grep -q "Időpontfoglaló telepítése"'
 out=$(curl -s "$BASE/install.php" --data-urlencode business='Teszt Gumiszerviz' -d preset=gumiszerviz -d name=Admin \
   -d email=admin@example.com -d password=titkos123 -d password2=titkos123 -d dbpass=rossz)

@@ -10,7 +10,14 @@ const APPS = [
         'short'   => 'Az ügyfeleid pár koppintással foglalnak, te egy helyen látsz mindent — a vállalkozásod saját arculatával.',
         'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
         'mockup'  => 'mockup_booking',
-        'for'     => 'Gumiszerviz, fodrászat, rendelő, szerviz',
+        'for'     => 'Gumiszerviz',
+    ],
+    'onallo-idopontfoglalo' => [
+        'name'    => 'Önálló időpontfoglaló',
+        'short'   => 'Az időpontfoglaló teljes rendszere a saját tárhelyedre: megveszed, elviszed, és egy sorral a weboldaladba építed — havidíj nélkül.',
+        'badge'   => '49 000 Ft + ÁFA, egyszeri',
+        'mockup'  => 'mockup_onallo',
+        'for'     => 'Saját weboldallal és tárhellyel rendelkező vállalkozások',
     ],
     'evfordulok' => [
         'name'    => 'Évfordulók',

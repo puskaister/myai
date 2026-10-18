@@ -138,6 +138,10 @@ foreach ($apps as $app => $skip) {
                 'smtp' => $smtp,
             ];
             if ($app === 'chatbot') $config['anthropic'] = ['api_key' => $anthropicKey, 'base_url' => ''];
+            // a telepítő előre kitöltött értékei (pl. bemutató példányoknál a szakmai csomag és a minta cégnév)
+            if (isset($inst['preset']) || isset($inst['name'])) {
+                $config['install_defaults'] = ['preset' => preg_replace('/[^a-z0-9_]/', '', (string) ($inst['preset'] ?? '')), 'business' => (string) ($inst['name'] ?? '')];
+            }
             file_put_contents("$dist/$dir/api/config.php", "<?php\nreturn " . var_export($config, true) . ";\n");
         }
         echo "  $app → /$dir  (előtag: $prefix)\n";
