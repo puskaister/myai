@@ -21,7 +21,7 @@ out=$(curl -s "$BASE/install.php" -d action=adopt -d dbpass=rossz)
 check "rossz jelszóval nem vehető át" 'grep -q "nem egyezik" <<<"$out"'
 out=$(curl -s "$BASE/install.php" -d action=adopt --data-urlencode dbpass="$DB_PASS")
 check "átvétel sikerül" 'grep -q "Kész!" <<<"$out"'
-check "az átvett cég beállításai megvannak" 'curl -s "$BASE/api/?r=config" | jq -e ".settings.business.name == \"Régi Cég\" and (.services | length) == 4" >/dev/null'
+check "az átvett cég beállításai megvannak" 'curl -s "$BASE/api/?r=config" | jq -e ".settings.business.name == \"Régi Cég\" and (.services | length) == 8" >/dev/null'
 code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/?r=login" -H 'X-Requested-With: fetch' -H 'Content-Type: application/json' -d '{"email":"regi@example.com","password":"regijelszo1"}')
 check "a régi admin be tud lépni" '[ "$code" = 200 ]'
 
