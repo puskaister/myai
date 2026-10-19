@@ -111,7 +111,7 @@ r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Teszt G
 r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Teszt Gumiszerviz","buyer_email":"vevo@example.com","max_downloads":2,"send":true}')
 LCODE=$(body "$r" | jq -r .code)
 check "kód elkészült és elküldve" '[ "$(status "$r")" = 200 ] && [[ "$LCODE" =~ ^IDO-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$ ]] && grep -q "To: vevo@example.com" "$MAIL_LOG" && grep -q "letoltes.php?kod=$LCODE" "$MAIL_LOG"'
-check "letöltés kóddal (kisbetűvel is), tiszta zip a védő sor nélkül" '[ "$(curl -s -o /dev/null -w "%{http_code} %{content_type}" "$BASE/letoltes.php?kod=$(tr A-Z a-z <<<"$LCODE")")" = "200 application/zip" ] && [ "$(curl -s "$BASE/letoltes.php?kod=$LCODE")" = "PK-teszt-csomag" ]'
+check "letöltés kóddal (kisbetűvel is), tiszta zip a védő sor nélkül" '[ "$(curl -s -o /dev/null -w "%{http_code} %{content_type}" "$BASE/letoltes.php?kod=$(tr A-Z a-z <<<"$LCODE")")" = "200 application/zip" ] && [ "$(curl -s "$BASE/letoltes.php?kod=$LCODE")" = "PK<?php ez nem futhat ?>-teszt" ]'
 check "a csomag közvetlenül megnyitva semmit nem ad ki" '[ "$(curl -s -o /dev/null -w "%{http_code} %{size_download}" "$BASE/csomagok/idopontfoglalo.zip.php")" = "404 0" ]'
 curl -s -o /dev/null "$BASE/letoltes.php?kod=$LCODE"
 check "a letöltések száma korlátozott" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/letoltes.php?kod=$LCODE")" = 403 ] && get admin/licenses | jq -e ".licenses[0].downloads == 2" >/dev/null'

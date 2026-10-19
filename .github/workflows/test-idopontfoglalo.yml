@@ -247,7 +247,9 @@ jobs:
           done
           # fizetős csomag: PHP-fájlba csomagolva (közvetlenül megnyitva semmit nem ad ki), letöltőkóddal
           W=dist/ugyintezes/csomagok/idopontfoglalo.zip.php
-          head -1 "$W" | grep -q "^<?php http_response_code(404); exit; ?>$" || { echo "::error::a fizetős csomag nincs védő PHP-sorral ellátva"; exit 1; }
+          [ "$(head -1 "$W")" = "<?php http_response_code(404); exit; __halt_compiler();" ] || { echo "::error::a fizetős csomag nincs védő PHP-sorral ellátva"; exit 1; }
+          php -l "$W" > /dev/null || { echo "::error::a védett csomag PHP-ként nem értelmezhető (közvetlenül megnyitva hibát adna)"; exit 1; }
+          [ "$(php "$W" | wc -c)" = 0 ] || { echo "::error::a védett csomag futtatva kimenetet ad"; exit 1; }
           P=/tmp/idopontfoglalo.zip && tail -n +2 "$W" > "$P"
           ls dist/ugyintezes/csomagok/*.zip 2>/dev/null && { echo "::error::védtelen .zip a csomagok mappában!"; exit 1; }
           for f in install.php TELEPITES.md widget.js api/config.example.php admin/index.php uploads/.htaccess; do
@@ -417,7 +419,7 @@ jobs:
       - name: Szerver indítása (a levelek naplófájlba mennek)
         run: |
           bash tests/set-ugyintezes-config.sh
-          mkdir -p apps/ugyintezes/csomagok && printf '<?php http_response_code(404); exit; ?>\nPK-teszt-csomag' > apps/ugyintezes/csomagok/idopontfoglalo.zip.php
+          mkdir -p apps/ugyintezes/csomagok && printf '<?php http_response_code(404); exit; __halt_compiler();\nPK<?php ez nem futhat ?>-teszt' > apps/ugyintezes/csomagok/idopontfoglalo.zip.php
           touch "$RUNNER_TEMP/mails.log"
           TZ=Europe/Budapest php -d "sendmail_path=cat >> $RUNNER_TEMP/mails.log" -d opcache.enable_cli=0 -S 127.0.0.1:8007 -t apps/ugyintezes > seged-server.log 2>&1 &
           sleep 2

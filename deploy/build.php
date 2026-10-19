@@ -161,9 +161,10 @@ foreach ($downloads as $name => $d) {
 }
 // Fizetős csomagok: csak személyes letöltőkóddal tölthetők le (ugyintezes/letoltes.php,
 // a kódokat az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni).
-// A zip egy .php fájlba kerül egy kilépő PHP-sor mögé: közvetlenül megnyitva a szerver
-// lefuttatja és üres 404-et ad — nginx alatt is (ott a .htaccess nem véd).
-const PAID_GUARD = "<?php http_response_code(404); exit; ?>\n"; // ugyanez: apps/ugyintezes/api/lib/licenses.php
+// A zip egy .php fájlba kerül egy kilépő PHP-sor és __halt_compiler() mögé: közvetlenül
+// megnyitva a szerver lefuttatja és üres 404-et ad — nginx alatt is (ott a .htaccess nem véd);
+// a __halt_compiler() miatt a PHP a zip bájtjait nem is próbálja értelmezni.
+const PAID_GUARD = "<?php http_response_code(404); exit; __halt_compiler();\n"; // ugyanez: apps/ugyintezes/api/lib/licenses.php
 $paid = [
     'idopontfoglalo' => ['app' => 'idopontfoglalo', 'skip' => ['README.md', 'api/config.php']],
 ];

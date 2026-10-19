@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 // Fizetős, letölthető csomagok és a személyes letöltőkódok.
 // A csomagokat a deploy készíti a csomagok/ mappába <név>.zip.php néven: a zip egy kilépő
-// PHP-sor mögött van, így közvetlenül megnyitva semmit nem ad ki (nginx alatt is).
+// PHP-sor és __halt_compiler() mögött van, így közvetlenül megnyitva semmit nem ad ki (nginx alatt is).
 // Letölteni csak a letoltes.php?kod=… címen, érvényes kóddal lehet.
-const PAID_GUARD = "<?php http_response_code(404); exit; ?>\n"; // ugyanez: deploy/build.php
+const PAID_GUARD = "<?php http_response_code(404); exit; __halt_compiler();\n"; // ugyanez: deploy/build.php
 
 const PAID_PRODUCTS = [
     'idopontfoglalo' => ['name' => 'Önálló online időpontfoglaló', 'file' => 'idopontfoglalo.zip.php', 'price' => '49 000 Ft + ÁFA'],
