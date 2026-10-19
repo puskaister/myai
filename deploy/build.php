@@ -169,10 +169,11 @@ $paid = [
 ];
 if (is_dir("$dist/ugyintezes")) {
     $paidDir = "$dist/ugyintezes/csomagok";
+    if (!is_dir($paidDir)) mkdir($paidDir, 0755, true);
     foreach ($paid as $name => $d) {
         $tmp = "$root/dist-$name.zip";
         $hash = zip_dir("$root/apps/{$d['app']}", $tmp, "$name/", $d['skip']);
-        file_put_contents("$paidDir/$name.zip.php", PAID_GUARD . file_get_contents($tmp));
+        if (file_put_contents("$paidDir/$name.zip.php", PAID_GUARD . file_get_contents($tmp)) === false) fail("Nem sikerült írni: $paidDir/$name.zip.php");
         unlink($tmp);
         file_put_contents("$paidDir/$name.version", substr($hash, 0, 12) . "\n");
         echo "  fizetős csomag → /ugyintezes/csomagok/$name.zip.php (" . round(filesize("$paidDir/$name.zip.php") / 1024) . " KB, csak kóddal)\n";
