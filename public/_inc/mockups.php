@@ -146,3 +146,9 @@ function mockup_onallo(): void { ?>
   </div>
 </div>
 <?php }
+
+// Followup: a followup.my-ai.hu záróképe – a boldog férfi, aki kipipálta a napi teendőit.
+function mockup_followup(): void { ?>
+<img src="/assets/followup-napsutes.jpg" width="523" height="790" alt="" loading="lazy"
+  style="display:block;width:100%;max-width:520px;margin:0 auto;aspect-ratio:4/3;object-fit:cover;object-position:center 35%;border-radius:16px;box-shadow:0 24px 50px -24px rgba(4,12,20,.6)">
+<?php }

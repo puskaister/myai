@@ -19,6 +19,13 @@ const APPS = [
         'mockup'  => 'mockup_onallo',
         'for'     => 'Saját weboldallal és tárhellyel rendelkező vállalkozások',
     ],
+    'followup' => [
+        'name'    => 'Followup – napi teendők',
+        'short'   => 'Számlák, kintlévőségek, NAV-határidők és érdeklődők egy helyen. Minden reggel egyetlen lista: mit fizess ki, kit hívj fel, és a felszólító leveleket is megírja — te csak jóváhagyod.',
+        'badge'   => '45 napig ingyen kipróbálható',
+        'mockup'  => 'mockup_followup',
+        'for'     => 'Kis- és középvállalkozások',
+    ],
     'evfordulok' => [
         'name'    => 'Évfordulók',
         'short'   => 'Születésnapok, névnapok, évfordulók egy helyen — előtte napon emailben szólunk. Telefonra telepíthető.',
