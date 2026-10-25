@@ -25,6 +25,7 @@ const APPS = [
         'badge'   => '45 napig ingyen kipróbálható',
         'mockup'  => 'mockup_followup',
         'for'     => 'Kis- és középvállalkozások',
+        'url'     => 'https://followup.my-ai.hu/',   // saját oldala van, a kártya oda visz
     ],
     'evfordulok' => [
         'name'    => 'Évfordulók',
@@ -56,20 +57,21 @@ const APPS = [
     ],
 ];
 
-// Kártyarács: kép (makett), cím, pár szó, Tovább gomb.
+// Kártyarács: kép (makett), cím, pár szó, Tovább gomb. A kártya a /appok/<slug>/
+// oldalra visz, vagy – ha az appnak saját weboldala van – az 'url' címre.
 function apps_grid(): void { ?>
       <div class="app-grid">
-        <?php foreach (APPS as $slug => $app): ?>
+        <?php foreach (APPS as $slug => $app): $href = $app['url'] ?? "/appok/$slug/"; ?>
           <article class="app-card">
-            <a class="app-thumb" href="/appok/<?= e($slug) ?>/" tabindex="-1" aria-hidden="true">
+            <a class="app-thumb" href="<?= e($href) ?>" tabindex="-1" aria-hidden="true">
               <div class="thumb-inner"><?php ($app['mockup'])(); ?></div>
             </a>
             <div class="app-card-body">
               <span class="badge"><?= e($app['badge']) ?></span>
-              <h3><a href="/appok/<?= e($slug) ?>/"><?= e($app['name']) ?></a></h3>
+              <h3><a href="<?= e($href) ?>"><?= e($app['name']) ?></a></h3>
               <p><?= e($app['short']) ?></p>
               <p class="app-for"><?= e($app['for']) ?></p>
-              <a class="btn btn-primary" href="/appok/<?= e($slug) ?>/" aria-label="Tovább: <?= e($app['name']) ?>">Tovább →</a>
+              <a class="btn btn-primary" href="<?= e($href) ?>" aria-label="Tovább: <?= e($app['name']) ?>">Tovább →</a>
             </div>
           </article>
         <?php endforeach; ?>
