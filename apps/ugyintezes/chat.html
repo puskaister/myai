@@ -31,6 +31,7 @@ body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f);display:flex;f
 .msg p{margin:4px 0}.msg ol,.msg ul{margin:4px 0;padding-left:1.2em}
 .msg .meta{font-size:.78rem;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 0;background:var(--bg)}
+.chips .or{font-size:.85rem;color:var(--muted);align-self:center;padding:0 2px}
 .chip{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--bg);color:var(--accent);border-radius:999px;padding:4px 10px;cursor:pointer}
 form{display:flex;gap:8px;padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg)}
 input{flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
@@ -113,6 +114,8 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
     if(/^#[0-9a-f]{3,8}$/i.test(szin))document.documentElement.style.setProperty('--accent',szin);
     var chips=document.getElementById('chips');
     cfg.temak.slice(0,4).forEach(function(t){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t.title;b.onclick=function(){answer(t.title)};chips.appendChild(b)});
+    // a témagombok utáni rövid felirat, ha a tudásbázis kéri (pl. „vagy kérdezzen”)
+    if(typeof d.temak_utan==='string'&&d.temak_utan&&cfg.temak.length){var or=document.createElement('span');or.className='or';or.textContent=d.temak_utan;chips.appendChild(or)}
     add('bot',render(d.udvozles||'Jó napot kívánok! Miben segíthetek?'));
   }).catch(function(){add('bot','<p>A tudásbázis most nem érhető el. Kérjük, próbálja később.</p>')});
 })();

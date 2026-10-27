@@ -3,6 +3,7 @@
   "szin": "#0f5c63",
   "udvozles": "Jó napot! A Followup segédje vagyok. Kérdezzen az árakról, az ingyenes 45 napos próbáról, arról, mit tud a program, vagy hogyan kell benne számlát, érdeklődőt rögzíteni.\nA kérdéseit nem tároljuk.",
   "nem_ertem": "Erre most nem tudok pontos választ. Próbálja egyszerűbben, például: „mennyibe kerül?”, „hogyan működik a próba?”, vagy válasszon a fenti témák közül.\nEmberrel is beszélhet: info@my-ai.hu · +36 30 584 5937.",
+  "temak_utan": "vagy kérdezzen",
   "temak": [
     {
       "id": "mi",
