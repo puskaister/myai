@@ -4,8 +4,9 @@ declare(strict_types=1);
 // Előfizetések: ár, érvényesség, befizetés rögzítése, lejárati emlékeztetők.
 // A beépített chatbot csak érvényes előfizetésnél kapja meg a tudásbázist (kb.php).
 
-// A my-ai.hu saját buboréka és a nyilvános demó mindig működik (fájlból, adatbázis nélkül).
-const BUILTIN_KBS = ['minta', 'my-ai'];
+// A my-ai.hu saját buboréka, a Followup oldal (followup.my-ai.hu) buboréka és a nyilvános demó
+// mindig működik (fájlból, adatbázis nélkül).
+const BUILTIN_KBS = ['minta', 'my-ai', 'followup'];
 
 function price_gross(): int {
     $o = get_options();

@@ -1,0 +1,470 @@
+{
+  "nev": "Followup – Kérdezzen tőlünk",
+  "szin": "#0f5c63",
+  "udvozles": "Jó napot! A Followup segédje vagyok. Kérdezzen az árakról, az ingyenes 45 napos próbáról, arról, mit tud a program, vagy hogyan kell benne számlát, érdeklődőt rögzíteni.\nA kérdéseit nem tároljuk.",
+  "nem_ertem": "Erre most nem tudok pontos választ. Próbálja egyszerűbben, például: „mennyibe kerül?”, „hogyan működik a próba?”, vagy válasszon a fenti témák közül.\nEmberrel is beszélhet: info@my-ai.hu · +36 30 584 5937.",
+  "temak": [
+    {
+      "id": "mi",
+      "title": "Mi a Followup?",
+      "keys": [
+        "mi a followup",
+        "mi ez",
+        "mire jó",
+        "mire való",
+        "mit tud",
+        "hogyan működik a followup",
+        "hogyan működik a program",
+        "miben segít",
+        "mire használ",
+        "kintlévőség-kezelő",
+        "számlakövető"
+      ],
+      "answer": "A Followup kintlévőség-kezelő és számlakövető program kis- és középvállalkozásoknak.\nEgy helyen vannak benne:\n- a fizetendő számlák,\n- a kintlévőségek (ki tartozik, mióta),\n- a NAV- és banki befizetési határidők,\n- az érdeklődők.\nMinden reggel egyetlen teendőlistát kap emailben: mit fizessen ki, kit hívjon fel és miért, melyik levelet küldje el. A fizetési emlékeztetőket és felszólításokat meg is írja, Ön csak jóváhagyja."
+    },
+    {
+      "id": "ar",
+      "title": "Árak",
+      "keys": [
+        "mennyibe",
+        "mennyi az ár",
+        "árak",
+        "árat",
+        "árlista",
+        "költség",
+        "díj",
+        "drága",
+        "olcsó",
+        "forint",
+        "mennyit kell fizetni",
+        "befektetés"
+      ],
+      "answer": "Followup szoftver: 149 000 Ft + ÁFA egyszeri bevezető ár (tervezett ár: 499 000 Ft + ÁFA), teljes telepítési leírással.\nIgény szerint:\n- Telepítés a saját tárhelyére: 100 000 Ft + ÁFA, egyszeri\n- Karbantartás (technikai karbantartás, frissítés, védelem): 30 000 Ft + ÁFA / hó\n- Üzemeltetés nálunk, karbantartással együtt: 39 000 Ft + ÁFA / hó, így tárhellyel sem kell bajlódnia\n- A 45 napos ingyenes próbából nálunk maradva: 19 000 Ft + ÁFA / hó\nAjánlatkérés: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "proba",
+      "title": "Ingyenes próba",
+      "keys": [
+        "próba",
+        "kipróbál",
+        "ingyen",
+        "ingyenes",
+        "teszt",
+        "45 nap",
+        "demó verzió",
+        "kockázat"
+      ],
+      "answer": "45 napig ingyen kipróbálhatja, bankkártya nélkül.\n1. Regisztrál: cégnév, név, email és jelszó. Emailben aktiváló linket kap.\n2. Kipróbálja: saját, csak Önnek elérhető részt kap, egy kitalált asztalosüzem mintaadataival. A mintát tételenként is törölheti, és rögzítheti a saját számláit.\n3. Dönt: marad nálunk, vagy elviszi a programot az adataival a saját tárhelyére.\nA próba alatt a levelek csak Önhöz érkeznek, a partnereihez nem mennek ki.\nIndítás: followup.my-ai.hu/proba.php",
+      "elsobbseg": 1
+    },
+    {
+      "id": "bemutato",
+      "title": "Bemutató, kapcsolat",
+      "keys": [
+        "bemutató",
+        "kapcsolat",
+        "elérhető",
+        "telefonszám",
+        "email cím",
+        "e-mail",
+        "hívj",
+        "felhív",
+        "beszélni",
+        "ember",
+        "ügyfélszolgálat",
+        "segítség",
+        "megkeres"
+      ],
+      "answer": "Szívesen megmutatjuk a Followupot az Ön helyzetére egy rövid beszélgetésen.\n- Bemutatókérés: a followup.my-ai.hu oldal alján lévő űrlapon\n- E-mail: info@my-ai.hu\n- Telefon: +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "kintlevoseg",
+      "title": "Kintlévőségek behajtása",
+      "keys": [
+        "kintlévőség",
+        "behajt",
+        "tartozik",
+        "tartozás",
+        "nem fizet",
+        "késik",
+        "lejárt számla",
+        "vevő",
+        "pénzem",
+        "adós"
+      ],
+      "answer": "A lejárt számlákat a késés szerint sorba rendezi, és megmondja a következő lépést:\n- a lejárat után: fizetési emlékeztető\n- 8 nap késés után: telefonhívás\n- 15 napnál: fizetési felszólítás\n- 30 napnál: utolsó fizetési felszólítás\nA partner fizetési ígéretét is rögzítheti: az ígért napig a program nem sürget, ha pedig elmúlik és nem jött pénz, szól, hogy hívja újra."
+    },
+    {
+      "id": "felszolitas",
+      "title": "Fizetési felszólítás",
+      "keys": [
+        "felszólít",
+        "emlékeztető",
+        "felszólító levél",
+        "levél minta",
+        "mintalevél",
+        "levelet ír",
+        "megírja"
+      ],
+      "answer": "Nem kell felszólítás-mintát keresnie. A Followup megírja a fizetési emlékeztetőt, a felszólítást és az utolsó felszólítást a számlaszámmal, az összeggel, a lejárt határidővel és az Ön bankszámlaszámával, a felszólításoknál új fizetési határidővel.\nÖn átnézi, ha kell, átírja, és egy kattintással elküldi. Ha a partnernek nincs email címe, a levelet kinyomtathatja, és „Máshogy elküldve” jelöléssel rögzítheti."
+    },
+    {
+      "id": "jovahagyas",
+      "title": "Semmi nem megy ki magától",
+      "keys": [
+        "jóváhagy",
+        "magától",
+        "automatikus",
+        "tudtom nélkül",
+        "véletlenül",
+        "kiküld",
+        "ellenőriz"
+      ],
+      "answer": "A Followup előkészíti a leveleket, de egyiket sem küldi el magától. Felszólítás, válasz egy érdeklődőnek, időpont-visszaigazolás: mindegyik csak akkor indul, ha Ön vagy a kollégája átnézte és rányomott a küldésre. A rendszer azt is megjegyzi, ki hagyta jóvá."
+    },
+    {
+      "id": "fizetendo",
+      "title": "Fizetendő számlák",
+      "keys": [
+        "fizetendő",
+        "beszállító",
+        "szállító",
+        "rezsi",
+        "bérleti díj",
+        "bérlet",
+        "határidő előtt",
+        "ismétlőd",
+        "havonta"
+      ],
+      "answer": "A beszállítói számlákat, a rezsit, a bérleti díjat határidővel rögzíti. A Followup a határidő előtt 3 nappal szól, a lejártat pirossal mutatja. A havonta ismétlődő tételt elég egyszer felvenni: kifizetéskor a következő havit magától létrehozza.\nA reggeli emailben a kedvezményezett számlaszáma és a közlemény is ott van, így onnan rögtön utalhat."
+    },
+    {
+      "id": "nav",
+      "title": "NAV és banki határidők",
+      "keys": [
+        "nav",
+        "áfa",
+        "járulék",
+        "adó",
+        "szja",
+        "késedelmi pótlék",
+        "hitel",
+        "lízing",
+        "törlesztő",
+        "bank"
+      ],
+      "answer": "A járulékot, az áfát, a NAV által előírt késedelmi pótlékot, valamint a hitel- és lízingrészleteket összeggel, határidővel és közleménnyel rögzítheti, a havonta ismétlődőket egyszer.\nA határidő előtt 30 nappal a Teendők oldalon, 7 nappal előtte a reggeli emailben is jelzi őket."
+    },
+    {
+      "id": "napi",
+      "title": "Reggeli teendőlista",
+      "keys": [
+        "reggel",
+        "napi lista",
+        "teendő",
+        "összefoglaló",
+        "napi email",
+        "mit csináljak",
+        "mivel kezdjem",
+        "lista"
+      ],
+      "answer": "Minden munkanap reggel 7 óra után emailben megkapja a napi teendőket:\n- fizetendő számlák számlaszámmal és közleménnyel\n- kit kell felhívni és miért\n- jóváhagyásra váró levelek\n- NAV- és banki befizetések a következő 7 napban\n- esedékes utánkövetések, megválaszolatlan érdeklődők\n- mai időpontok\nMinden tételnél link visz a program megfelelő oldalára. Ha aznap nincs teendő, nem kap levelet."
+    },
+    {
+      "id": "erdeklodo",
+      "title": "Érdeklődők kezelése",
+      "keys": [
+        "érdeklődő",
+        "ügyfélkezel",
+        "crm",
+        "ajánlatkér",
+        "megkeresés",
+        "űrlap",
+        "utánkövet",
+        "nem válaszol"
+      ],
+      "answer": "A weboldal űrlapjáról, telefonon vagy emailben érkezett érdeklődők egy listára kerülnek. A program szól, kinek kell válaszolni, és mikor kell utánamenni (alapból 2, 5 és 10 nap után, ha nem jelentkezik). Mindenkihez felelős munkatárs rendelhető, és minden levél, jegyzet, hívás egy helyen látszik."
+    },
+    {
+      "id": "idopont",
+      "title": "Online időpontfoglalás",
+      "keys": [
+        "időpont",
+        "foglal",
+        "naptár",
+        "egyeztet",
+        "találkozó",
+        "munkaidő"
+      ],
+      "answer": "Az érdeklődő a levélben személyes foglalási linket kap, és a szabad időpontok közül maga választ az Ön munkaidejéből. Nincs oda-vissza egyeztetés, és a foglalt időpontot senki más nem kapja meg. Ön egy kattintással visszaigazolja vagy lemondja.\nA munkaidőt, az időpont hosszát és azt, hogy hány napra előre lehet foglalni, a Beállításokban adja meg."
+    },
+    {
+      "id": "szamlazo",
+      "title": "Számlázó vagy könyvelő helyett?",
+      "keys": [
+        "számlázó",
+        "számlát állít",
+        "könyvel",
+        "könyvelő",
+        "számlázz",
+        "billingo",
+        "kiállít"
+      ],
+      "answer": "Nem váltja ki őket. A Followup nem állít ki számlát és nem könyvel. A kapott és kiállított számlákat Ön rögzíti benne, a program pedig figyeli a fizetési határidőket, a lejárt számlákat és a teendőket, hogy semmi ne csússzon el."
+    },
+    {
+      "id": "munkatars",
+      "title": "Több munkatárs",
+      "keys": [
+        "munkatárs",
+        "kolléga",
+        "több felhasználó",
+        "felhasználó",
+        "jogosultság",
+        "admin",
+        "csapat"
+      ],
+      "answer": "Több munkatárs használhatja, mindenki saját belépéssel. Az admin a beállításokat is módosíthatja, és munkatársakat vehet fel vagy tilthat le. A munkatárs rögzíthet, leveleket hagyhat jóvá, érdeklődőket és időpontokat kezelhet. Távozó kollégát egy kattintással letilthat, az általa rögzített adatok megmaradnak."
+    },
+    {
+      "id": "adatok",
+      "title": "Hol vannak az adataim?",
+      "keys": [
+        "adataim",
+        "adat",
+        "hol tárol",
+        "adatbázis",
+        "adatvédelem",
+        "gdpr",
+        "biztonság",
+        "biztonságos",
+        "jelszó"
+      ],
+      "answer": "A saját tárhelyén, saját adatbázisban, vagy ha nem akar tárhellyel bajlódni, mi üzemeltetjük. Belépni mindkét esetben csak Ön és a munkatársai tudnak, saját jelszóval (legalább 10 karakter). A rendszer csak a belépéshez szükséges munkamenet-sütit használja."
+    },
+    {
+      "id": "uzemeltetes",
+      "title": "Üzemeltetés nálunk",
+      "keys": [
+        "üzemeltet",
+        "nálatok",
+        "nálunk",
+        "nem akarok bajlódni",
+        "bajlód",
+        "tárhely nélkül",
+        "domain",
+        "aldomain"
+      ],
+      "answer": "Ha nem akar tárhellyel bajlódni, üzemeltetjük Ön helyett: tárhely, adatbázis, https, levelezés, időzítő, mentések, frissítések és karbantartás.\nDíja a szoftver árán (149 000 Ft + ÁFA) felül 39 000 Ft + ÁFA / hó, az ingyenes próbából átlépőknek 19 000 Ft + ÁFA / hó.\nÖnnek csak a beállításokhoz szükséges adatokat kell megadnia. Ha a saját domainjén szeretné elérni, ehhez egyetlen DNS-bejegyzés kell."
+    },
+    {
+      "id": "telepites",
+      "title": "Telepítés saját tárhelyre",
+      "keys": [
+        "telepít",
+        "saját tárhely",
+        "informatikus",
+        "feltelepít",
+        "üzembe helyez",
+        "rendszergazda"
+      ],
+      "answer": "A programot teljes telepítési leírással kapja: a cég informatikusa ez alapján üzembe helyezi a saját tárhelyén.\nNincs, aki telepítse? Vállaljuk: 100 000 Ft + ÁFA, egyszeri díj.\nKérésre a technikai karbantartást, frissítést és védelmet is vállaljuk: 30 000 Ft + ÁFA / hó."
+    },
+    {
+      "id": "kovetelmeny",
+      "title": "Mi kell a telepítéshez?",
+      "keys": [
+        "mi kell",
+        "mire van szükség",
+        "követelmény",
+        "php",
+        "mysql",
+        "mariadb",
+        "ssl",
+        "https",
+        "ftp",
+        "smtp",
+        "cron",
+        "időzítő"
+      ],
+      "answer": "A legtöbb tárhelycsomag mindezt tartalmazza:\n- domain név vagy aldomain\n- webtárhely PHP 8.1 vagy újabb verzióval (javasolt a 8.4)\n- MySQL vagy MariaDB adatbázis\n- SSL-tanúsítvány (https)\n- FTP-hozzáférés a feltöltéshez\n- céges email postafiók (SMTP)\n- időzítő (cron)\n- cégadatok a beállításokhoz\nA részletek a mellékelt telepítési leírásban vannak."
+    },
+    {
+      "id": "karbantartas",
+      "title": "Karbantartás",
+      "keys": [
+        "karbantart",
+        "frissít",
+        "védelem",
+        "support",
+        "hiba esetén",
+        "elromlik"
+      ],
+      "answer": "Karbantartás: a weboldal technikai karbantartása, frissítése, védelme 30 000 Ft + ÁFA / hó, ha a programot a saját tárhelyén használja. Ha nálunk üzemeltetjük, a karbantartás benne van az üzemeltetés díjában."
+    },
+    {
+      "id": "proba_utan",
+      "title": "A próba után",
+      "keys": [
+        "próba után",
+        "lejár",
+        "45 nap után",
+        "letölt",
+        "elvisz",
+        "csomag",
+        "maradok",
+        "maradhat",
+        "zárol",
+        "törlőd",
+        "nap után",
+        "utána mi",
+        "mi történik"
+      ],
+      "answer": "A 45 nap után a próbaverzió zárolódik, magától semmi nem indul el és nem kerül pénzbe. Két lehetőség közül választhat:\n- Marad nálunk, ugyanitt, a meglévő adataival: 149 000 Ft + ÁFA egyszeri, majd 19 000 Ft + ÁFA / hó, karbantartással, frissítéssel, védelemmel. Tárhellyel, domainnal, üzemeltetéssel nem kell bajlódnia.\n- Elviszi a programot az adataival a saját tárhelyére: 149 000 Ft + ÁFA. A telepítést (100 000 Ft + ÁFA) és a karbantartást (30 000 Ft + ÁFA / hó) igény szerint vállaljuk.\nHa nem folytatja, a zárolás után 30 nappal az adatai törlődnek.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "megrendeles",
+      "title": "Megrendelés",
+      "keys": [
+        "megrendel",
+        "rendelés",
+        "vásárl",
+        "megveszem",
+        "megvenném",
+        "aszf",
+        "ászf",
+        "szerződés",
+        "számlát kérek"
+      ],
+      "answer": "Megrendelni a followup.my-ai.hu oldalon, az ÁSZF és megrendelés oldalon tud (aszf.php), ahol a feltételeket is megtalálja. A megrendelés után a használati útmutatót (PDF) is elküldjük.\nKérdés esetén: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "hogyan_szamla",
+      "title": "Új számla rögzítése",
+      "keys": [
+        "új számla",
+        "számlát rögzít",
+        "számla felvitel",
+        "felvisz",
+        "rögzít",
+        "beír",
+        "hogyan vegyek fel",
+        "új tétel"
+      ],
+      "answer": "Számlák menü, majd a megfelelő fül:\n- Fizetendő számlák: amit Önnek kell kifizetnie\n- Kintlévőségek (nekünk fizetnek): amit a vevőnek kell fizetnie\n- NAV és banki befizetések\nKattintson a „+ Új tétel” gombra, adja meg a partnert, az összeget (bruttó) és a fizetési határidőt, kintlévőségnél a vevő email címét is (erre mennek a felszólítások). A rendszeres tételeknél pipálja be a „Havonta ismétlődik” jelölőt. Végül: Rögzítés."
+    },
+    {
+      "id": "hogyan_fizetve",
+      "title": "Kifizetés, befolyás jelölése",
+      "keys": [
+        "kifizettem",
+        "kifizetve",
+        "befolyt",
+        "megjött a pénz",
+        "fizetett",
+        "utaltam",
+        "sztornó",
+        "töröl"
+      ],
+      "answer": "Nyissa meg a tételt, hagyja a mai dátumot (vagy írja be a fizetés napját), és kattintson a „Kifizetve” (fizetendő tételnél) vagy a „Befolyt” (kintlévőségnél) gombra. A tétel lekerül a teendők közül, a függő felszólítás is visszavonódik.\nTévesen rögzített számlát a „Sztornó” gombbal vehet ki a teendők közül."
+    },
+    {
+      "id": "hogyan_igeret",
+      "title": "Fizetési ígéret rögzítése",
+      "keys": [
+        "ígér",
+        "megígérte",
+        "fizetési ígéret",
+        "hívás eredmény",
+        "felhívtam",
+        "jegyzet"
+      ],
+      "answer": "A számla adatlapján, a „Hívás / ígéret / jegyzet” dobozban írja le röviden, mit beszéltek, és ha a partner megígérte, adja meg az „Ígért fizetés” dátumát, majd Rögzítés. Az ígért napig a program nem sürget. Ha elmúlik és nem jött pénz, a partner újra a „Kit kell hívni” listára kerül."
+    },
+    {
+      "id": "hogyan_erdeklodo",
+      "title": "Új érdeklődő rögzítése",
+      "keys": [
+        "új érdeklődő",
+        "érdeklődőt felvesz",
+        "telefonon jött",
+        "felvétel",
+        "cetli",
+        "veszem fel",
+        "felveszem",
+        "vegyem fel"
+      ],
+      "answer": "A menüben kattintson a „+ Új” pontra. Adja meg a forrást (telefon, email, személyes…), a nevet, az elérhetőséget és röviden, mit szeretne, majd „Felvétel”. Az érdeklődő bekerül a listába és a napi teendők közé, amíg nem válaszol neki. A weboldal űrlapjáról érkezők maguktól bekerülnek, ha az űrlap be van kötve."
+    },
+    {
+      "id": "mintaadat",
+      "title": "Mintaadatok",
+      "keys": [
+        "minta",
+        "mintaadat",
+        "kitalált",
+        "asztalos",
+        "fenyőház",
+        "példa adat"
+      ],
+      "answer": "A mintaadatok egy kitalált asztalosüzem számlái, kintlévőségei, NAV-határidői és érdeklődői, hogy rögtön lássa, hogyan néz ki egy reggel. Törölheti egyszerre a Beállításokban, vagy tételenként a „Minta törlése” gombbal. A törlés csak a mintát érinti, a saját adataihoz nem nyúl."
+    },
+    {
+      "id": "jelszo",
+      "title": "Elfelejtett jelszó",
+      "keys": [
+        "elfelejtett",
+        "elfelejtettem",
+        "nem tudok belépni",
+        "belépés",
+        "új jelszó",
+        "jelszavam"
+      ],
+      "answer": "A belépőoldalon kattintson az „Elfelejtette a jelszavát?” linkre, adja meg az email címét, és néhány percen belül kap egy linket (60 percig érvényes). Ha nem jön, nézze meg a levélszemét mappát is, vagy keressen minket: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "ceg",
+      "title": "Kik vagyunk?",
+      "keys": [
+        "ki készít",
+        "kik vagytok",
+        "cég adatai",
+        "cégadat",
+        "immobilis",
+        "my-ai",
+        "fejlesztő"
+      ],
+      "answer": "A Followupot az Immobilis Partners Kft. (my-ai.hu) fejleszti és üzemelteti.\n- Székhely: 1238 Budapest, Molnár utca 65/b\n- Cégjegyzékszám: 01-09-684414\n- Adószám: 11941736-2-43\n- info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "koszon",
+      "title": "Köszönöm",
+      "keys": [
+        "köszön",
+        "kösz",
+        "köszi",
+        "szuper",
+        "rendben"
+      ],
+      "answer": "Szívesen! Ha van még kérdése, írja be bátran, vagy keressen minket: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": -1
+    },
+    {
+      "id": "szia",
+      "title": "Üdvözlés",
+      "keys": [
+        "szia",
+        "hello",
+        "helló",
+        "jó napot",
+        "üdv",
+        "sziasztok"
+      ],
+      "answer": "Jó napot! Miben segíthetek? Kérdezhet az árakról, az ingyenes próbáról, arról, mit tud a Followup, vagy hogyan kell benne egy számlát rögzíteni.",
+      "elsobbseg": -1
+    }
+  ]
+}

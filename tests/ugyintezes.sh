@@ -23,6 +23,7 @@ check "demó oldal, chat, widget" '[ "$(curl -s -o /dev/null -w "%{http_code}" "
 check "a my-ai.hu saját tudásbázisa mindig elérhető" 'curl -s "$BASE/kb.php?u=my-ai" | jq -e "(.temak | length) > 5" >/dev/null && curl -s "$BASE/kb.php?u=minta" | jq -e ".temak | length > 0" >/dev/null'
 check "a saját válasza már nem „ingyenes”" '! curl -s "$BASE/kb.php?u=my-ai" | grep -q "ingyenes, szabályalapú" && curl -s "$BASE/kb.php?u=my-ai" | grep -q "5 000 Ft + ÁFA"'
 check "a my-ai.hu tudástára: logó, minden ár, cégadatok" 'curl -s "$BASE/kb.php?u=my-ai" | jq -e ".logo == \"/assets/immobilis-logo.svg\" and (.temak | length) >= 30" >/dev/null && curl -s "$BASE/kb.php?u=my-ai" | grep -q "30 000 Ft + ÁFA" && curl -s "$BASE/kb.php?u=my-ai" | grep -q "01-09-684414"'
+check "a Followup oldal tudásbázisa mindig elérhető (árak, próba)" 'curl -s "$BASE/kb.php?u=followup" | jq -e "(.temak | length) >= 25 and .temak[0].title == \"Mi a Followup?\"" >/dev/null && curl -s "$BASE/kb.php?u=followup" | grep -q "149 000 Ft + ÁFA" && curl -s "$BASE/kb.php?u=followup" | grep -q "45 napig ingyen"'
 check "a chat fejléce logót tud mutatni" 'curl -s "$BASE/chat.html" | grep -q "className=.logo."'
 check "cron telepítés előtt: kihagyva" 'curl -s "$BASE/cron.php" | jq -e ".skipped" >/dev/null'
 
