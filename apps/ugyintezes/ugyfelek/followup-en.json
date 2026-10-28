@@ -1,0 +1,477 @@
+{
+  "nyelv": "en",
+  "nev": "Followup – Ask us",
+  "szin": "#0f5c63",
+  "udvozles": "Hello! I'm the Followup assistant. Ask me about prices, the free 45-day trial, what the program does, or how to record an invoice or an enquiry in it.\nWe do not store your questions.",
+  "nem_ertem": "I don't have an exact answer to that. Try asking more simply, e.g. \"how much does it cost?\" or \"how does the trial work?\", or choose one of the topics above.\nYou can also talk to a person: info@my-ai.hu · +36 30 584 5937.",
+  "temak_utan": "or ask a question",
+  "temak": [
+    {
+      "id": "what",
+      "title": "What is Followup?",
+      "keys": [
+        "what is followup",
+        "what is it",
+        "what does it do",
+        "what is it for",
+        "how does it work",
+        "how does followup work",
+        "features",
+        "receivables",
+        "invoice tracking"
+      ],
+      "answer": "Followup is receivables management and invoice tracking software for small and medium-sized businesses.\nIn one place:\n- the bills you have to pay,\n- your receivables (who owes you, since when),\n- tax and bank payment deadlines,\n- your enquiries.\nEvery morning you get a single to-do list by email: what to pay, whom to call and why, which letter to send. It also writes the payment reminders and demands – you just approve them."
+    },
+    {
+      "id": "price",
+      "title": "Prices",
+      "keys": [
+        "how much",
+        "price",
+        "prices",
+        "pricing",
+        "cost",
+        "costs",
+        "fee",
+        "expensive",
+        "cheap",
+        "euro",
+        "pay for"
+      ],
+      "answer": "Followup software: €399 + VAT one-off introductory price (planned price: €1,290 + VAT), with a full installation guide.\nOptional:\n- Installation on your own web hosting: €269 + VAT, one-off\n- Maintenance (technical maintenance, updates, protection): €79 + VAT / month\n- Hosting by us, maintenance included: €99 + VAT / month – no need to deal with hosting\n- Staying with us after the free 45-day trial: €49 + VAT / month\nQuotes: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "trial",
+      "title": "Free trial",
+      "keys": [
+        "trial",
+        "try",
+        "free",
+        "test",
+        "45 days",
+        "demo version",
+        "risk"
+      ],
+      "answer": "You can try it free for 45 days, without a credit card.\n1. Sign up: company name, name, email and password. You get an activation link by email.\n2. Try it: you get your own area, filled with the sample data of a fictional joinery workshop. You can delete the samples one by one and record your own invoices.\n3. Decide: stay with us, or take the program and your data to your own web hosting.\nDuring the trial, emails are only sent to you, never to your partners.\nStart: on followup.hu, with the \"Try it free for 45 days\" button.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "contact",
+      "title": "Demo, contact",
+      "keys": [
+        "demo",
+        "contact",
+        "phone number",
+        "email address",
+        "e-mail",
+        "call",
+        "talk",
+        "person",
+        "human",
+        "customer service",
+        "support team",
+        "help"
+      ],
+      "answer": "We'd be happy to show you Followup for your situation in a short call.\n- Request a demo: with the form at the bottom of followup.hu\n- Email: info@my-ai.hu\n- Phone: +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "receivables",
+      "title": "Collecting what you're owed",
+      "keys": [
+        "receivable",
+        "collect",
+        "owes",
+        "owe me",
+        "debt",
+        "not paying",
+        "late payment",
+        "overdue invoice",
+        "customer",
+        "my money",
+        "debtor"
+      ],
+      "answer": "It sorts overdue invoices by how late they are and tells you the next step:\n- after the due date: payment reminder\n- after 8 days: phone call\n- after 15 days: payment demand\n- after 30 days: final demand\nYou can also record a customer's promise to pay: until the promised day the program won't chase them; if the day passes without payment, it tells you to call again."
+    },
+    {
+      "id": "demand",
+      "title": "Payment demand letters",
+      "keys": [
+        "demand",
+        "reminder",
+        "dunning",
+        "letter template",
+        "sample letter",
+        "writes the letter",
+        "writes letters"
+      ],
+      "answer": "No need to look for templates. Followup writes the payment reminder, the demand and the final demand with the invoice number, the amount, the missed due date and your bank details – and, for demands, a new payment deadline.\nYou review it, edit if needed, and send it with one click. If the partner has no email address, you can print the letter and record it with \"Sent another way\"."
+    },
+    {
+      "id": "approval",
+      "title": "Nothing goes out on its own",
+      "keys": [
+        "approve",
+        "approval",
+        "automatic",
+        "automatically",
+        "without me",
+        "by mistake",
+        "sends",
+        "check before"
+      ],
+      "answer": "Followup prepares the letters but never sends any of them on its own. A payment demand, a reply to an enquiry, an appointment confirmation: each goes out only after you or a colleague have reviewed it and clicked send. The system also records who approved it."
+    },
+    {
+      "id": "bills",
+      "title": "Bills to pay",
+      "keys": [
+        "bills to pay",
+        "supplier",
+        "utilities",
+        "before the due date",
+        "recurring",
+        "monthly",
+        "pay rent",
+        "rent payment"
+      ],
+      "answer": "Record supplier invoices, utilities and rent with their due dates. Followup reminds you 3 days before the due date and shows overdue items in red. Monthly recurring items only need to be entered once: when you mark one as paid, next month's is created automatically.\nThe morning email includes the payee's bank account and the payment reference, so you can pay straight away."
+    },
+    {
+      "id": "tax",
+      "title": "Tax and bank deadlines",
+      "keys": [
+        "tax",
+        "vat",
+        "social security",
+        "contributions",
+        "payroll",
+        "late payment penalty",
+        "loan",
+        "leasing",
+        "instalment",
+        "bank"
+      ],
+      "answer": "You can record social security contributions, VAT, late payment penalties and loan and leasing instalments with amount, deadline and payment reference – monthly recurring items just once.\nThey appear on the To-dos page 30 days before the deadline, and in the morning email 7 days before."
+    },
+    {
+      "id": "daily",
+      "title": "Morning to-do list",
+      "keys": [
+        "morning",
+        "daily list",
+        "to-do",
+        "todo",
+        "summary",
+        "daily email",
+        "what should i do",
+        "where to start",
+        "list"
+      ],
+      "answer": "Every working day after 7 am you get your daily to-dos by email:\n- bills to pay, with account number and payment reference\n- whom to call and why\n- letters awaiting approval\n- tax and bank payments in the next 7 days\n- follow-ups due, unanswered enquiries\n- today's appointments\nEach item links to the right page of the program. If there is nothing to do that day, you get no email."
+    },
+    {
+      "id": "enquiries",
+      "title": "Managing enquiries",
+      "keys": [
+        "enquiry",
+        "enquiries",
+        "inquiry",
+        "lead",
+        "crm",
+        "quote request",
+        "web form",
+        "follow up",
+        "follow-up",
+        "no reply"
+      ],
+      "answer": "Enquiries from your website form, by phone or by email go onto one list. The program tells you whom to reply to and when to follow up (by default after 2, 5 and 10 days if they don't respond). You can assign a responsible colleague, and every email, note and call is visible in one place."
+    },
+    {
+      "id": "booking",
+      "title": "Online booking",
+      "keys": [
+        "appointment",
+        "booking",
+        "book",
+        "calendar",
+        "schedule",
+        "meeting",
+        "working hours"
+      ],
+      "answer": "The enquirer gets a personal booking link in the email and chooses a free slot within your working hours. No back-and-forth, and nobody else can take the booked slot. You confirm or cancel with one click.\nYou set the working hours, the appointment length and how many days ahead people can book in Settings."
+    },
+    {
+      "id": "invoicing",
+      "title": "Instead of invoicing software or an accountant?",
+      "keys": [
+        "invoicing software",
+        "issue invoices",
+        "bookkeeping",
+        "accountant",
+        "accounting"
+      ],
+      "answer": "No, it doesn't replace them. Followup does not issue invoices and does not do bookkeeping. You record the invoices you receive and issue, and the program keeps an eye on payment deadlines, overdue invoices and to-dos so that nothing slips through."
+    },
+    {
+      "id": "team",
+      "title": "Several colleagues",
+      "keys": [
+        "colleague",
+        "colleagues",
+        "several users",
+        "user",
+        "users",
+        "permission",
+        "admin",
+        "team",
+        "staff"
+      ],
+      "answer": "Several colleagues can use it, each with their own login. Admins can also change the settings and add or disable colleagues. Staff can record items, approve letters and manage enquiries and appointments. A departing colleague can be disabled with one click; the data they recorded stays."
+    },
+    {
+      "id": "data",
+      "title": "Where is my data?",
+      "keys": [
+        "my data",
+        "data",
+        "stored",
+        "database",
+        "privacy",
+        "gdpr",
+        "security",
+        "secure",
+        "password"
+      ],
+      "answer": "On your own web hosting, in your own database – or, if you don't want to deal with hosting, we run it for you. In both cases only you and your colleagues can log in, each with their own password (at least 10 characters). The system only uses the session cookie needed for logging in."
+    },
+    {
+      "id": "hosting",
+      "title": "Hosting by us",
+      "keys": [
+        "hosting",
+        "host it",
+        "you host",
+        "do not want to deal",
+        "without hosting",
+        "domain",
+        "subdomain"
+      ],
+      "answer": "If you don't want to deal with hosting, we run it for you: web space, database, https, email, scheduler, backups, updates and maintenance.\nThe fee is €99 + VAT / month on top of the software price (€399 + VAT); after the free trial it is €49 + VAT / month.\nYou only provide the details for the settings. To use your own domain, a single DNS record is all it takes."
+    },
+    {
+      "id": "install",
+      "title": "Installing on your own hosting",
+      "keys": [
+        "install",
+        "own hosting",
+        "it person",
+        "set up",
+        "setup",
+        "system administrator"
+      ],
+      "answer": "You get the program with a full installation guide: your IT person can set it up on your own web hosting.\nNobody to install it? We'll do it: €269 + VAT, one-off.\nOn request we also take care of technical maintenance, updates and protection: €79 + VAT / month."
+    },
+    {
+      "id": "requirements",
+      "title": "What do I need to install it?",
+      "keys": [
+        "what do i need",
+        "requirements",
+        "requirement",
+        "php",
+        "mysql",
+        "mariadb",
+        "ssl",
+        "https",
+        "ftp",
+        "smtp",
+        "cron",
+        "scheduler"
+      ],
+      "answer": "Most hosting plans include all of this:\n- a domain name or subdomain\n- web hosting with PHP 8.1 or newer (8.4 recommended)\n- a MySQL or MariaDB database\n- an SSL certificate (https)\n- FTP access for uploading\n- a company email account (SMTP)\n- a scheduler (cron)\n- your company details for the settings\nThe details are in the installation guide."
+    },
+    {
+      "id": "maintenance",
+      "title": "Maintenance",
+      "keys": [
+        "maintenance",
+        "update",
+        "updates",
+        "protection",
+        "support",
+        "if something breaks",
+        "broken"
+      ],
+      "answer": "Maintenance – technical maintenance, updates and protection of the website – is €79 + VAT / month if you use the program on your own hosting. If we host it, maintenance is included in the hosting fee."
+    },
+    {
+      "id": "after_trial",
+      "title": "After the trial",
+      "keys": [
+        "after the trial",
+        "expires",
+        "after 45 days",
+        "download",
+        "take it",
+        "package",
+        "stay",
+        "locked",
+        "deleted",
+        "what happens"
+      ],
+      "answer": "After 45 days the trial is locked; nothing starts automatically and nothing costs money. You can choose:\n- Stay with us, at the same address with your existing data: €399 + VAT one-off, then €49 + VAT / month, with maintenance, updates and protection. No hosting, domain or operation to worry about.\n- Take the program and your data to your own hosting: €399 + VAT. Installation (€269 + VAT) and maintenance (€79 + VAT / month) on request.\nIf you don't continue, your data is deleted 30 days after the trial is locked.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "order",
+      "title": "Ordering",
+      "keys": [
+        "order",
+        "ordering",
+        "buy",
+        "purchase",
+        "terms",
+        "contract",
+        "invoice me"
+      ],
+      "answer": "You can order on followup.hu, on the \"Terms & ordering\" page (followup.hu/en/terms.php), where you also find the conditions.\nQuestions: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "language",
+      "title": "Languages",
+      "keys": [
+        "language",
+        "english",
+        "german",
+        "deutsch",
+        "hungarian",
+        "translation"
+      ],
+      "answer": "The program is available in English, German and Hungarian. The language is set for each installation; the AI drafts replies to enquiries in the enquirer's own language."
+    },
+    {
+      "id": "how_invoice",
+      "title": "Recording a new invoice",
+      "keys": [
+        "new invoice",
+        "record an invoice",
+        "add an invoice",
+        "enter an invoice",
+        "add invoice",
+        "how do i add",
+        "new item"
+      ],
+      "answer": "Open the Invoices menu, then the right tab:\n- Bills to pay: what you have to pay\n- Receivables (owed to us): what your customer has to pay\n- Tax and bank payments\nClick \"+ New item\", enter the partner, the amount (gross) and the due date – for receivables also the customer's email address (the demands go there). For recurring items tick \"Repeats monthly\". Finally: Save."
+    },
+    {
+      "id": "how_paid",
+      "title": "Marking as paid or received",
+      "keys": [
+        "paid",
+        "i paid",
+        "received",
+        "money arrived",
+        "they paid",
+        "transferred",
+        "void",
+        "delete"
+      ],
+      "answer": "Open the item, keep today's date (or enter the payment date) and click \"Paid\" (for a bill to pay) or \"Received\" (for a receivable). The item leaves your to-dos and any pending demand is withdrawn.\nAn invoice recorded by mistake can be removed from the to-dos with the \"Void\" button."
+    },
+    {
+      "id": "how_promise",
+      "title": "Recording a promise to pay",
+      "keys": [
+        "promise",
+        "promised",
+        "promise to pay",
+        "call result",
+        "i called",
+        "note"
+      ],
+      "answer": "On the invoice page, in the \"Call / promise / note\" box, briefly note what you discussed and, if the partner promised to pay, enter the \"Promised payment date\", then Save. Until that day the program won't chase them. If it passes without payment, the partner goes back onto the \"Whom to call\" list."
+    },
+    {
+      "id": "how_enquiry",
+      "title": "Recording a new enquiry",
+      "keys": [
+        "new enquiry",
+        "add an enquiry",
+        "came by phone",
+        "phone call",
+        "sticky note",
+        "record a lead",
+        "add a lead"
+      ],
+      "answer": "Click \"+ New\" in the menu. Enter the source (phone, email, in person…), the name, the contact details and briefly what they want, then \"Add\". The enquiry goes onto the list and into your daily to-dos until you reply. Enquiries from your website form arrive automatically if the form is connected."
+    },
+    {
+      "id": "sample",
+      "title": "Sample data",
+      "keys": [
+        "sample",
+        "sample data",
+        "fictional",
+        "joinery",
+        "pinewood",
+        "example data"
+      ],
+      "answer": "The sample data are the invoices, receivables, tax deadlines and enquiries of a fictional joinery workshop, so you can see straight away what a morning looks like. Delete them all at once in Settings, or one by one with the \"Delete sample\" button. This only affects the samples, never your own data."
+    },
+    {
+      "id": "password",
+      "title": "Forgotten password",
+      "keys": [
+        "forgot",
+        "forgotten",
+        "cannot log in",
+        "can't log in",
+        "login",
+        "log in",
+        "new password",
+        "my password",
+        "reset"
+      ],
+      "answer": "On the login page click \"Forgot your password?\", enter your email address and within a few minutes you get a link (valid for 60 minutes). If it doesn't arrive, check your spam folder, or contact us: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "company",
+      "title": "Who are we?",
+      "keys": [
+        "who makes",
+        "who are you",
+        "company details",
+        "company",
+        "immobilis",
+        "my-ai",
+        "developer"
+      ],
+      "answer": "Followup is developed and operated by Immobilis Partners Kft. (my-ai.hu), Hungary.\n- Registered office: 1238 Budapest, Molnár utca 65/b\n- Company registration number: 01-09-684414\n- Tax number: 11941736-2-43\n- info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "thanks",
+      "title": "Thank you",
+      "keys": [
+        "thank",
+        "thanks",
+        "great",
+        "perfect"
+      ],
+      "answer": "You're welcome! If you have another question, just type it, or contact us: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": -1
+    },
+    {
+      "id": "hello",
+      "title": "Hello",
+      "keys": [
+        "hello",
+        "good morning",
+        "good afternoon"
+      ],
+      "answer": "Hello! How can I help? You can ask about prices, the free trial, what Followup does, or how to record an invoice in it.",
+      "elsobbseg": -1
+    }
+  ]
+}

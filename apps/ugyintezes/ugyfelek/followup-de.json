@@ -1,0 +1,478 @@
+{
+  "nyelv": "de",
+  "nev": "Followup – Fragen Sie uns",
+  "szin": "#0f5c63",
+  "udvozles": "Guten Tag! Ich bin der Followup-Assistent. Fragen Sie mich nach den Preisen, der kostenlosen 45-Tage-Testversion, was das Programm kann oder wie man darin eine Rechnung oder eine Anfrage erfasst.\nIhre Fragen werden nicht gespeichert.",
+  "nem_ertem": "Darauf habe ich gerade keine genaue Antwort. Versuchen Sie es einfacher, z. B. „Was kostet es?“ oder „Wie funktioniert die Testversion?“, oder wählen Sie eines der Themen oben.\nSie können auch mit einem Menschen sprechen: info@my-ai.hu · +36 30 584 5937.",
+  "temak_utan": "oder stellen Sie eine Frage",
+  "temak": [
+    {
+      "id": "what",
+      "title": "Was ist Followup?",
+      "keys": [
+        "was ist followup",
+        "was ist das",
+        "wofur",
+        "was kann",
+        "wie funktioniert",
+        "funktionen",
+        "forderungsmanagement",
+        "rechnungsuberwachung"
+      ],
+      "answer": "Followup ist eine Software für Forderungsmanagement und Rechnungsüberwachung für kleine und mittlere Unternehmen.\nAn einem Ort:\n- die Rechnungen, die Sie bezahlen müssen,\n- Ihre Forderungen (wer schuldet Ihnen seit wann),\n- Steuer- und Bankzahlungstermine,\n- Ihre Anfragen.\nJeden Morgen erhalten Sie eine einzige Aufgabenliste per E-Mail: was zu bezahlen ist, wen Sie anrufen sollten und warum, welchen Brief Sie verschicken sollten. Zahlungserinnerungen und Mahnungen schreibt Followup gleich mit – Sie geben sie nur noch frei."
+    },
+    {
+      "id": "price",
+      "title": "Preise",
+      "keys": [
+        "was kostet",
+        "kosten",
+        "preis",
+        "preise",
+        "gebuhr",
+        "teuer",
+        "gunstig",
+        "euro",
+        "bezahlen"
+      ],
+      "answer": "Followup-Software: 399 € zzgl. MwSt. einmaliger Einführungspreis (geplanter Preis: 1.290 € zzgl. MwSt.), mit vollständiger Installationsanleitung.\nOptional:\n- Installation auf Ihrem eigenen Webspace: 269 € zzgl. MwSt., einmalig\n- Wartung (technische Wartung, Aktualisierung, Absicherung): 79 € zzgl. MwSt. / Monat\n- Betrieb bei uns, inklusive Wartung: 99 € zzgl. MwSt. / Monat – ohne Hosting-Aufwand\n- Nach der kostenlosen 45-Tage-Testversion bei uns bleiben: 49 € zzgl. MwSt. / Monat\nAngebote: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "trial",
+      "title": "Kostenlose Testversion",
+      "keys": [
+        "test",
+        "testversion",
+        "testen",
+        "ausprobieren",
+        "kostenlos",
+        "gratis",
+        "45 tage",
+        "risiko"
+      ],
+      "answer": "Sie können Followup 45 Tage kostenlos testen, ohne Kreditkarte.\n1. Registrieren: Firmenname, Name, E-Mail und Passwort. Sie erhalten einen Aktivierungslink per E-Mail.\n2. Testen: Sie bekommen einen eigenen Bereich mit den Beispieldaten einer erfundenen Tischlerei. Die Beispiele können Sie einzeln löschen und Ihre eigenen Rechnungen erfassen.\n3. Entscheiden: bei uns bleiben oder das Programm mit Ihren Daten auf Ihren eigenen Webspace mitnehmen.\nWährend der Testphase gehen E-Mails nur an Sie, nie an Ihre Partner.\nStart: auf followup.hu, mit der Schaltfläche „45 Tage kostenlos testen“.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "contact",
+      "title": "Demo, Kontakt",
+      "keys": [
+        "demo",
+        "kontakt",
+        "telefonnummer",
+        "e-mail",
+        "email",
+        "anrufen",
+        "sprechen",
+        "mensch",
+        "kundenservice",
+        "hilfe"
+      ],
+      "answer": "Gern zeigen wir Ihnen Followup in einem kurzen Gespräch für Ihre Situation.\n- Demo anfragen: über das Formular unten auf followup.hu\n- E-Mail: info@my-ai.hu\n- Telefon: +36 30 584 5937",
+      "elsobbseg": 1
+    },
+    {
+      "id": "receivables",
+      "title": "Forderungen eintreiben",
+      "keys": [
+        "forderung",
+        "eintreiben",
+        "schuldet",
+        "schulden",
+        "zahlt nicht",
+        "verzug",
+        "uberfallige rechnung",
+        "kunde",
+        "mein geld",
+        "schuldner"
+      ],
+      "answer": "Followup sortiert überfällige Rechnungen nach Verzug und nennt den nächsten Schritt:\n- nach Fälligkeit: Zahlungserinnerung\n- nach 8 Tagen: Anruf\n- nach 15 Tagen: Mahnung\n- nach 30 Tagen: letzte Mahnung\nSie können auch eine Zahlungszusage erfassen: Bis zum zugesagten Tag drängt das Programm nicht; verstreicht er ohne Zahlung, meldet es sich, damit Sie erneut anrufen."
+    },
+    {
+      "id": "demand",
+      "title": "Mahnungen",
+      "keys": [
+        "mahnung",
+        "mahnungen",
+        "zahlungserinnerung",
+        "erinnerung",
+        "vorlage",
+        "musterbrief",
+        "schreibt den brief",
+        "briefe schreiben"
+      ],
+      "answer": "Sie brauchen keine Vorlagen. Followup schreibt Zahlungserinnerung, Mahnung und letzte Mahnung mit Rechnungsnummer, Betrag, versäumter Frist und Ihrer Bankverbindung – bei Mahnungen mit neuer Zahlungsfrist.\nSie prüfen, ändern bei Bedarf und versenden mit einem Klick. Hat der Partner keine E-Mail-Adresse, können Sie den Brief drucken und mit „Anders versendet“ erfassen."
+    },
+    {
+      "id": "approval",
+      "title": "Nichts geht von selbst hinaus",
+      "keys": [
+        "freigabe",
+        "freigeben",
+        "automatisch",
+        "ohne mein wissen",
+        "versehentlich",
+        "verschickt",
+        "prufen"
+      ],
+      "answer": "Followup bereitet die Briefe vor, verschickt aber keinen davon selbstständig. Mahnung, Antwort auf eine Anfrage, Terminbestätigung: Jede Nachricht geht erst hinaus, wenn Sie oder ein Kollege sie geprüft und auf Senden geklickt haben. Das System hält auch fest, wer sie freigegeben hat."
+    },
+    {
+      "id": "bills",
+      "title": "Fällige Rechnungen",
+      "keys": [
+        "fallige rechnung",
+        "zu zahlen",
+        "lieferant",
+        "nebenkosten",
+        "miete",
+        "vor der falligkeit",
+        "wiederkehrend",
+        "monatlich"
+      ],
+      "answer": "Erfassen Sie Lieferantenrechnungen, Nebenkosten und Miete mit Fälligkeit. Followup erinnert 3 Tage vorher und zeigt Überfälliges rot an. Monatlich wiederkehrende Posten müssen Sie nur einmal anlegen: Wenn Sie einen als bezahlt markieren, wird der nächste automatisch erstellt.\nIn der Morgen-E-Mail stehen Bankverbindung und Verwendungszweck, sodass Sie sofort überweisen können."
+    },
+    {
+      "id": "tax",
+      "title": "Steuer- und Bankfristen",
+      "keys": [
+        "steuer",
+        "finanzamt",
+        "umsatzsteuer",
+        "mwst",
+        "sozialversicherung",
+        "beitrage",
+        "lohnsteuer",
+        "saumniszuschlag",
+        "kredit",
+        "leasing",
+        "bank",
+        "kreditrate",
+        "leasingrate"
+      ],
+      "answer": "Sie können Sozialversicherungsbeiträge, Umsatzsteuer, Säumniszuschläge sowie Kredit- und Leasingraten mit Betrag, Frist und Verwendungszweck erfassen, monatlich wiederkehrende nur einmal.\n30 Tage vor der Frist erscheinen sie auf der Aufgabenseite, 7 Tage vorher auch in der Morgen-E-Mail."
+    },
+    {
+      "id": "daily",
+      "title": "Morgendliche Aufgabenliste",
+      "keys": [
+        "morgen",
+        "morgens",
+        "tagesliste",
+        "aufgabe",
+        "aufgaben",
+        "zusammenfassung",
+        "tagliche e-mail",
+        "was soll ich",
+        "womit anfangen",
+        "liste"
+      ],
+      "answer": "Jeden Werktag nach 7 Uhr erhalten Sie Ihre Tagesaufgaben per E-Mail:\n- fällige Rechnungen mit Kontonummer und Verwendungszweck\n- wen Sie anrufen sollten und warum\n- Briefe zur Freigabe\n- Steuer- und Bankzahlungen der nächsten 7 Tage\n- fälliges Nachfassen, unbeantwortete Anfragen\n- heutige Termine\nJeder Punkt führt per Link zur richtigen Seite des Programms. Gibt es an einem Tag nichts zu tun, kommt keine E-Mail."
+    },
+    {
+      "id": "enquiries",
+      "title": "Anfragen verwalten",
+      "keys": [
+        "anfrage",
+        "anfragen",
+        "interessent",
+        "crm",
+        "angebotsanfrage",
+        "formular",
+        "nachfassen",
+        "keine antwort"
+      ],
+      "answer": "Anfragen über Ihr Website-Formular, per Telefon oder E-Mail landen auf einer Liste. Das Programm sagt Ihnen, wem Sie antworten und wann Sie nachfassen sollten (standardmäßig nach 2, 5 und 10 Tagen ohne Antwort). Sie können einen zuständigen Mitarbeiter zuweisen, und alle E-Mails, Notizen und Anrufe sind an einem Ort sichtbar."
+    },
+    {
+      "id": "booking",
+      "title": "Online-Terminbuchung",
+      "keys": [
+        "termin",
+        "buchung",
+        "buchen",
+        "kalender",
+        "vereinbaren",
+        "treffen",
+        "arbeitszeit"
+      ],
+      "answer": "Der Interessent erhält per E-Mail einen persönlichen Buchungslink und wählt einen freien Termin innerhalb Ihrer Arbeitszeit. Kein Hin und Her, und den gebuchten Termin bekommt niemand anderes. Sie bestätigen oder sagen mit einem Klick ab.\nArbeitszeit, Termindauer und wie viele Tage im Voraus gebucht werden kann, legen Sie in den Einstellungen fest."
+    },
+    {
+      "id": "invoicing",
+      "title": "Statt Rechnungsprogramm oder Steuerberater?",
+      "keys": [
+        "rechnungsprogramm",
+        "rechnungen ausstellen",
+        "buchhaltung",
+        "steuerberater",
+        "buchfuhrung"
+      ],
+      "answer": "Nein, Followup ersetzt sie nicht. Es stellt keine Rechnungen aus und führt keine Buchhaltung. Sie erfassen die erhaltenen und ausgestellten Rechnungen, und das Programm überwacht Zahlungsfristen, überfällige Rechnungen und Aufgaben, damit nichts untergeht."
+    },
+    {
+      "id": "team",
+      "title": "Mehrere Mitarbeiter",
+      "keys": [
+        "mitarbeiter",
+        "kollege",
+        "kollegen",
+        "mehrere benutzer",
+        "benutzer",
+        "berechtigung",
+        "admin",
+        "team"
+      ],
+      "answer": "Mehrere Mitarbeiter können Followup nutzen, jeder mit eigenem Zugang. Admins können auch die Einstellungen ändern und Mitarbeiter anlegen oder sperren. Mitarbeiter können erfassen, Briefe freigeben sowie Anfragen und Termine verwalten. Ausscheidende Kollegen sperren Sie mit einem Klick; die von ihnen erfassten Daten bleiben erhalten."
+    },
+    {
+      "id": "data",
+      "title": "Wo liegen meine Daten?",
+      "keys": [
+        "meine daten",
+        "daten",
+        "gespeichert",
+        "datenbank",
+        "datenschutz",
+        "dsgvo",
+        "sicherheit",
+        "sicher",
+        "passwort"
+      ],
+      "answer": "Auf Ihrem eigenen Webspace, in Ihrer eigenen Datenbank – oder, wenn Sie sich nicht um Hosting kümmern möchten, betreiben wir es für Sie. In beiden Fällen können sich nur Sie und Ihre Mitarbeiter anmelden, jeder mit eigenem Passwort (mindestens 10 Zeichen). Das System verwendet nur das für die Anmeldung nötige Sitzungs-Cookie."
+    },
+    {
+      "id": "hosting",
+      "title": "Betrieb bei uns",
+      "keys": [
+        "betrieb",
+        "hosting",
+        "hosten",
+        "kein aufwand",
+        "ohne webspace",
+        "domain",
+        "subdomain"
+      ],
+      "answer": "Wenn Sie sich nicht um Hosting kümmern möchten, betreiben wir Followup für Sie: Webspace, Datenbank, https, E-Mail, Zeitsteuerung, Backups, Updates und Wartung.\nDie Gebühr beträgt zusätzlich zum Softwarepreis (399 € zzgl. MwSt.) 99 € zzgl. MwSt. / Monat, nach der kostenlosen Testversion 49 € zzgl. MwSt. / Monat.\nSie geben nur die Daten für die Einstellungen an. Für Ihre eigene Domain genügt ein einziger DNS-Eintrag."
+    },
+    {
+      "id": "install",
+      "title": "Installation auf eigenem Webspace",
+      "keys": [
+        "installation",
+        "installieren",
+        "eigener webspace",
+        "it-dienstleister",
+        "einrichten",
+        "administrator"
+      ],
+      "answer": "Sie erhalten das Programm mit vollständiger Installationsanleitung: Ihr IT-Dienstleister kann es damit auf Ihrem Webspace einrichten.\nNiemand, der es installiert? Wir übernehmen das: 269 € zzgl. MwSt., einmalig.\nAuf Wunsch übernehmen wir auch technische Wartung, Aktualisierung und Absicherung: 79 € zzgl. MwSt. / Monat."
+    },
+    {
+      "id": "requirements",
+      "title": "Was brauche ich für die Installation?",
+      "keys": [
+        "was brauche ich",
+        "voraussetzung",
+        "voraussetzungen",
+        "anforderung",
+        "php",
+        "mysql",
+        "mariadb",
+        "ssl",
+        "https",
+        "ftp",
+        "smtp",
+        "cron",
+        "zeitsteuerung"
+      ],
+      "answer": "Die meisten Hosting-Pakete enthalten all das:\n- eine Domain oder Subdomain\n- Webspace mit PHP 8.1 oder neuer (empfohlen 8.4)\n- eine MySQL- oder MariaDB-Datenbank\n- ein SSL-Zertifikat (https)\n- FTP-Zugang zum Hochladen\n- ein geschäftliches E-Mail-Postfach (SMTP)\n- eine Zeitsteuerung (Cron)\n- Ihre Firmendaten für die Einstellungen\nDie Details stehen in der Installationsanleitung."
+    },
+    {
+      "id": "maintenance",
+      "title": "Wartung",
+      "keys": [
+        "wartung",
+        "aktualisierung",
+        "update",
+        "updates",
+        "absicherung",
+        "support",
+        "wenn etwas kaputt",
+        "fehler"
+      ],
+      "answer": "Wartung – technische Wartung, Aktualisierung und Absicherung der Website – kostet 79 € zzgl. MwSt. / Monat, wenn Sie das Programm auf Ihrem eigenen Webspace nutzen. Wenn wir es betreiben, ist die Wartung in der Betriebsgebühr enthalten."
+    },
+    {
+      "id": "after_trial",
+      "title": "Nach der Testversion",
+      "keys": [
+        "nach der testversion",
+        "nach dem test",
+        "lauft ab",
+        "nach 45 tagen",
+        "herunterladen",
+        "mitnehmen",
+        "paket",
+        "bleiben",
+        "gesperrt",
+        "geloscht",
+        "was passiert"
+      ],
+      "answer": "Nach 45 Tagen wird die Testversion gesperrt; nichts startet automatisch und nichts kostet Geld. Sie haben zwei Möglichkeiten:\n- Bei uns bleiben, unter derselben Adresse mit Ihren Daten: 399 € zzgl. MwSt. einmalig, danach 49 € zzgl. MwSt. / Monat, mit Wartung, Aktualisierung und Absicherung. Kein Aufwand mit Hosting, Domain oder Betrieb.\n- Das Programm mit Ihren Daten auf Ihren eigenen Webspace mitnehmen: 399 € zzgl. MwSt. Installation (269 € zzgl. MwSt.) und Wartung (79 € zzgl. MwSt. / Monat) auf Wunsch.\nWenn Sie nicht weitermachen, werden Ihre Daten 30 Tage nach der Sperrung gelöscht.",
+      "elsobbseg": 1
+    },
+    {
+      "id": "order",
+      "title": "Bestellung",
+      "keys": [
+        "bestellen",
+        "bestellung",
+        "kaufen",
+        "agb",
+        "vertrag",
+        "rechnung bitte"
+      ],
+      "answer": "Bestellen können Sie auf followup.hu auf der Seite „AGB & Bestellung“ (followup.hu/de/agb.php), wo Sie auch die Bedingungen finden.\nFragen: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "language",
+      "title": "Sprachen",
+      "keys": [
+        "sprache",
+        "sprachen",
+        "deutsch",
+        "englisch",
+        "ungarisch",
+        "ubersetzung"
+      ],
+      "answer": "Das Programm ist auf Deutsch, Englisch und Ungarisch verfügbar. Die Sprache wird je Installation festgelegt; Antwortentwürfe auf Anfragen schreibt die KI in der Sprache des Interessenten."
+    },
+    {
+      "id": "how_invoice",
+      "title": "Neue Rechnung erfassen",
+      "keys": [
+        "neue rechnung",
+        "rechnung erfassen",
+        "rechnung anlegen",
+        "rechnung eingeben",
+        "wie lege ich",
+        "neuer posten"
+      ],
+      "answer": "Öffnen Sie das Menü Rechnungen und dann den passenden Reiter:\n- Zu zahlende Rechnungen: was Sie bezahlen müssen\n- Forderungen (an uns zu zahlen): was Ihr Kunde bezahlen muss\n- Steuer- und Bankzahlungen\nKlicken Sie auf „+ Neuer Posten“, geben Sie Partner, Betrag (brutto) und Fälligkeit an – bei Forderungen auch die E-Mail-Adresse des Kunden (dorthin gehen die Mahnungen). Bei regelmäßigen Posten „Monatlich wiederkehrend“ ankreuzen. Zum Schluss: Speichern."
+    },
+    {
+      "id": "how_paid",
+      "title": "Als bezahlt oder eingegangen markieren",
+      "keys": [
+        "bezahlt",
+        "habe bezahlt",
+        "eingegangen",
+        "geld ist da",
+        "hat bezahlt",
+        "uberwiesen",
+        "stornieren",
+        "loschen"
+      ],
+      "answer": "Öffnen Sie den Posten, lassen Sie das heutige Datum stehen (oder geben Sie das Zahlungsdatum ein) und klicken Sie auf „Bezahlt“ (bei zu zahlenden Rechnungen) oder „Eingegangen“ (bei Forderungen). Der Posten verschwindet aus den Aufgaben, eine ausstehende Mahnung wird zurückgezogen.\nEine versehentlich erfasste Rechnung entfernen Sie mit „Stornieren“ aus den Aufgaben."
+    },
+    {
+      "id": "how_promise",
+      "title": "Zahlungszusage erfassen",
+      "keys": [
+        "zusage",
+        "zugesagt",
+        "zahlungszusage",
+        "versprochen",
+        "anrufergebnis",
+        "habe angerufen",
+        "notiz"
+      ],
+      "answer": "Notieren Sie auf der Rechnungsseite im Feld „Anruf / Zusage / Notiz“ kurz, was besprochen wurde, und geben Sie bei einer Zusage das „Zugesagte Zahlungsdatum“ an, dann Speichern. Bis zu diesem Tag drängt das Programm nicht. Verstreicht er ohne Zahlung, kommt der Partner wieder auf die Liste „Wen anrufen“."
+    },
+    {
+      "id": "how_enquiry",
+      "title": "Neue Anfrage erfassen",
+      "keys": [
+        "neue anfrage",
+        "anfrage erfassen",
+        "kam per telefon",
+        "telefonat",
+        "zettel",
+        "interessent anlegen"
+      ],
+      "answer": "Klicken Sie im Menü auf „+ Neu“. Geben Sie Quelle (Telefon, E-Mail, persönlich …), Name, Kontaktdaten und kurz das Anliegen an, dann „Anlegen“. Die Anfrage kommt auf die Liste und in Ihre Tagesaufgaben, bis Sie antworten. Anfragen über Ihr Website-Formular kommen automatisch an, wenn das Formular angebunden ist."
+    },
+    {
+      "id": "sample",
+      "title": "Beispieldaten",
+      "keys": [
+        "beispiel",
+        "beispieldaten",
+        "erfunden",
+        "tischlerei",
+        "kiefernhof",
+        "musterdaten"
+      ],
+      "answer": "Die Beispieldaten sind Rechnungen, Forderungen, Steuertermine und Anfragen einer erfundenen Tischlerei, damit Sie sofort sehen, wie ein Morgen aussieht. Löschen Sie sie alle auf einmal in den Einstellungen oder einzeln mit „Beispiel löschen“. Das betrifft nur die Beispiele, nie Ihre eigenen Daten."
+    },
+    {
+      "id": "password",
+      "title": "Passwort vergessen",
+      "keys": [
+        "vergessen",
+        "kann mich nicht anmelden",
+        "anmeldung",
+        "anmelden",
+        "login",
+        "neues passwort",
+        "mein passwort",
+        "zurucksetzen"
+      ],
+      "answer": "Klicken Sie auf der Anmeldeseite auf „Passwort vergessen?“, geben Sie Ihre E-Mail-Adresse ein, und innerhalb weniger Minuten erhalten Sie einen Link (60 Minuten gültig). Kommt nichts an, sehen Sie im Spam-Ordner nach oder schreiben Sie uns: info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "company",
+      "title": "Wer sind wir?",
+      "keys": [
+        "wer macht",
+        "wer seid ihr",
+        "wer sind sie",
+        "firmendaten",
+        "firma",
+        "impressum",
+        "immobilis",
+        "my-ai",
+        "entwickler"
+      ],
+      "answer": "Followup wird von der Immobilis Partners Kft. (my-ai.hu), Ungarn, entwickelt und betrieben.\n- Sitz: 1238 Budapest, Molnár utca 65/b\n- Handelsregisternummer: 01-09-684414\n- Steuernummer: 11941736-2-43\n- info@my-ai.hu · +36 30 584 5937"
+    },
+    {
+      "id": "thanks",
+      "title": "Danke",
+      "keys": [
+        "danke",
+        "vielen dank",
+        "super",
+        "prima",
+        "alles klar"
+      ],
+      "answer": "Gern geschehen! Wenn Sie noch eine Frage haben, schreiben Sie sie einfach, oder kontaktieren Sie uns: info@my-ai.hu · +36 30 584 5937",
+      "elsobbseg": -1
+    },
+    {
+      "id": "hello",
+      "title": "Begrüßung",
+      "keys": [
+        "hallo",
+        "guten tag",
+        "guten morgen",
+        "servus",
+        "moin"
+      ],
+      "answer": "Guten Tag! Wie kann ich helfen? Sie können nach den Preisen, der kostenlosen Testversion, den Funktionen von Followup oder dem Erfassen einer Rechnung fragen.",
+      "elsobbseg": -1
+    }
+  ]
+}

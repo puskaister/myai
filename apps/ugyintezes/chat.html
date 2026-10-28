@@ -51,6 +51,21 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
 (function(){
   var log=document.getElementById('log');
   var cfg={temak:[]};
+  // A chatablak feliratai a tudásbázis nyelvén (kb.nyelv: hu, en vagy de; alapból magyar).
+  var L={
+    hu:{q:'Írja be a kérdését…',qLabel:'Kérdés',send:'Küldés',close:'Bezárás',rel:'Kapcsolódó: ',none:'Ezt sajnos nem értettem. Válasszon az alábbi témák közül.',hello:'Jó napot kívánok! Miben segíthetek?',off:'A chat jelenleg nem elérhető.',err:'A tudásbázis most nem érhető el. Kérjük, próbálja később.',foot:'Ügyintézési Segéd · my-ai.hu',title:'Ügyintézési Segéd'},
+    en:{q:'Type your question…',qLabel:'Question',send:'Send',close:'Close',rel:'Related: ',none:'Sorry, I didn\'t understand that. Please choose one of the topics below.',hello:'Hello! How can I help?',off:'The chat is currently unavailable.',err:'The knowledge base is not available right now. Please try again later.',foot:'Assistant · my-ai.hu',title:'Assistant'},
+    de:{q:'Ihre Frage …',qLabel:'Frage',send:'Senden',close:'Schließen',rel:'Verwandt: ',none:'Das habe ich leider nicht verstanden. Bitte wählen Sie eines der Themen unten.',hello:'Guten Tag! Wie kann ich helfen?',off:'Der Chat ist derzeit nicht verfügbar.',err:'Die Wissensbasis ist gerade nicht erreichbar. Bitte versuchen Sie es später.',foot:'Assistent · my-ai.hu',title:'Assistent'}
+  };
+  var t=L.hu;
+  function setLang(l){
+    if(!L[l])return;t=L[l];document.documentElement.lang=l;document.title=t.title;
+    var q=document.getElementById('q');q.placeholder=t.q;q.setAttribute('aria-label',t.qLabel);
+    document.querySelector('button.send').textContent=t.send;
+    document.getElementById('close').setAttribute('aria-label',t.close);
+    document.getElementById('name').textContent=t.title;
+    document.querySelector('.foot a').textContent=t.foot;
+  }
   var norm=function(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()};
   var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 
@@ -79,10 +94,10 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
     add('user',esc(q));
     var res=match(q);
     setTimeout(function(){
-      if(!res.length){add('bot',render(cfg.nem_ertem||'Ezt sajnos nem értettem. Válasszon az alábbi témák közül.'));return}
+      if(!res.length){add('bot',render(cfg.nem_ertem||t.none));return}
       var html='<h3>'+esc(res[0].t.title)+'</h3>'+render(res[0].t.answer);
       var more=res.slice(1,3).filter(function(x){return x.score>=res[0].score-1});
-      if(more.length)html+='<p class="meta">Kapcsolódó: '+more.map(function(x){return esc(x.t.title)}).join(' · ')+'</p>';
+      if(more.length)html+='<p class="meta">'+esc(t.rel)+more.map(function(x){return esc(x.t.title)}).join(' · ')+'</p>';
       add('bot',html);
     },200);
   }
@@ -96,10 +111,11 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
   var id=(new URLSearchParams(location.search).get('u')||'minta').toLowerCase();
   if(!/^[a-z0-9-]{1,40}$/.test(id))id='minta';
   fetch('kb.php?u='+encodeURIComponent(id),{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+    setLang(d.nyelv);
     if(d.inactive){ // lejárt vagy szüneteltetett előfizetés
       if(d.nev){document.getElementById('name').textContent=d.nev;document.title=d.nev}
       document.getElementById('ask').hidden=true;
-      add('bot','<p>'+esc(d.uzenet||'A chat jelenleg nem elérhető.')+'</p>');
+      add('bot','<p>'+esc(d.uzenet||t.off)+'</p>');
       return;
     }
     cfg=d;cfg.temak=Array.isArray(d.temak)?d.temak:[];
@@ -116,8 +132,8 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
     cfg.temak.slice(0,4).forEach(function(t){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t.title;b.onclick=function(){answer(t.title)};chips.appendChild(b)});
     // a témagombok utáni rövid felirat, ha a tudásbázis kéri (pl. „vagy kérdezzen”)
     if(typeof d.temak_utan==='string'&&d.temak_utan&&cfg.temak.length){var or=document.createElement('span');or.className='or';or.textContent=d.temak_utan;chips.appendChild(or)}
-    add('bot',render(d.udvozles||'Jó napot kívánok! Miben segíthetek?'));
-  }).catch(function(){add('bot','<p>A tudásbázis most nem érhető el. Kérjük, próbálja később.</p>')});
+    add('bot',render(d.udvozles||t.hello));
+  }).catch(function(){add('bot','<p>'+esc(t.err)+'</p>')});
 })();
 </script>
 </body>

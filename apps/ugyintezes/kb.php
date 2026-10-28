@@ -1,6 +1,6 @@
 <?php
 // A chatablak (chat.html) innen kéri a tudásbázist: kb.php?u=<ügyfél-azonosító>.
-// – a beépített demó, a my-ai.hu és a Followup oldal buboréka (minta, my-ai, followup) mindig működik, fájlból
+// – a beépített demó, a my-ai.hu és a Followup oldalak buboréka (minta, my-ai, followup, followup-en, followup-de) mindig működik, fájlból
 //   (a my-ai az admin felületen tanított változatot adja, ha van);
 // – egy ügyfélé csak érvényes (kifizetett, aktív) előfizetésnél, különben "szünetel".
 declare(strict_types=1);
