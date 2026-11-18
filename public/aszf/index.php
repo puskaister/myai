@@ -152,7 +152,7 @@ header('Content-Type: text/html; charset=utf-8');
   <p>13.5. A letöltőkód személyes: a Megrendelő nem adhatja át harmadik félnek. Visszaélés esetén a Szolgáltató a kódot letilthatja.</p>
 </main>
 
-<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/adatkezeles/">Adatkezelési tájékoztató</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
+<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/adatkezeles/">Adatkezelési tájékoztató</a> · <a href="/rolunk/">Rólunk és impresszum</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
 <script src="/ugyintezes/widget.js" data-ugyfel="my-ai" data-szin="#4f46e5" data-felirat="Kérdezz tőlünk" defer></script>
 </body>
 </html>
