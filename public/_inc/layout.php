@@ -23,6 +23,7 @@ const SITE = [
     'name'    => 'my-ai.hu',
     'email'   => 'info@my-ai.hu',   // ha üres, a kapcsolat-sáv rejtve marad
     'phone'   => '+36 30 584 5937',
+    'linkedin'=> 'https://www.linkedin.com/company/immobilis-p/', // a cég LinkedIn-oldala
     'demoUrl' => '/foglalas/',
 ];
 
@@ -115,6 +116,7 @@ function page_end(): void { ?>
       <a href="/adatkezeles/">Adatkezelési tájékoztató</a>
       <a href="/aszf/">ÁSZF</a>
       <a href="/rolunk/">Rólunk és impresszum</a>
+      <a href="<?= e(SITE['linkedin']) ?>" rel="noopener" target="_blank">LinkedIn</a>
       <button type="button" class="footer-btn" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button>
     </span>
   </div>

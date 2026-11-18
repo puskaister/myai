@@ -156,7 +156,7 @@ header('Content-Type: text/html; charset=utf-8');
   <p>A tájékoztatót szükség szerint frissítjük; a mindenkori változat ezen az oldalon érhető el, a hatályba lépés dátumával.</p>
 </main>
 
-<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/aszf/">ÁSZF</a> · <a href="/rolunk/">Rólunk és impresszum</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
+<footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/aszf/">ÁSZF</a> · <a href="/rolunk/">Rólunk és impresszum</a> · <a href="https://www.linkedin.com/company/immobilis-p/" rel="noopener" target="_blank">LinkedIn</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>
 <script src="/ugyintezes/widget.js" data-ugyfel="my-ai" data-szin="#4f46e5" data-felirat="Kérdezz tőlünk" defer></script>
 </body>
 </html>

@@ -49,7 +49,8 @@ page_start('Rólunk és impresszum – my-ai.hu', 'Az Immobilis Partners Kft. 19
 
       <h2>Kapcsolat</h2>
       <p>E-mail: <a href="mailto:<?= e(SITE['email']) ?>"><?= e(SITE['email']) ?></a><br>
-         Telefon: <a href="tel:<?= e(preg_replace('/[^0-9+]/', '', SITE['phone'])) ?>"><?= e(SITE['phone']) ?></a></p>
+         Telefon: <a href="tel:<?= e(preg_replace('/[^0-9+]/', '', SITE['phone'])) ?>"><?= e(SITE['phone']) ?></a><br>
+         LinkedIn: <a href="<?= e(SITE['linkedin']) ?>" rel="noopener" target="_blank">Immobilis Partners Kft.</a></p>
 
       <h2 id="impresszum">Impresszum</h2>
       <table>
