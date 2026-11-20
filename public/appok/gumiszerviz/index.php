@@ -74,10 +74,11 @@ app_hero('gumiszerviz', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó ·
           <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
           <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 100 Ft)</p>
           <p style="font-weight:700;margin:0 0 2px">+ 3 000 Ft + ÁFA / hó</p>
-          <p class="muted" style="margin:0 0 12px">üzemeltetés, tárhely, frissítések (bruttó 3 810 Ft / hó)</p>
+          <p class="muted" style="margin:0 0 12px">bruttó 3 810 Ft / hó — <strong>minden üzemeltetési gond a miénk</strong></p>
           <ul class="checks">
             <li>Mi állítjuk be a te arculatoddal</li>
             <li>A my-ai.hu-n fut (pl. my-ai.hu/cegneved), tárhely nélkül</li>
+            <li>Minden üzemeltetési gond a miénk: tárhely, frissítések, hibaelhárítás</li>
             <li>Weboldalba építhető gombbal vagy linkkel</li>
           </ul>
           <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek</a>
