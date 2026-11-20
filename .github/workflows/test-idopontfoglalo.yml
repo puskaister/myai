@@ -68,8 +68,7 @@ jobs:
           BASE: http://127.0.0.1:8000
           PASS: ujjelszo123
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js idopontfoglalo
+          bash tests/ui/run.sh idopontfoglalo
 
       - name: PHP szerver napló (hiba esetén)
         if: failure()
@@ -129,8 +128,7 @@ jobs:
         env:
           BASE: http://127.0.0.1:8002
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js chatbot
+          bash tests/ui/run.sh chatbot
 
       - name: Deploy-csomag – az SDK zipből kicsomagolva is működik
         run: |
@@ -225,8 +223,7 @@ jobs:
         env:
           BASE: http://127.0.0.1:8003
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js latogatok
+          bash tests/ui/run.sh latogatok
 
       - name: A letölthető csomag (zip) a vásárlónál is működik
         env:
@@ -323,8 +320,7 @@ jobs:
         env:
           BASE: http://127.0.0.1:8005
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js evfordulok
+          bash tests/ui/run.sh evfordulok
 
       - name: Napló (hiba esetén)
         if: failure()
@@ -379,8 +375,7 @@ jobs:
         env:
           BASE: http://127.0.0.1:8006
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js bevasarlolista
+          bash tests/ui/run.sh bevasarlolista
 
       - name: Napló (hiba esetén)
         if: failure()
@@ -436,8 +431,7 @@ jobs:
         env:
           BASE: http://127.0.0.1:8007
         run: |
-          npm install --prefix tests/ui --no-audit --no-fund --silent
-          node tests/ui/ui-test.js ugyintezes
+          bash tests/ui/run.sh ugyintezes
 
       - name: Napló (hiba esetén)
         if: failure()

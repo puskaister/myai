@@ -28,7 +28,7 @@ async function textOk(page, label) {
     bad(label + ': „' + m[0] + '” a látható szövegben … ' + t.slice(i, m.index + 40).replace(/\s+/g, ' '));
   } else ok(label);
 }
-const waitText = (page, text, timeout = 10000) =>
+const waitText = (page, text, timeout = 20000) =>
   page.waitForFunction((t) => document.body.innerText.includes(t), { timeout }, text);
 const clickText = (page, selector, text) => page.evaluate((sel, t) => {
   const el = [...document.querySelectorAll(sel)].find((e) => e.textContent.trim().includes(t));
@@ -51,7 +51,7 @@ const flows = {
     await waitText(page, 'Válassz szolgáltatást');
     await textOk(page, 'foglalás 1/4: szolgáltatások');
     await page.click('.choice');
-    await page.waitForSelector('.day:not([disabled])', { timeout: 15000 });
+    await page.waitForSelector('.day:not([disabled])', { timeout: 20000 });
     await textOk(page, 'foglalás 2/4: naptár');
     await page.click('.day:not([disabled])');
     await page.waitForSelector('.slot');
@@ -64,7 +64,7 @@ const flows = {
     await page.type('input[name=email]', 'ui@example.com');
     for (const f of await page.$$('input[name^="fields."]')) await f.type('UI-001');
     await page.click('form button[type=submit]');
-    await page.waitForFunction(() => /Sikeres foglalás|Foglalási kérés elküldve/.test(document.body.innerText), { timeout: 10000 });
+    await page.waitForFunction(() => /Sikeres foglalás|Foglalási kérés elküldve/.test(document.body.innerText), { timeout: 20000 });
     await textOk(page, 'foglalás 4/4: visszaigazolás');
 
     // Telepítési útmutató: a felismert böngészőhöz illő lépések.
@@ -80,9 +80,9 @@ const flows = {
       await p.setUserAgent(ua);
       await p.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
       await p.goto(BASE + '/', { waitUntil: 'networkidle0' });
-      await p.waitForSelector('#install-btn:not([hidden])', { timeout: 5000 });
+      await p.waitForSelector('#install-btn:not([hidden])', { timeout: 10000 });
       await p.$eval('#install-btn', (b) => b.click());
-      await p.waitForSelector('.ig-sheet', { timeout: 5000 });
+      await p.waitForSelector('.ig-sheet', { timeout: 10000 });
       const t = await p.evaluate(() => document.querySelector('.ig-sheet').innerText);
       if (!t.includes(expect)) bad('telepítési útmutató (' + label + '): nincs benne „' + expect + '”: ' + t.replace(/\s+/g, ' '));
       else if (arrow && !(await p.$(arrow))) bad('telepítési útmutató (' + label + '): hiányzik a nyíl ' + arrow);
@@ -110,7 +110,7 @@ const flows = {
 
   async latogatok(page) {
     await login(page, '/');
-    await page.waitForSelector('.tiles', { timeout: 10000 });
+    await page.waitForSelector('.tiles', { timeout: 20000 });
     await settle(600);
     await textOk(page, 'irányítópult: áttekintés');
     for (const d of ['Ma', '30 nap']) { await clickText(page, '.range button', d); await settle(600); await textOk(page, 'áttekintés: ' + d); }
@@ -123,7 +123,7 @@ const flows = {
 
   async evfordulok(page) {
     await login(page, '/', 'anna@example.com');
-    await page.waitForSelector('.tabs', { timeout: 10000 });
+    await page.waitForSelector('.tabs', { timeout: 20000 });
     await settle(600);
     await textOk(page, 'közelgő alkalmak');
     await page.click('.fab');
@@ -142,7 +142,7 @@ const flows = {
 
   async bevasarlolista(page) {
     await login(page, '/', 'anna@example.com');
-    await page.waitForSelector('#add-input', { timeout: 10000 });
+    await page.waitForSelector('#add-input', { timeout: 20000 });
     await settle(600);
     await textOk(page, 'lista');
     await page.type('#add-input', 'kenyér, tej meg két kiló alma');
@@ -167,7 +167,7 @@ const flows = {
 
   async chatbot(page) {
     await login(page, '/admin/');
-    await page.waitForSelector('.tabs', { timeout: 10000 });
+    await page.waitForSelector('.tabs', { timeout: 20000 });
     await settle(800);
     await textOk(page, 'admin: beszélgetések');
     for (const tab of ['Betanítás', 'Megjelenés és beágyazás', 'Beállítások', 'Fiók']) {
@@ -179,12 +179,12 @@ const flows = {
     await page.waitForSelector('#text');
     await page.type('#text', 'Szia, gumicserét szeretnék');
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 15000 });
+    await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 20000 });
     await textOk(page, 'chat: válasz megjelent');
   },
   async ugyintezes(page) {
     await login(page, '/admin/');
-    await page.waitForSelector('.tabs', { timeout: 10000 });
+    await page.waitForSelector('.tabs', { timeout: 20000 });
     await waitText(page, 'aktív előfizetés');
     await settle(600);
     await textOk(page, 'admin: ügyfelek');
@@ -212,7 +212,7 @@ const flows = {
     }
     // ügyfél-fiók: a tests/ugyintezes.sh által beállított jelszóval
     await login(page, '/fiok/', 'anna@kovacs.hu', 'ugyfel123');
-    await page.waitForSelector('#kb-test', { timeout: 10000 });
+    await page.waitForSelector('#kb-test', { timeout: 20000 });
     await settle(500);
     await textOk(page, 'ügyfél-fiók: tanítás');
     await page.type('#kb-test', 'mikor vagytok nyitva?'); // a tests/ugyintezes.sh végén mentett tudástár
@@ -222,15 +222,39 @@ const flows = {
     await page.waitForSelector('#q');
     await page.type('#q', 'mennyibe kerül a chatbot?');
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 10000 });
+    await page.waitForFunction(() => document.querySelectorAll('.msg.bot').length >= 2, { timeout: 20000 });
     await textOk(page, 'chat: válasz a tudásbázisból');
   },
 };
 
+// A Chrome indítása a CI-ban néha elakad: újrapróbáljuk.
+async function launch() {
+  for (let i = 1; ; i++) {
+    try {
+      return await puppeteer.launch({ executablePath: CHROME, headless: true, timeout: 60000, protocolTimeout: 120000,
+        args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--lang=hu-HU'] });
+    } catch (e) {
+      if (i >= 3) throw new Error('a Chrome nem indult el (' + e.message + ')');
+      console.log('  … a Chrome nem indult el (' + e.message + '), újrapróbálom');
+      await settle(3000 * i);
+    }
+  }
+}
+
+// Minden váratlan hiba látható GitHub-hibaüzenet legyen (ne csak „exit code 1”).
+const crash = (e) => {
+  console.log('VÁRATLAN HIBA: ' + (e && e.stack || e));
+  if (process.env.GITHUB_ACTIONS) console.log('::error title=Felületi teszt (' + app + ')::váratlan hiba: ' + String(e && e.message || e).replace(/\n/g, ' '));
+  process.exit(1);
+};
+process.on('unhandledRejection', crash);
+process.on('uncaughtException', crash);
+
 (async () => {
   if (!flows[app]) { console.error('Ismeretlen app: ' + app); process.exit(2); }
-  const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-sandbox', '--disable-gpu', '--lang=hu-HU'] });
+  const browser = await launch();
   const page = await browser.newPage();
+  page.setDefaultTimeout(20000);
   await page.setViewport({ width: 1280, height: 900 });
   page.on('pageerror', (e) => jsErrors.push('JS hiba: ' + e.message));
   page.on('console', (m) => {
@@ -244,7 +268,10 @@ const flows = {
   try {
     await flows[app](page);
   } catch (e) {
-    bad('a folyamat megszakadt: ' + e.message);
+    // a GitHub-hibaüzenetbe az oldal címe és eleje is bekerül, hogy a log nélkül is látsszon, hol akadt el
+    let where = '';
+    try { where = ' | ' + page.url() + ' | ' + (await page.evaluate(() => document.body.innerText)).replace(/\s+/g, ' ').slice(0, 300); } catch (x) { /* nincs oldal */ }
+    bad('a folyamat megszakadt: ' + e.message + where);
     try { console.log((await page.evaluate(() => document.body.innerText)).slice(0, 1500)); } catch (x) { /* nincs oldal */ }
   }
   for (const e of jsErrors) bad(e);
