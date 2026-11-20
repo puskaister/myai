@@ -32,7 +32,7 @@ const APPS = [
         'badge'   => '45 napig ingyen kipróbálható',
         'mockup'  => 'mockup_followup',
         'for'     => 'Kis- és középvállalkozások',
-        'url'     => 'https://followup.my-ai.hu/',   // saját oldala van, a kártya oda visz
+        'url'     => 'https://followup.hu/hu/rend.php',   // saját oldala van, a kártya oda visz
     ],
     'evfordulok' => [
         'name'    => 'Évfordulók',
