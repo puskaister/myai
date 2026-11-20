@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Gumiszerviz időpontfoglaló – my-ai.hu', 'Online időpontfoglaló gumiszervizeknek, nálunk üzemeltetve 30 000 Ft + ÁFA beállítás és 3 000 Ft + ÁFA / hó, vagy önálló változat a saját tárhelyre 49 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
-app_hero('gumiszerviz', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó · gumiszervizeknek',
+page_start('Gumiszerviz időpontfoglaló – my-ai.hu', 'Online időpontfoglaló gumiszervizeknek, nálunk üzemeltetve 29 990 Ft + ÁFA beállítás és 2 990 Ft + ÁFA / hó, vagy önálló változat a saját tárhelyre egyszeri 29 990 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
+app_hero('gumiszerviz', '29 990 Ft + ÁFA · havidíjjal nálunk, vagy a saját tárhelyedre · gumiszervizeknek',
     'Az ügyfél pár koppintással foglal gumicserére, centírozásra vagy defektjavításra, te pedig egy helyen látsz mindent.',
     [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#arak', 'Árak és változatok']]);
 ?>
@@ -71,10 +71,10 @@ app_hero('gumiszerviz', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó ·
       <div class="grid two" style="margin-top:22px">
         <div class="card">
           <h3>Nálunk üzemeltetve</h3>
-          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 100 Ft)</p>
-          <p style="font-weight:700;margin:0 0 2px">+ 3 000 Ft + ÁFA / hó</p>
-          <p class="muted" style="margin:0 0 12px">bruttó 3 810 Ft / hó — <strong>minden üzemeltetési gond a miénk</strong></p>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">29 990 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 087 Ft)</p>
+          <p style="font-weight:700;margin:0 0 2px">+ 2 990 Ft + ÁFA / hó üzemeltetési díj</p>
+          <p class="muted" style="margin:0 0 12px">bruttó 3 797 Ft / hó — <strong>minden üzemeltetési gond a miénk</strong></p>
           <ul class="checks">
             <li>Mi állítjuk be a te arculatoddal</li>
             <li>A my-ai.hu-n fut (pl. my-ai.hu/cegneved), tárhely nélkül</li>
@@ -85,14 +85,15 @@ app_hero('gumiszerviz', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó ·
         </div>
         <div class="card" id="onallo">
           <h3>Önálló változat a saját tárhelyedre</h3>
-          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">49 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 62 230 Ft)</p>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">29 990 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 087 Ft), havidíj nélkül</p>
           <ul class="checks">
             <li>A teljes rendszer telepítőcsomagja: elviszed, a saját tárhelyeden fut</li>
             <li>Az adatok nálad maradnak, havidíj nélkül</li>
             <li>A saját weboldaladba építheted: lebegő „Időpontfoglalás” gomb vagy beágyazva</li>
-            <li>Részletes telepítési útmutató; a telepítésben szívesen segítünk</li>
+            <li>Részletes telepítési útmutató</li>
             <li>Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS</li>
+            <li>Igény szerint a tárhelyedre telepítjük: egyszeri 19 000 Ft + ÁFA (bruttó 24 130 Ft)</li>
           </ul>
           <a class="btn btn-primary" href="mailto:info@my-ai.hu?subject=<?= rawurlencode('Önálló időpontfoglaló megrendelése') ?>">Megrendelem</a>
           <p class="meta" style="margin-top:12px">A díjbekérő kifizetése után emailben személyes letöltőkódot küldünk. <a href="/appok/onallo-idopontfoglalo/">Részletek és követelmények →</a></p>

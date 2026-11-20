@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Szépségszalon időpontfoglaló – my-ai.hu', 'Online időpontfoglaló szépségszalonoknak: a vendég a telefonjáról foglal, csak a szabad időpontok választhatók, email visszaigazolás. Nálunk üzemeltetve 30 000 Ft + ÁFA beállítás és 3 000 Ft + ÁFA / hó, vagy önálló változat egyszeri 49 000 Ft + ÁFA.', 'appok');
-app_hero('szepsegszalon', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó · szépségszalonoknak',
+page_start('Szépségszalon időpontfoglaló – my-ai.hu', 'Online időpontfoglaló szépségszalonoknak: a vendég a telefonjáról foglal, csak a szabad időpontok választhatók, email visszaigazolás. Nálunk üzemeltetve 29 990 Ft + ÁFA beállítás és 2 990 Ft + ÁFA / hó, vagy önálló változat egyszeri 29 990 Ft + ÁFA.', 'appok');
+app_hero('szepsegszalon', '29 990 Ft + ÁFA · havidíjjal nálunk, vagy a saját tárhelyedre · szépségszalonoknak',
     'Szépségszalonoknak: a vendégeid akkor foglalnak, amikor eszükbe jut — este a kanapéról is —, te pedig nem a telefont nyomkodod vendég közben.',
     [['#arak', 'Árak és változatok'], ['#kapcsolat', 'Ajánlatot kérek']]);
 ?>
@@ -73,10 +73,10 @@ app_hero('szepsegszalon', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó 
       <div class="grid two" style="margin-top:22px">
         <div class="card">
           <h3>Nálunk üzemeltetve</h3>
-          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 100 Ft)</p>
-          <p style="font-weight:700;margin:0 0 2px">+ 3 000 Ft + ÁFA / hó</p>
-          <p class="muted" style="margin:0 0 12px">bruttó 3 810 Ft / hó — <strong>minden üzemeltetési gond a miénk</strong></p>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">29 990 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 087 Ft)</p>
+          <p style="font-weight:700;margin:0 0 2px">+ 2 990 Ft + ÁFA / hó üzemeltetési díj</p>
+          <p class="muted" style="margin:0 0 12px">bruttó 3 797 Ft / hó — <strong>minden üzemeltetési gond a miénk</strong></p>
           <ul class="checks">
             <li>Mi állítjuk be a szalonod arculatával</li>
             <li>A my-ai.hu-n fut (pl. my-ai.hu/szalonneved), tárhely nélkül</li>
@@ -87,12 +87,13 @@ app_hero('szepsegszalon', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó 
         </div>
         <div class="card">
           <h3>Önálló változat a saját tárhelyedre</h3>
-          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">49 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 62 230 Ft)</p>
+          <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">29 990 Ft + ÁFA</p>
+          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 087 Ft), havidíj nélkül</p>
           <ul class="checks">
             <li>A teljes rendszer telepítőcsomagja, benne a szépségszalon kiinduló beállítással</li>
             <li>Az adatok nálad maradnak, havidíj nélkül</li>
             <li>Kell hozzá: PHP 7.4+ és MySQL tárhely, HTTPS</li>
+            <li>Igény szerint a tárhelyedre telepítjük: egyszeri 19 000 Ft + ÁFA (bruttó 24 130 Ft)</li>
           </ul>
           <a class="btn btn-primary" href="/appok/onallo-idopontfoglalo/">Részletek →</a>
         </div>

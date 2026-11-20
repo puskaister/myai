@@ -21,7 +21,7 @@ $provider = [
     'email'    => 'info@my-ai.hu',
     'phone'    => '+36 30 584 5937',
 ];
-$updated = '2026. október 18.';
+$updated = '2026. november 20.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -145,9 +145,9 @@ header('Content-Type: text/html; charset=utf-8');
   <p>A Szolgáltató az ÁSZF-et módosíthatja; a módosítást legalább 15 nappal a hatálybalépés előtt emailben közli a Megrendelőkkel. A mindenkori változat ezen az oldalon érhető el. Ha a Megrendelő a módosítást nem fogadja el, a hatálybalépésig felmondhat.</p>
 
   <h2>13. Önálló időpontfoglaló (szoftvercsomag)</h2>
-  <p>13.1. Az önálló időpontfoglaló a Megrendelő saját tárhelyére telepíthető foglalási rendszer telepítőcsomagja. Egyszeri díja <strong>49 000 Ft + ÁFA</strong> (bruttó 62 230 Ft), kivéve, ha a megrendeléskor a termékoldalon más díj szerepelt. A megrendelés emailben történik; a szerződés a díjbekérő elküldésével jön létre. A díj kifizetése után a Szolgáltató emailben személyes letöltőkódot küld, amellyel a csomag a my-ai.hu-ról letölthető (legfeljebb a levélben megadott számú alkalommal).</p>
+  <p>13.1. Az önálló időpontfoglaló a Megrendelő saját tárhelyére telepíthető foglalási rendszer telepítőcsomagja. Egyszeri díja <strong>29 990 Ft + ÁFA</strong> (bruttó 38 087 Ft), kivéve, ha a megrendeléskor a termékoldalon más díj szerepelt. A megrendelés emailben történik; a szerződés a díjbekérő elküldésével jön létre. A díj kifizetése után a Szolgáltató emailben személyes letöltőkódot küld, amellyel a csomag a my-ai.hu-ról letölthető (legfeljebb a levélben megadott számú alkalommal).</p>
   <p>13.2. Felhasználási jog: a Megrendelő a csomagot egy vállalkozás saját foglalási rendszereként, egy telepítésben (és ugyanannak a vállalkozásnak egy tesztpéldányában), határozatlan ideig használhatja, és saját célra módosíthatja. A csomag vagy módosított változata nem ruházható át, nem adható tovább, nem értékesíthető, és szolgáltatásként sem kínálható harmadik félnek. A szoftver szerzői joga a Szolgáltatónál marad.</p>
-  <p>13.3. A telepítés és az üzemeltetés (tárhely, adatbázis, biztonsági mentés, levelezés) a Megrendelő feladata. A foglalásokban kezelt személyes adatok adatkezelője a Megrendelő.</p>
+  <p>13.3. A telepítés és az üzemeltetés (tárhely, adatbázis, biztonsági mentés, levelezés) a Megrendelő feladata. Igény szerint a Szolgáltató a csomagot a Megrendelő tárhelyére telepíti, egyszeri 19 000 Ft + ÁFA (bruttó 24 130 Ft) díjért; ehhez a Megrendelő átadja a szükséges tárhely- és adatbázis-hozzáférést. A telepítés után az üzemeltetés a Megrendelő feladata marad. A foglalásokban kezelt személyes adatok adatkezelője a Megrendelő.</p>
   <p>13.4. A Szolgáltató a csomagot a vásárláskori állapotában adja át. A jelzett hibákat észszerű időn belül javítja, a telepítésben emailben vagy telefonon segít. A Megrendelő által módosított részekért a Szolgáltató nem felel.</p>
   <p>13.5. A letöltőkód személyes: a Megrendelő nem adhatja át harmadik félnek. Visszaélés esetén a Szolgáltató a kódot letilthatja.</p>
 </main>

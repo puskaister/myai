@@ -7,8 +7,8 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
 $order = 'mailto:info@my-ai.hu?subject=' . rawurlencode('Önálló időpontfoglaló megrendelése');
-page_start('Önálló időpontfoglaló a saját weboldaladra – my-ai.hu', 'Az online időpontfoglaló teljes rendszere a saját tárhelyedre: egyszeri 49 000 Ft + ÁFA, havidíj nélkül. Egy sorral beépíthető a weboldaladba (WordPress is).', 'appok');
-app_hero('onallo-idopontfoglalo', 'Egyszeri 49 000 Ft + ÁFA · a saját tárhelyedre',
+page_start('Önálló időpontfoglaló a saját weboldaladra – my-ai.hu', 'Az online időpontfoglaló teljes rendszere a saját tárhelyedre: egyszeri 29 990 Ft + ÁFA, havidíj nélkül. Egy sorral beépíthető a weboldaladba (WordPress is).', 'appok');
+app_hero('onallo-idopontfoglalo', 'Egyszeri 29 990 Ft + ÁFA · a saját tárhelyedre',
     'Megveszed, elviszed, és a saját weboldaladon fut: az ügyfeleid ott foglalnak időpontot, ahol eddig is kerestek — a foglalások és az ügyféladatok nálad maradnak.',
     [[$order, 'Megrendelem'], ['#mire-van-szukseg', 'Mire van szükség?']]);
 ?>
@@ -39,7 +39,7 @@ app_hero('onallo-idopontfoglalo', 'Egyszeri 49 000 Ft + ÁFA · a saját tárhel
         <div class="card"><h3>HTTPS a domainen</h3><p>SSL-tanúsítvány (pl. ingyenes Let's Encrypt) a biztonságos belépéshez és a telefonos telepítéshez.</p></div>
         <div class="card"><h3>Email küldés</h3><p>A visszaigazoló leveleket a tárhely küldi; ha kell, egy postafiók SMTP adataival megbízhatóbb.</p></div>
         <div class="card"><h3>Hozzáférés a weboldaladhoz</h3><p>Ahol be tudod illeszteni a kódot: WordPressben pl. egy „Egyéni HTML” blokkban.</p></div>
-        <div class="card"><h3>Nincs tárhelyed?</h3><p>Válaszd a <a href="/appok/gumiszerviz/">nálunk üzemeltetett változatot</a> (30 000 Ft + ÁFA beállítás és 3 000 Ft + ÁFA / hó) — ott mi futtatjuk, neked semmit nem kell telepítened.</p></div>
+        <div class="card"><h3>Nincs tárhelyed?</h3><p>Válaszd a <a href="/appok/gumiszerviz/">nálunk üzemeltetett változatot</a> (29 990 Ft + ÁFA beállítás és 2 990 Ft + ÁFA / hó) — ott mi futtatjuk, neked semmit nem kell telepítened.</p></div>
       </div>
     </div>
   </section>
@@ -56,8 +56,9 @@ app_hero('onallo-idopontfoglalo', 'Egyszeri 49 000 Ft + ÁFA · a saját tárhel
       <pre class="card" style="margin-top:14px;white-space:pre-wrap;word-break:break-all;font-size:.85rem">&lt;script src="https://a-weboldalad.hu/foglalas/widget.js" defer&gt;&lt;/script&gt;</pre>
       <div class="card" style="margin-top:22px;max-width:520px">
         <h3>Ár</h3>
-        <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">49 000 Ft + ÁFA</p>
-        <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 62 230 Ft), havidíj nélkül</p>
+        <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">29 990 Ft + ÁFA</p>
+        <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 087 Ft), havidíj nélkül</p>
+        <p style="margin:0 0 14px"><strong>Nem szeretnéd magad telepíteni?</strong> Igény szerint a tárhelyedre telepítjük: egyszeri 19 000 Ft + ÁFA (bruttó 24 130 Ft).</p>
         <a class="btn btn-primary" href="<?= e($order) ?>">Megrendelem</a>
         <p class="meta" style="margin-top:12px">A vásárlás feltételei: <a href="/aszf/">ÁSZF</a> 13. pont.</p>
       </div>

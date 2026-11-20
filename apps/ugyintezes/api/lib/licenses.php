@@ -8,7 +8,7 @@ declare(strict_types=1);
 const PAID_GUARD = "<?php http_response_code(404); exit; __halt_compiler();\n"; // ugyanez: deploy/build.php
 
 const PAID_PRODUCTS = [
-    'idopontfoglalo' => ['name' => 'Önálló online időpontfoglaló', 'file' => 'idopontfoglalo.zip.php', 'price' => '49 000 Ft + ÁFA'],
+    'idopontfoglalo' => ['name' => 'Önálló online időpontfoglaló', 'file' => 'idopontfoglalo.zip.php', 'price' => '29 990 Ft + ÁFA'],
 ];
 
 function paid_file(string $product): string {
