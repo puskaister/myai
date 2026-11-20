@@ -228,3 +228,23 @@ input:focus, select:focus, textarea:focus, .btn:focus-visible, .choice:focus-vis
 .toast.err { background: var(--danger); color: #fff; }
 
 body.plain .card { margin-top: 0; }
+
+/* Telepítési útmutató (iPhone / belső böngésző) */
+.ig-back { position: fixed; inset: 0; z-index: 1000; background: rgba(15, 23, 42, .55); display: flex; align-items: flex-end; justify-content: center; padding: 12px 12px calc(84px + env(safe-area-inset-bottom)); }
+.ig-sheet { width: 100%; max-width: 440px; background: var(--card, #fff); color: var(--text); border-radius: 20px; padding: 18px; box-shadow: 0 16px 40px rgba(0, 0, 0, .3); }
+.ig-sheet.top { align-self: flex-start; margin-top: calc(72px + env(safe-area-inset-top)); }
+.ig-sheet h2 { font-size: 1.15rem; margin: 0 0 6px; }
+.ig-sheet .muted { margin: 0 0 4px; }
+.ig-steps { list-style: none; counter-reset: ig; margin: 10px 0 0; padding: 0; }
+.ig-steps li { counter-increment: ig; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; position: relative; padding: 6px 0 6px 36px; line-height: 1.45; }
+.ig-steps li::before { content: counter(ig); position: absolute; left: 0; top: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: var(--on-primary); font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+.ig-key { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: 1.5px solid #007aff; border-radius: 7px; }
+.ig-key svg { width: 15px; height: 15px; fill: none; stroke: #007aff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ig-pill { display: inline-block; background: rgba(127, 127, 127, .15); border-radius: 7px; padding: 1px 7px; font-weight: 600; }
+.ig-arrow { position: fixed; left: 50%; font-size: 2.2rem; color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .5); animation: ig-bob 1s ease-in-out infinite; }
+.ig-arrow.bottom { bottom: calc(26px + env(safe-area-inset-bottom)); transform: translateX(-50%); }
+.ig-arrow.top { top: calc(14px + env(safe-area-inset-top)); right: 18px; left: auto; }
+@keyframes ig-bob { 50% { translate: 0 6px; } }
+.ig-arrow.top { animation-name: ig-bob-up; }
+@keyframes ig-bob-up { 50% { translate: 0 -6px; } }
+@media (prefers-reduced-motion: reduce) { .ig-arrow { animation: none; } }

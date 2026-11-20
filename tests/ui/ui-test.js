@@ -67,6 +67,29 @@ const flows = {
     await page.waitForFunction(() => /Sikeres foglalás|Foglalási kérés elküldve/.test(document.body.innerText), { timeout: 10000 });
     await textOk(page, 'foglalás 4/4: visszaigazolás');
 
+    // Telepítési útmutató: a felismert böngészőhöz illő lépések.
+    const UAS = [
+      ['iPhone Safari', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', 'Főképernyőhöz adás', '.ig-arrow.bottom'],
+      ['iPhone Chrome', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/138.0.7204.156 Mobile/15E148 Safari/604.1', 'címsor jobb oldalán', '.ig-arrow.top'],
+      ['iPhone Facebook', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBAV/520.0.0.38.101;FBBV/1;FBDV/iPhone15,2;FBMD/iPhone;FBSN/iOS;FBSV/18.5;FBSS/3;FBLC/hu_HU]', 'Megnyitás a Safariban', null],
+      ['Android Facebook', 'Mozilla/5.0 (Linux; Android 14; SM-S911B Build/UP1A.231005.007; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/138.0.0.0 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/520.0.0.38.101;]', 'Megnyitás böngészőben', null],
+    ];
+    for (const [label, ua, expect, arrow] of UAS) {
+      const p = await page.browser().newPage();
+      p.on('pageerror', (e) => jsErrors.push('JS hiba (' + label + '): ' + e.message));
+      await p.setUserAgent(ua);
+      await p.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+      await p.goto(BASE + '/', { waitUntil: 'networkidle0' });
+      await p.waitForSelector('#install-btn:not([hidden])', { timeout: 5000 });
+      await p.click('#install-btn');
+      await p.waitForSelector('.ig-sheet', { timeout: 5000 });
+      const t = await p.evaluate(() => document.querySelector('.ig-sheet').innerText);
+      if (!t.includes(expect)) bad('telepítési útmutató (' + label + '): nincs benne „' + expect + '”: ' + t.replace(/\s+/g, ' '));
+      else if (arrow && !(await p.$(arrow))) bad('telepítési útmutató (' + label + '): hiányzik a nyíl ' + arrow);
+      else await textOk(p, 'telepítési útmutató: ' + label);
+      await p.close();
+    }
+
     await login(page, '/admin/');
     await page.waitForSelector('.tabs');
     await settle(800);

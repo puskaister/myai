@@ -350,27 +350,121 @@
   }
 
   // ---------------------------------------------------------------- telepítés (PWA)
+  // Androidon (Chrome, Edge, Samsung) a böngésző saját telepítő ablaka jön fel.
+  // iPhone-on ilyen nincs: képes útmutató a felismert böngészőhöz igazítva.
+  // Facebook / Instagram / Messenger belső böngészőjéből egyik rendszeren sem
+  // lehet telepíteni, ott előbb rendes böngészőben kell megnyitni.
+  function detectBrowser() {
+    const ua = navigator.userAgent;
+    const ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const ipad = /ipad/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const inapp = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|MessengerForiOS|Line\/|TikTok|musical_ly|Snapchat|LinkedInApp|\bwv\)/i.test(ua);
+    let kind = 'safari';
+    if (inapp) kind = 'inapp';
+    else if (/CriOS/i.test(ua)) kind = 'chrome';
+    else if (/EdgiOS/i.test(ua)) kind = 'edge';
+    else if (/FxiOS/i.test(ua)) kind = 'firefox';
+    return { ios, ipad, inapp, kind };
+  }
+
+  const SHARE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M5 11v9h14v-9"/></svg>';
+  function icon(html) { const s = el('span', { class: 'ig-key' }); s.innerHTML = html; return s; }
+  function pill(t) { return el('span', { class: 'ig-pill' }, t); }
+
+  function installSteps(b) {
+    const add = ['Válaszd: ', pill('Főképernyőhöz adás'), ' (ha nem látod, görgess lejjebb)'];
+    const done = ['Koppints jobb fent: ', pill('Hozzáadás'), ' — kész, ott az ikon a főképernyőn!'];
+    if (b.inapp) {
+      return {
+        title: 'Előbb nyisd meg böngészőben',
+        intro: 'Ebből az appból (pl. Facebook, Instagram) nem lehet a főképernyőre tenni a foglalót.',
+        steps: [
+          ['Koppints jobb fent (vagy lent) a ', pill('⋯'), ' gombra'],
+          ['Válaszd: ', pill(b.ios ? 'Megnyitás a Safariban' : 'Megnyitás böngészőben'), ' (vagy „Megnyitás külső böngészőben”)'],
+          ['Ott koppints újra a „Telepítés appként” linkre a lap alján'],
+        ],
+        copy: true, arrow: null,
+      };
+    }
+    if (b.kind === 'chrome') {
+      return {
+        title: 'Tedd ki a telefonod főképernyőjére!',
+        steps: [
+          ['Koppints fent, a címsor jobb oldalán a ', icon(SHARE_ICON), ' ', el('b', {}, 'Megosztás'), ' gombra'],
+          add, done,
+        ],
+        arrow: 'top',
+      };
+    }
+    if (b.kind === 'edge' || b.kind === 'firefox') {
+      return {
+        title: 'Tedd ki a telefonod főképernyőjére!',
+        steps: [
+          ['Koppints lent a menüre (', pill('☰'), ' vagy ', pill('⋯'), '), majd a ', icon(SHARE_ICON), ' ', el('b', {}, 'Megosztás'), ' pontra'],
+          add, done,
+        ],
+        arrow: 'bottom',
+      };
+    }
+    return {
+      title: 'Tedd ki a telefonod főképernyőjére!',
+      steps: [
+        b.ipad
+          ? ['Koppints fent, a címsor mellett a ', icon(SHARE_ICON), ' ', el('b', {}, 'Megosztás'), ' gombra']
+          : ['Koppints lent a ', icon(SHARE_ICON), ' ', el('b', {}, 'Megosztás'), ' gombra — ha nem látod, előbb a ', pill('⋯'), ' gombra'],
+        add, done,
+      ],
+      arrow: b.ipad ? 'top' : 'bottom',
+    };
+  }
+
+  function showInstallGuide(b) {
+    const g = installSteps(b);
+    const close = () => { back.remove(); document.removeEventListener('keydown', onKey); };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    const copyBtn = g.copy ? el('button', {
+      type: 'button', class: 'btn ghost block', style: 'margin-top:12px',
+      onclick: () => {
+        const ok = () => { copyBtn.textContent = 'Link kimásolva — illeszd be a böngészőbe'; };
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(ok, () => prompt('Másold ki a linket:', location.href));
+        else prompt('Másold ki a linket:', location.href);
+      },
+    }, 'Link másolása') : null;
+    const back = el('div', { class: 'ig-back', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'ig-title', onclick: (e) => { if (e.target === back) close(); } },
+      el('div', { class: 'ig-sheet' + (g.arrow === 'top' ? ' top' : '') },
+        el('h2', { id: 'ig-title' }, g.title),
+        g.intro ? el('p', { class: 'muted' }, g.intro) : null,
+        el('ol', { class: 'ig-steps' }, g.steps.map((st) => el('li', {}, st))),
+        copyBtn,
+        el('button', { type: 'button', class: 'btn block', style: 'margin-top:12px', onclick: close }, 'Értem')),
+      g.arrow ? el('div', { class: 'ig-arrow ' + g.arrow, 'aria-hidden': 'true' }, g.arrow === 'top' ? '⬆' : '⬇') : null);
+    document.body.append(back);
+    document.addEventListener('keydown', onKey);
+    back.querySelector('.btn.block:last-child').focus();
+  }
+
   function setupInstall() {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
     const btn = document.getElementById('install-btn');
     const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
     if (!btn || standalone) return;
+    const b = detectBrowser();
     let deferred = null;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferred = e;
       btn.hidden = false;
     });
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (isIOS) btn.hidden = false;
+    // iPhone-on és belső böngészőben nincs telepítő ablak, ott az útmutató segít.
+    if (b.ios || b.inapp) btn.hidden = false;
     btn.addEventListener('click', async () => {
       if (deferred) {
         deferred.prompt();
         await deferred.userChoice;
         deferred = null;
         btn.hidden = true;
-      } else if (isIOS) {
-        alert('iPhone / iPad: koppints a Safari alján a Megosztás gombra (négyzet felfelé mutató nyíllal), majd válaszd a „Főképernyőhöz adás” lehetőséget.');
+      } else {
+        showInstallGuide(b);
       }
     });
   }
