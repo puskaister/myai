@@ -74,7 +74,6 @@ function page_start(string $title, string $description, string $active = '', arr
         <?php foreach ($nav as $key => [$href, $label]): ?>
           <a href="<?= e($href) ?>"<?= $key === $active ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
         <?php endforeach; ?>
-        <a class="btn btn-primary" href="<?= e(SITE['demoUrl']) ?>">Demó</a>
       </nav>
       <button type="button" class="menu-btn" aria-controls="nav-links" aria-expanded="false" aria-label="Menü">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
