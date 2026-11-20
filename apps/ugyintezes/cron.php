@@ -1,5 +1,6 @@
 <?php
-// Napi kör: lejárat előtti emlékeztetők és a lejárt előfizetések jelzése.
+// Napi kör: lejárat előtti emlékeztetők és a lejárt előfizetések jelzése, valamint a
+// nálunk üzemeltetett időpontfoglalók késedelmi emlékeztetője és felfüggesztési értesítője.
 // Naponta egyszer kell meghívni (GitHub Actions ütemező vagy a tárhely CRON-ja):
 //   https://…/cron.php?key=<kulcs>   — a kulcs az admin Beállítások fülén látszik.
 declare(strict_types=1);
@@ -21,4 +22,4 @@ if (!hash_equals(cron_key(), (string) ($_GET['key'] ?? ''))) {
 set_time_limit(300);
 $date = (string) ($_GET['date'] ?? ''); // csak teszteléshez
 $today = preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) ? $date : date('Y-m-d');
-echo json_encode(['date' => $today] + run_billing($today), JSON_UNESCAPED_UNICODE);
+echo json_encode(['date' => $today] + run_billing($today) + ['hosting' => run_hosting($today)], JSON_UNESCAPED_UNICODE);

@@ -23,6 +23,7 @@ $iconV = substr(md5($primary . $s['theme']['logo']), 0, 8);
 $onPrimary = (0.299 * $r + 0.587 * $g + 0.114 * $b) > 160 ? '#111827' : '#ffffff';
 // Beágyazva (widget.js, iframe-ben): nincs „Telepítés appként” gomb, és a magasságot jelezzük a befogadó oldalnak.
 $embedded = isset($_GET['beagyazva']);
+$suspended = hosting_suspended(); // nálunk üzemeltetett foglaló, lejárt havi díj (ÁSZF 14.5.)
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -57,7 +58,14 @@ header('Content-Type: text/html; charset=utf-8');
 </header>
 
 <main id="app" class="container" aria-live="polite">
+<?php if ($suspended): ?>
+  <div class="card suspended">
+    <h2>Az online foglalás átmenetileg szünetel</h2>
+    <p>Időpontot most telefonon vagy emailben kérhetsz<?= $s['business']['phone'] || $s['business']['email'] ? ' — az elérhetőségeket lent találod' : '' ?>. Köszönjük a türelmed!</p>
+  </div>
+<?php else: ?>
   <noscript><p class="card">Az időpontfoglaláshoz engedélyezd a JavaScriptet.</p></noscript>
+<?php endif; ?>
 </main>
 
 <footer class="footer container">
@@ -73,8 +81,10 @@ header('Content-Type: text/html; charset=utf-8');
   <?php if (!$embedded): ?><button type="button" id="install-btn" class="link-btn" hidden>Telepítés appként</button><?php endif; ?>
 </footer>
 
+<?php if (!$suspended): ?>
 <script>window.BOOT = <?= json_encode(['settings' => $public, 'services' => $services], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;</script>
 <script src="<?= $v('assets/app.js') ?>"></script>
+<?php endif; ?>
 <?php if ($embedded): ?>
 <script>
   // a befogadó oldal (widget.js) ehhez igazítja az iframe magasságát

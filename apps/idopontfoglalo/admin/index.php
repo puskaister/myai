@@ -44,6 +44,9 @@ header('Cache-Control: no-store');
     <a class="btn small ghost" style="color:var(--on-primary);border-color:currentColor" href="../" target="_blank" rel="noopener">Foglalási oldal ↗</a>
   </div>
 </header>
+<?php if (hosting_suspended()): ?>
+<div class="container wide"><div class="card suspended" role="alert"><strong>A foglalási oldal felfüggesztve:</strong> a havi üzemeltetési díj nem érkezett meg, ezért új online foglalást nem fogad. A foglalásaid és beállításaid megmaradtak. A díj rendezése után azonnal újra működik — kérdés esetén: info@my-ai.hu</div></div>
+<?php endif; ?>
 <main id="admin" class="container wide"></main>
 <script src="<?= $v('assets/admin.js') ?>"></script>
 </body>

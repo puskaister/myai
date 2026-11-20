@@ -298,6 +298,7 @@ try {
 
         case 'book': {
             if (!$isPost) throw new AppError('Method not allowed', 405);
+            if (hosting_suspended()) throw new AppError('Az online foglalás átmenetileg szünetel. Kérjük, telefonon egyeztess időpontot.', 503);
             $in = input();
             if (trim((string) ($in['website'] ?? '')) !== '') respond(['ok' => true]); // honeypot: robot
             rate_limit('book:' . client_ip(), 6, 3600);

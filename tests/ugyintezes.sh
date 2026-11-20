@@ -137,6 +137,41 @@ c=$(curl -s "$BASE/cron.php?key=$KEY")
 check "lejárati értesítés (ügyfél + admin)" 'jq -e ".expired == 1" <<<"$c" >/dev/null && grep -q "lejárt" "$MAIL_LOG" && grep -q "To: admin@example.com" "$MAIL_LOG"'
 check "lejárati értesítés egyszer" 'curl -s "$BASE/cron.php?key=$KEY" | jq -e ".expired == 0" >/dev/null'
 
+echo "== Nálunk üzemeltetett foglalók (havi díj hó 5-ig, 10 nap után felfüggesztés)"
+SQL() { mysql -h127.0.0.1 -uidopont -p"$DB_PASS" idopont -e "$1" 2>/dev/null; }
+SQL "CREATE TABLE IF NOT EXISTS demo_settings (k VARCHAR(64) NOT NULL PRIMARY KEY, v MEDIUMTEXT NOT NULL); REPLACE INTO demo_settings (k, v) VALUES ('business', '{\"name\":\"Demo Gumi\",\"email\":\"\"}'), ('notify', '{\"admin_email\":\"gumi@example.com\"}')"
+hrow() { get admin/hosting | jq -c '.rows[0]'; }
+check "lista: a foglaló neve és értesítési címe, még nincs nyilvántartva" 'hrow | jq -e ".dir == \"demofoglalo\" and .name == \"Demo Gumi\" and .email == \"gumi@example.com\" and .status == \"untracked\"" >/dev/null'
+check "belépés nélkül tiltott" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/?r=admin/hosting")" = 401 ]'
+r=$(post admin/hosting/pay '{"dir":"demofoglalo","months":1}')
+EOM=$(TZ=Europe/Budapest date -d "$(date +%Y-%m-01) +1 month -1 day" +%F)
+check "első befizetés: a folyó hónap végéig fizetve" '[ "$(status "$r")" = 200 ] && [ "$(body "$r" | jq -r .paid_until)" = "$EOM" ] && hrow | jq -e ".status == \"ok\"" >/dev/null'
+r=$(post admin/hosting/pay '{"dir":"demofoglalo","months":2}')
+EOM2=$(TZ=Europe/Budapest date -d "$(date +%Y-%m-01) +3 months -1 day" +%F)
+check "további 2 hónap: a fizetett időszak végétől" '[ "$(body "$r" | jq -r .paid_until)" = "$EOM2" ]'
+check "ismeretlen foglaló: 404" '[ "$(status "$(post admin/hosting/pay "{\"dir\":\"nincs\",\"months\":1}")")" = 404 ]'
+check "rossz hónapszám: 400" '[ "$(status "$(post admin/hosting/pay "{\"dir\":\"demofoglalo\",\"months\":13}")")" = 400 ]'
+hsave() { post admin/hosting/save "{\"dir\":\"demofoglalo\",\"paid_until\":\"$1\",\"mode\":\"${2:-auto}\",\"email\":\"\",\"note\":\"\"}" >/dev/null; }
+D() { TZ=Europe/Budapest date -d "$TODAY $1 days" +%F; }
+hsave "$(D -3)"
+check "határidőn belül (hó 5-ig): fizetendő, nincs levél" 'hrow | jq -e ".status == \"due\"" >/dev/null && curl -s "$BASE/cron.php?key=$KEY" | jq -e ".hosting.late == 0 and .hosting.suspended == 0" >/dev/null'
+hsave "$(D -8)"
+: > "$MAIL_LOG"
+c=$(curl -s "$BASE/cron.php?key=$KEY")
+check "határidő után: késik, emlékeztető az ügyfélnek és nekünk" 'hrow | jq -e ".status == \"late\" and .suspend_from != \"\"" >/dev/null && jq -e ".hosting.late == 1" <<<"$c" >/dev/null && grep -q "To: gumi@example.com" "$MAIL_LOG" && grep -q "To: admin@example.com" "$MAIL_LOG"'
+check "emlékeztető időszakonként egyszer" 'curl -s "$BASE/cron.php?key=$KEY" | jq -e ".hosting.late == 0" >/dev/null'
+hsave "$(D -16)"
+: > "$MAIL_LOG"
+c=$(curl -s "$BASE/cron.php?key=$KEY")
+check "határidő + 10 nap után: felfüggesztve, értesítés" 'hrow | jq -e ".status == \"suspended\"" >/dev/null && jq -e ".hosting.suspended == 1" <<<"$c" >/dev/null && grep -q "To: gumi@example.com" "$MAIL_LOG"'
+hsave "$(D -15)"
+check "a 10. napon még nincs felfüggesztve" 'hrow | jq -e ".status == \"late\"" >/dev/null'
+hsave "$(D -40)" active
+check "kézzel bekapcsolva: késés ellenére működik" 'hrow | jq -e ".status == \"active\"" >/dev/null'
+hsave "$EOM" suspended
+check "kézzel felfüggesztve: fizetett időszakban is" 'hrow | jq -e ".status == \"suspended\"" >/dev/null'
+check "a táblában a foglaló ezt olvassa" '[ "$(SQL "SELECT mode FROM seged_hosting WHERE dir = '"'"'demofoglalo'"'"'" | tail -n1)" = suspended ]'
+
 echo
 if [ "$FAILS" -gt 0 ]; then echo "$FAILS teszt HIBÁS"; exit 1; fi
 echo "Ügyintézési Segéd: minden teszt rendben."

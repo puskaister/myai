@@ -57,6 +57,29 @@ function db(): mysqli {
     return $mysqli;
 }
 
+// Nálunk üzemeltetett foglalónál a havi díj nyilvántartása az Ügyintézési Segéd adatbázis-táblájában
+// van (config 'hosting' => ['table' => 'seged_hosting', 'key' => <mappa>], a deploy írja; ÁSZF 14.).
+// Felfüggesztve: kézzel, vagy ha a fizetett időszak vége után 15 nappal (a hónap 5-i határidő + 10 nap)
+// sincs befizetés. Ugyanez a szabály: apps/ugyintezes/api/lib/hosting.php hosting_status().
+// Az önálló (letöltött) csomagban nincs 'hosting' kulcs, ott soha nincs felfüggesztés.
+function hosting_suspended(): bool {
+    static $cache = null;
+    if ($cache !== null) return $cache;
+    $cfg = app_config()['hosting'] ?? null;
+    $table = (string) ($cfg['table'] ?? '');
+    if (!$cfg || !preg_match('/^[a-z0-9_]{1,64}$/', $table)) return $cache = false;
+    $stmt = @db()->prepare("SELECT paid_until, mode FROM `$table` WHERE dir = ?");
+    if (!$stmt) return $cache = false; // még nincs ilyen tábla: nincs nyilvántartás
+    $key = (string) ($cfg['key'] ?? '');
+    $stmt->bind_param('s', $key);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    if (!$row) return $cache = false;
+    if ($row['mode'] === 'suspended') return $cache = true;
+    if ($row['mode'] !== 'auto' || !$row['paid_until']) return $cache = false;
+    return $cache = date('Y-m-d') > date('Y-m-d', strtotime($row['paid_until'] . ' +15 days'));
+}
+
 // Táblanév-előtag: több cég is osztozhat egy adatbázison (pl. gumipont_bookings,
 // fodrasz_bookings). Az SQL-ben a táblák {nev} alakban szerepelnek.
 function table_prefix(): string {

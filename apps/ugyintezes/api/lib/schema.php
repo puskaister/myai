@@ -30,10 +30,12 @@ const LICENSES_SQL = "CREATE TABLE IF NOT EXISTS {licenses} (
 // Meglévő telepítés frissítése (az első API-hívásnál, egyszer).
 function migrate_schema(): void {
     $ver = (int) (setting_value('schema_version') ?? 1);
-    if ($ver >= 3) return;
+    if ($ver >= 4) return;
     if ($ver < 2) migrate_v2();
-    if (!db()->query(sql_tables(LICENSES_SQL))) throw new AppError('Adatbázis-frissítési hiba: ' . db()->error, 500);
-    set_setting_value('schema_version', '3');
+    foreach ([LICENSES_SQL, HOSTING_SQL] as $sql) {
+        if (!db()->query(sql_tables($sql))) throw new AppError('Adatbázis-frissítési hiba: ' . db()->error, 500);
+    }
+    set_setting_value('schema_version', '4');
 }
 
 function migrate_v2(): void {
@@ -106,6 +108,7 @@ function schema_statements(): array {
 
         PORTAL_RESETS_SQL,
         LICENSES_SQL,
+        HOSTING_SQL,
 
         "CREATE TABLE IF NOT EXISTS {rate_limits} (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

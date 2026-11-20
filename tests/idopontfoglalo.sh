@@ -150,6 +150,26 @@ check "belépés az új jelszóval" '[ "$(status "$r")" = 200 ]'
 r=$(api_post reset "{\"token\":\"$TOK\",\"password\":\"masikjelszo1\"}")
 check "a token másodszor nem használható" '[ "$(status "$r")" = 400 ]'
 
+echo "== Havi díj: felfüggesztett foglaló (ÁSZF 14.5.)"
+HSQL() { mysql -h127.0.0.1 -uidopont -ptesztjelszo idopont -e "$1" 2>/dev/null; }
+bookx() { api_post book "{\"service_id\":$SID,\"date\":\"$DATE\",\"time\":\"$SLOT2\",\"name\":\"Felfüggesztés Teszt\",\"phone\":\"+36301234567\",\"email\":\"s@example.com\",\"fields\":{\"plate\":\"SUS-001\"}}"; }
+SLOT2=$(api_get "slots&service_id=$SID&date=$DATE" | jq -r '.slots[0] // empty')
+check "nyilvántartó tábla nélkül működik" '! curl -s "$BASE/" | grep -q "átmenetileg szünetel"'
+HSQL "CREATE TABLE kozos_hosting (dir VARCHAR(40) NOT NULL PRIMARY KEY, paid_until DATE NULL, mode VARCHAR(10) NOT NULL DEFAULT 'auto')"
+HSQL "INSERT INTO kozos_hosting (dir, paid_until, mode) VALUES ('teszt', CURDATE() - INTERVAL 15 DAY, 'auto')"
+check "a 10. késedelmi napon még működik" '! curl -s "$BASE/" | grep -q "átmenetileg szünetel"'
+HSQL "UPDATE kozos_hosting SET paid_until = CURDATE() - INTERVAL 16 DAY"
+check "utána: a foglalási oldal felfüggesztve" 'P=$(curl -s "$BASE/"); grep -q "átmenetileg szünetel" <<<"$P" && ! grep -q "assets/app.js" <<<"$P"'
+check "felfüggesztve: foglalás 503" '[ "$(status "$(bookx)")" = 503 ]'
+check "felfüggesztve: az admin figyelmeztetést lát" 'curl -s "$BASE/admin/" | grep -q "A foglalási oldal felfüggesztve"'
+HSQL "UPDATE kozos_hosting SET mode = 'active'"
+check "kézzel bekapcsolva: újra foglalható" '! curl -s "$BASE/" | grep -q "átmenetileg szünetel" && [ "$(status "$(bookx)")" = 200 ]'
+HSQL "UPDATE kozos_hosting SET mode = 'suspended', paid_until = CURDATE() + INTERVAL 20 DAY"
+check "kézzel felfüggesztve: fizetett időszakban is szünetel" 'curl -s "$BASE/" | grep -q "átmenetileg szünetel"'
+HSQL "DROP TABLE kozos_hosting"
+# a felületi teszt is foglal ugyanerről a címről: a foglalási korlát (6/óra) ne teljen be miattunk
+HSQL "DELETE FROM teszt_rate_limits WHERE k LIKE 'book:%'"
+
 echo
 if [ "$FAILS" -gt 0 ]; then echo "$FAILS teszt HIBÁS"; exit 1; fi
 echo "Minden teszt rendben."

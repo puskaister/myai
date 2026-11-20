@@ -7,6 +7,7 @@
 //        admin/kb (+/save, /reset): a tanító felület (a my-ai.hu saját chatbotja vagy egy ügyfélé),
 //        admin/customer/invite: belépési link az ügyfélnek,
 //        admin/licenses, admin/license/create|toggle|send: letöltőkódok a fizetős csomagokhoz
+//        admin/hosting, admin/hosting/save|pay: a nálunk üzemeltetett foglalók havi díja, felfüggesztés
 // Ügyfél (fiok/): portal/login, logout, me, forgot, password, kb, kb/save — csak a saját chatbotja
 declare(strict_types=1);
 
@@ -102,7 +103,7 @@ try {
     if (strpos($route, 'portal/') === 0 && !in_array($route, ['portal/login', 'portal/logout', 'portal/me', 'portal/forgot', 'portal/password'], true) && !current_customer()) {
         throw new AppError('Bejelentkezés szükséges.', 401);
     }
-    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'admin/licenses', 'portal/me', 'portal/kb'];
+    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'admin/licenses', 'admin/hosting', 'portal/me', 'portal/kb'];
     if (!in_array($route, $getOnly, true) && !$isPost) throw new AppError('Method not allowed', 405);
 
     switch ($route) {
@@ -315,6 +316,25 @@ try {
             if (!$l) throw new AppError('Nincs ilyen kód.', 404);
             send_license_email($l);
             respond(['ok' => true, 'email' => $l['buyer_email']]);
+        }
+
+        // ------------------------------------------------------------- nálunk üzemeltetett foglalók
+        case 'admin/hosting':
+            respond(['today' => date('Y-m-d'), 'price' => HOSTING_PRICE, 'rows' => hosting_rows(date('Y-m-d'))]);
+
+        case 'admin/hosting/save': {
+            $in = input();
+            $paid = trim((string) ($in['paid_until'] ?? ''));
+            hosting_save((string) ($in['dir'] ?? ''), $paid === '' ? null : $paid, (string) ($in['mode'] ?? 'auto'),
+                str_in($in, 'email', 190), str_in($in, 'note', 500));
+            respond(['ok' => true]);
+        }
+
+        case 'admin/hosting/pay': {
+            $in = input();
+            $months = (int) ($in['months'] ?? 1);
+            if ($months < 1 || $months > 12) throw new AppError('Érvénytelen időszak.');
+            respond(['ok' => true, 'paid_until' => hosting_pay((string) ($in['dir'] ?? ''), $months, date('Y-m-d'))]);
         }
 
         case 'admin/customer/invite': {

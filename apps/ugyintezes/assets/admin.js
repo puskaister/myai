@@ -5,7 +5,7 @@
 
   const root = document.getElementById('admin');
   const STATUS = { pending: 'Megrendelve', active: 'Aktív', paused: 'Szüneteltetve' };
-  const state = { tab: 'customers', list: null, settings: null, teach: null, licenses: null };
+  const state = { tab: 'customers', list: null, settings: null, teach: null, licenses: null, hosting: null };
 
   // ---------------------------------------------------------------- segédek (assets/common.js)
   const { el, fill, toast, field, huDate, copy, fail } = window.Ugy;
@@ -74,10 +74,10 @@
   }
 
   // ---------------------------------------------------------------- keret
-  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['licenses', 'Letöltőkódok'], ['settings', 'Beállítások'], ['account', 'Fiók']];
+  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['licenses', 'Letöltőkódok'], ['hosting', 'Foglalók'], ['settings', 'Beállítások'], ['account', 'Fiók']];
   function render() {
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, l]) => el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => go(k) }, l)));
-    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, licenses: viewLicenses, settings: viewSettings, account: viewAccount }[state.tab]());
+    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, licenses: viewLicenses, hosting: viewHosting, settings: viewSettings, account: viewAccount }[state.tab]());
   }
   async function go(tab) {
     if (state.tab === 'teach' && tab !== 'teach' && state.teach?.dirty && !confirm('A tanítás nem mentett változásai elvesznek. Továbblépsz?')) return;
@@ -87,6 +87,7 @@
       if (tab === 'teach' && !state.teach) await loadTeach({ bot: 'my-ai' });
       if (tab === 'settings' || tab === 'account') state.settings = await api('admin/settings');
       if (tab === 'licenses') state.licenses = await api('admin/licenses');
+      if (tab === 'hosting') state.hosting = await api('admin/hosting');
     } catch (e) { fail(e); }
     render();
   }
@@ -271,6 +272,66 @@
           } }, l.disabled ? 'Engedélyezés' : 'Letiltás'))))) : el('p', { class: 'muted' }, 'Még nincs kiadott kód.'));
 
     return el('div', { class: 'grid2' }, f, list);
+  }
+
+  // ---------------------------------------------------------------- nálunk üzemeltetett foglalók (ÁSZF 14.)
+  const HSTATE = {
+    untracked: ['', 'Nincs nyilvántartva'], ok: ['active', 'Fizetve'], due: ['pending', 'Fizetendő'],
+    late: ['pending', 'Késik'], suspended: ['expired', 'Felfüggesztve'], active: ['active', 'Kézzel bekapcsolva'],
+  };
+  async function reloadHosting() { state.hosting = await api('admin/hosting'); render(); }
+
+  function hostingModal(h) {
+    const f = el('form', { class: 'form' },
+      el('div', { class: 'grid2' },
+        field('Fizetve eddig (az utolsó kifizetett hónap vége)', el('input', { name: 'paid_until', type: 'date', value: h.paid_until })),
+        field('Működés', el('select', { name: 'mode' },
+          [['auto', 'Automatikus (késés után felfüggeszt)'], ['suspended', 'Felfüggesztve (kézzel)'], ['active', 'Mindig működik (pl. bemutató)']]
+            .map(([v, l]) => el('option', { value: v, selected: h.mode === v }, l))))),
+      field('Ügyfél email (emlékeztetőkhöz)', el('input', { name: 'email', type: 'email', value: h.email_custom, placeholder: h.email || 'a foglaló értesítési címe' }),
+        'Ha üres, a foglaló beállításaiban megadott értesítési címre megy.'),
+      field('Megjegyzés (pl. számlázási név)', el('input', { name: 'note', value: h.note })),
+      el('button', { class: 'btn', type: 'submit' }, 'Mentés'));
+    const close = modal((h.name || h.dir) + ' – /' + h.dir + '/', f);
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await api('admin/hosting/save', {}, { dir: h.dir, paid_until: f.paid_until.value, mode: f.mode.value, email: f.email.value, note: f.note.value });
+        toast('Mentve'); close(); await reloadHosting();
+      } catch (err) { fail(err); }
+    });
+  }
+
+  function viewHosting() {
+    const d = state.hosting;
+    if (!d) return el('p', { class: 'muted' }, 'Betöltés…');
+    const info = el('div', { class: 'card form' },
+      el('h2', {}, 'Nálunk üzemeltetett foglalók'),
+      el('p', { class: 'muted', style: 'margin:0' }, 'Havi díj: ' + d.price + ', minden hónapban előre, a hónap 5. napjáig. ',
+        'Ha a határidő után 10 nappal sincs befizetés, a foglaló automatikusan felfüggesztődik (új foglalást nem fogad), és az ügyfél emailt kap; késéskor előtte emlékeztetőt. ',
+        'A befizetés rögzítése után azonnal újra működik. Amíg nincs „Fizetve eddig” dátum, a foglalót nem függesztjük fel.'));
+    const list = el('div', { class: 'card form' },
+      el('h2', {}, 'Foglalók (' + d.rows.length + ')'),
+      d.rows.length ? el('div', { class: 'list' }, d.rows.map((h) => {
+        const [cls, label] = HSTATE[h.status] || ['paused', h.status];
+        const extra = h.status === 'due' ? ' · határidő: ' + huDate(h.due)
+          : h.status === 'late' ? ' · felfüggesztés: ' + huDate(h.suspend_from) + '-tól' : '';
+        return el('div', { class: 'item', style: 'grid-template-columns:1fr auto;cursor:default' },
+          el('div', {},
+            el('div', { class: 'who' }, (h.name || '(még nincs telepítve)') + ' · ', el('a', { href: '../../' + h.dir + '/', target: '_blank', rel: 'noopener' }, '/' + h.dir + '/')),
+            el('div', { class: 'what' }, 'Fizetve eddig: ' + (h.paid_until ? huDate(h.paid_until) : '–') + extra + (h.email ? ' · ' + h.email : '') + (h.note ? ' · ' + h.note : ''))),
+          el('div', { class: 'row', style: 'gap:6px;justify-content:flex-end;flex-wrap:wrap' },
+            el('span', { class: 'badge ' + cls }, label),
+            el('button', { class: 'btn small', type: 'button', onclick: async () => {
+              const m = prompt('Hány hónap díja érkezett meg? (1–12)', '1');
+              if (m === null) return;
+              const months = parseInt(m, 10);
+              if (!(months >= 1 && months <= 12)) { toast('1 és 12 közötti szám kell.', true); return; }
+              try { const r = await api('admin/hosting/pay', {}, { dir: h.dir, months }); toast('Fizetve eddig: ' + huDate(r.paid_until)); await reloadHosting(); } catch (e) { fail(e); }
+            } }, 'Befizetés'),
+            el('button', { class: 'btn small ghost', type: 'button', onclick: () => hostingModal(h) }, 'Szerkesztés')));
+      })) : el('p', { class: 'muted' }, 'Nincs foglaló a deploy/idopontfoglalo.json-ban.'));
+    return el('div', {}, info, list);
   }
 
   // ---------------------------------------------------------------- beállítások

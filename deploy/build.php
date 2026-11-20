@@ -99,6 +99,13 @@ echo $smtp['host'] !== '' && $smtp['username'] !== '' && $smtp['password'] !== '
     ? "::notice title=Levelezés::SMTP beállítva: {$smtp['host']}:{$smtp['port']}, felhasználó: {$smtp['username']}, feladó: " . ($smtp['from'] ?: $smtp['username']) . "\n"
     : "::warning title=Levelezés::Nincs SMTP beállítva (SMTP_HOST / SMTP_USER / SMTP_PASS secret) — az appok a PHP mail()-lel küldenek, ami gyakran spambe kerül vagy nem érkezik meg.\n";
 
+// A nálunk üzemeltetett foglalók havi díját az Ügyintézési Segéd admin tartja nyilván
+// ({seged_}hosting tábla, ÁSZF 14.): a foglaló innen olvassa, hogy fel van-e függesztve,
+// az admin pedig a foglalók listáját kapja. A letölthető önálló csomagban ez nincs benne.
+$readList = fn (string $a) => is_file("$root/deploy/$a.json") ? (array) (json_decode((string) file_get_contents("$root/deploy/$a.json"), true)['instances'] ?? []) : [];
+$segedPrefix = (string) ($readList('ugyintezes')[0]['prefix'] ?? '');
+$bookingInstances = array_map(fn ($i) => ['dir' => (string) ($i['dir'] ?? ''), 'prefix' => (string) ($i['prefix'] ?? '')], $readList('idopontfoglalo'));
+
 $vendorZip = null;
 $seenDirs = [];
 $seenPrefixes = [];
@@ -138,6 +145,8 @@ foreach ($apps as $app => $skip) {
                 'smtp' => $smtp,
             ];
             if ($app === 'chatbot') $config['anthropic'] = ['api_key' => $anthropicKey, 'base_url' => ''];
+            if ($app === 'idopontfoglalo' && $segedPrefix !== '') $config['hosting'] = ['table' => $segedPrefix . 'hosting', 'key' => $dir];
+            if ($app === 'ugyintezes') $config['booking_instances'] = $bookingInstances;
             // a telepítő előre kitöltött értékei (pl. bemutató példányoknál a szakmai csomag és a minta cégnév)
             if (isset($inst['preset']) || isset($inst['name'])) {
                 $config['install_defaults'] = ['preset' => preg_replace('/[^a-z0-9_]/', '', (string) ($inst['preset'] ?? '')), 'business' => (string) ($inst['name'] ?? '')];

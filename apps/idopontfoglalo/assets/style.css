@@ -248,3 +248,7 @@ body.plain .card { margin-top: 0; }
 .ig-arrow.top { animation-name: ig-bob-up; }
 @keyframes ig-bob-up { 50% { translate: 0 -6px; } }
 @media (prefers-reduced-motion: reduce) { .ig-arrow { animation: none; } }
+
+/* Felfüggesztett (nálunk üzemeltetett) foglaló */
+.card.suspended { border-left: 4px solid var(--danger); }
+.card.suspended h2 { margin-top: 0; }

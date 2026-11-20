@@ -6,5 +6,7 @@ return [
     'prefix' => 'seged_',
     'session_name' => 'ugyintezes_test',
     'smtp' => [],
+    // a nálunk üzemeltetett foglalók (a deploy írja); a teszt egy kitalált foglalóval dolgozik
+    'booking_instances' => [['dir' => 'demofoglalo', 'prefix' => 'demo_']],
 ];
 PHP
