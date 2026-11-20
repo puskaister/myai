@@ -51,10 +51,14 @@ check "config: a rendszám kötelező extra mező" 'jq -e ".settings.fields[0].k
 check "config: nem szivárog ki az admin email" '! grep -q "admin_email" <<<"$cfg"'
 SID=$(jq '.services[0].id' <<<"$cfg")
 
-# Az első szabad nap keresése (ez és a következő hónap).
+# Az első olyan szabad nap keresése (ez és a következő hónap), amelyen legalább
+# 2 szabad időpont van: késő délután a mai napon már csak egy maradhat, a teszt
+# pedig később egy második időpontra is foglal.
 DATE=""
 for m in "$(date +%Y-%m)" "$(date -d '+1 month' +%Y-%m)"; do
-  DATE=$(api_get "days&service_id=$SID&month=$m" | jq -r '.days | to_entries | map(select(.value)) | .[0].key // empty')
+  for d in $(api_get "days&service_id=$SID&month=$m" | jq -r '.days | to_entries | map(select(.value)) | .[].key'); do
+    if [ "$(api_get "slots&service_id=$SID&date=$d" | jq '.slots | length')" -ge 2 ]; then DATE=$d; break; fi
+  done
   [ -n "$DATE" ] && break
 done
 check "van szabad nap" '[ -n "$DATE" ]'
