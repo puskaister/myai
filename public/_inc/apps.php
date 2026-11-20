@@ -12,6 +12,13 @@ const APPS = [
         'mockup'  => 'mockup_booking',
         'for'     => 'Gumiszerviz',
     ],
+    'szepsegszalon' => [
+        'name'    => 'Szépségszalon időpontfoglaló',
+        'short'   => 'A vendégeid a telefonjukról foglalnak arckezelésre, hajra vagy manikűrre, te pedig egy helyen látod a napod — a szalonod nevével és színeivel.',
+        'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
+        'mockup'  => 'mockup_szepsegszalon',
+        'for'     => 'Szépségszalon',
+    ],
     'onallo-idopontfoglalo' => [
         'name'    => 'Önálló időpontfoglaló',
         'short'   => 'Az időpontfoglaló teljes rendszere a saját tárhelyedre: megveszed, elviszed, és egy sorral a weboldaladba építed — havidíj nélkül.',
