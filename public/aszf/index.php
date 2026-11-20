@@ -34,7 +34,7 @@ header('Content-Type: text/html; charset=utf-8');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ÁSZF – my-ai.hu</title>
-<meta name="description" content="Az Ügyintézési Segéd havidíjas chatbot-szolgáltatás és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
+<meta name="description" content="Az Ügyintézési Segéd havidíjas chatbot-szolgáltatás, a nálunk üzemeltetett online időpontfoglaló és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
 <meta name="theme-color" content="#4f46e5">
 <style>
   :root { --bg: #fff; --text: #0f172a; --muted: #5b6477; --border: #e6e8f0; --soft: #f5f6fb; --accent: #4f46e5; color-scheme: light; }
@@ -69,9 +69,9 @@ header('Content-Type: text/html; charset=utf-8');
 
 <main class="wrap">
   <h1>Általános Szerződési Feltételek</h1>
-  <p class="muted">Ügyintézési Segéd havidíjas szolgáltatás · Hatályos: <?= $e($updated) ?></p>
+  <p class="muted">Ügyintézési Segéd · online időpontfoglaló · Hatályos: <?= $e($updated) ?></p>
 
-  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Ügyintézési Segéd chatbot-szolgáltatás igénybevételének, valamint az önálló időpontfoglaló szoftvercsomag megvásárlásának és használatának feltételeit (13. pont). A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
+  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Ügyintézési Segéd chatbot-szolgáltatás igénybevételének, az önálló időpontfoglaló szoftvercsomag megvásárlásának és használatának (13. pont), valamint a Szolgáltató által üzemeltetett online időpontfoglaló havidíjas szolgáltatásnak (14. pont) a feltételeit. A 3–7. pont az Ügyintézési Segédre vonatkozik; a többi pont minden szolgáltatásra. A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
 
   <h2>1. A szolgáltató</h2>
   <table>
@@ -129,7 +129,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <h2>8. Felelősség</h2>
   <p>8.1. A chatbot a tudásbázisban szereplő válaszokat adja. Előfordulhat, hogy egy kérdést nem ismer fel, vagy nem a legmegfelelőbb választ adja. A Szolgáltató nem felel a válaszok alapján hozott döntésekért, és a 7.1. pont szerinti tartalomért sem.</p>
-  <p>8.2. A Szolgáltató szerződésszegéssel okozott kárért való felelőssége – a szándékosan, súlyos gondatlansággal, illetve az emberi életet, testi épséget vagy egészséget megsértő szerződésszegés kivételével – a Megrendelő által a kár bekövetkezését megelőző 3 hónapban megfizetett díj összegéig, az önálló időpontfoglalónál a megfizetett egyszeri díj összegéig terjed.</p>
+  <p>8.2. A Szolgáltató szerződésszegéssel okozott kárért való felelőssége – a szándékosan, súlyos gondatlansággal, illetve az emberi életet, testi épséget vagy egészséget megsértő szerződésszegés kivételével – a Megrendelő által a kár bekövetkezését megelőző 3 hónapban megfizetett díj összegéig, az önálló időpontfoglalónál a megfizetett egyszeri díj összegéig terjed. A 14. pont szerinti szolgáltatásnál a kár bekövetkezését megelőző 3 hónapban megfizetett havi díj összegéig terjed.</p>
 
   <h2>9. Szellemi tulajdon</h2>
   <p>A chatbot szoftvere a Szolgáltató tulajdona; a Megrendelő a szerződés időtartamára nem kizárólagos, át nem ruházható használati jogot kap. A tudásbázis tartalma a Megrendelőé; a szerződés megszűnésekor kérésére a Szolgáltató átadja.</p>
@@ -150,6 +150,21 @@ header('Content-Type: text/html; charset=utf-8');
   <p>13.3. A telepítés és az üzemeltetés (tárhely, adatbázis, biztonsági mentés, levelezés) a Megrendelő feladata. Igény szerint a Szolgáltató a csomagot a Megrendelő tárhelyére telepíti, egyszeri 19 000 Ft + ÁFA (bruttó 24 130 Ft) díjért; ehhez a Megrendelő átadja a szükséges tárhely- és adatbázis-hozzáférést. A telepítés után az üzemeltetés a Megrendelő feladata marad. A foglalásokban kezelt személyes adatok adatkezelője a Megrendelő.</p>
   <p>13.4. A Szolgáltató a csomagot a vásárláskori állapotában adja át. A jelzett hibákat észszerű időn belül javítja, a telepítésben emailben vagy telefonon segít. A Megrendelő által módosított részekért a Szolgáltató nem felel.</p>
   <p>13.5. A letöltőkód személyes: a Megrendelő nem adhatja át harmadik félnek. Visszaélés esetén a Szolgáltató a kódot letilthatja.</p>
+
+  <h2>14. Online időpontfoglaló a Szolgáltató üzemeltetésében (havidíjas szolgáltatás)</h2>
+  <p>14.1. A Szolgáltató az online időpontfoglalót a Megrendelő nevével, logójával, színeivel, szolgáltatásaival és nyitvatartásával beállítja, és a saját szerverén (a my-ai.hu alatt) üzemelteti. Az üzemeltetés teljes egészében a Szolgáltató feladata: a tárhely, a működtetés, a frissítések és a hibaelhárítás. A Megrendelő saját admin felületen kezeli a foglalásokat és a beállításokat.</p>
+  <p>14.2. Díjak, kivéve, ha a megrendeléskor a termékoldalon más díj szerepelt:</p>
+  <ul>
+    <li>egyszeri beállítási díj: <strong>29 990 Ft + ÁFA</strong> (bruttó 38 087 Ft), amely a beállítás ellenértéke (nem foglaló);</li>
+    <li>havi üzemeltetési díj: <strong>2 990 Ft + ÁFA</strong> (bruttó 3 797 Ft).</li>
+  </ul>
+  <p>14.3. A szerződés a megrendelés Szolgáltató általi, emailben történő elfogadásával jön létre. Az egyszeri beállítási díjat a Szolgáltató számlája alapján, az indulás előtt kell megfizetni.</p>
+  <p>14.4. A havi üzemeltetési díj minden hónapban előre fizetendő, a Szolgáltató által kiállított számla ellenében, banki átutalással, a tárgyhónap 5. napjáig.</p>
+  <p>14.5. Késedelmes fizetés esetén a Szolgáltató emailben emlékeztetőt küld. Ha a havi díj a fizetési határidőt követő 10 napon belül sem érkezik meg, a szolgáltatás felfüggesztésre kerül: a foglalási oldal nem fogad új foglalást. A felfüggesztés nem mentesít a díj megfizetése alól. A tartozás beérkezése után a Szolgáltató a szolgáltatást haladéktalanul visszaállítja; a beállítások és a foglalások a felfüggesztés alatt megmaradnak.</p>
+  <p>14.6. A szerződés határozatlan időre jön létre. A Megrendelő bármikor, indoklás nélkül felmondhatja emailben (<?= $mail ?>); a felmondás a tárgyhónap végén hatályos, a megkezdett hónap díját a Szolgáltató nem téríti vissza. A Szolgáltató 30 napos határidővel, emailben mondhat fel; súlyos szerződésszegés esetén azonnali hatállyal is. Ha a tartozás a fizetési határidőtől számított 90 napon belül sem érkezik meg, a szerződés megszűnik.</p>
+  <p>14.7. A szerződés megszűnésekor a Megrendelő kérésére a Szolgáltató a foglalási adatokat átadja, majd 30 nap elteltével törli.</p>
+  <p>14.8. A foglalásokban szereplő személyes adatok (az ügyfelek neve, elérhetősége, a foglalás adatai) adatkezelője a Megrendelő; a Szolgáltató ezeket a Megrendelő megbízásából, adatfeldolgozóként, kizárólag a szolgáltatás nyújtásához kezeli.</p>
+  <p>14.9. A Szolgáltató a folyamatos elérhetőségre törekszik, de nem garantálja a megszakítás nélküli működést; a 3.4. pont ennél a szolgáltatásnál is irányadó. A szolgáltatás nem használható jogszabályba ütköző vagy harmadik személy jogait sértő célra.</p>
 </main>
 
 <footer><div class="wrap">© <?= date('Y') ?> my-ai.hu · <a href="/">Főoldal</a> · <a href="/adatkezeles/">Adatkezelési tájékoztató</a> · <a href="/rolunk/">Rólunk és impresszum</a> · <a href="https://www.linkedin.com/company/immobilis-p/" rel="noopener" target="_blank">LinkedIn</a> · <button type="button" class="link" onclick="window.myaiConsent && myaiConsent.open()">Süti-beállítások</button></div></footer>

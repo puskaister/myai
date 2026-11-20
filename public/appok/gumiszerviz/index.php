@@ -82,6 +82,7 @@ app_hero('gumiszerviz', '29 990 Ft + ÁFA · havidíjjal nálunk, vagy a saját 
             <li>Weboldalba építhető gombbal vagy linkkel</li>
           </ul>
           <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek</a>
+          <p class="meta" style="margin-top:12px">A havi díj minden hónapban előre, számla ellenében, a hónap 5. napjáig fizetendő. Feltételek: <a href="/aszf/">ÁSZF</a> 14. pont.</p>
         </div>
         <div class="card" id="onallo">
           <h3>Önálló változat a saját tárhelyedre</h3>
