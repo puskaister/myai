@@ -128,13 +128,13 @@ function run_billing(string $today): array {
         $until = date('Y. m. d.', strtotime($c['paid_until']));
         $pay = trim((string) $o['payment_info']);
         if ($kind === 'expired') {
-            $subject = 'Az Ügyintézési Segéd előfizetése lejárt – ' . $c['name'];
-            $body = "Kedves {$c['contact_name']}!\n\nAz Ügyintézési Segéd előfizetése $until-án lejárt, ezért a chatbot a weboldalán szünetel.\n"
+            $subject = 'A Tanítható chatbot előfizetése lejárt – ' . $c['name'];
+            $body = "Kedves {$c['contact_name']}!\n\nA Tanítható chatbot előfizetése $until-án lejárt, ezért a chatbot a weboldalán szünetel.\n"
                 . 'A folytatáshoz a havidíj ' . price_text() . ".\n" . ($pay !== '' ? "\nFizetési információ:\n$pay\n" : "\nA díjbekérőt hamarosan elküldjük.\n")
                 . "\nKérdés esetén írjon: " . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu";
         } else {
-            $subject = "Az Ügyintézési Segéd előfizetése $left nap múlva lejár – " . $c['name'];
-            $body = "Kedves {$c['contact_name']}!\n\nAz Ügyintézési Segéd előfizetése $until-ig érvényes ($left nap múlva lejár).\n"
+            $subject = "A Tanítható chatbot előfizetése $left nap múlva lejár – " . $c['name'];
+            $body = "Kedves {$c['contact_name']}!\n\nA Tanítható chatbot előfizetése $until-ig érvényes ($left nap múlva lejár).\n"
                 . 'A folytatáshoz kérjük, fizesse be a következő időszak díját: ' . price_text() . ".\n"
                 . ($pay !== '' ? "\nFizetési információ:\n$pay\n" : "\nA díjbekérőt emailben küldjük.\n")
                 . "\nKérdés esetén írjon: " . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu";

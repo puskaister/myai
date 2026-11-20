@@ -1,4 +1,4 @@
-// Ügyintézési Segéd admin: ügyfelek (megrendelések, előfizetések, tudásbázis,
+// Tanítható chatbot admin: ügyfelek (megrendelések, előfizetések, tudásbázis,
 // beépítő kód, befizetések), tanítás (témák szerkesztése és kipróbálása), beállítások, fiók.
 (function () {
   'use strict';
@@ -116,7 +116,7 @@
               el('div', { class: 'what' }, c.contact_name + ' · ' + c.email + (c.paid_until ? ' · érvényes: ' + huDate(c.paid_until) : ''))),
             el('span', { class: 'badge ' + cls }, label));
         }))
-        : el('p', { class: 'note' }, 'Még nincs megrendelés. A my-ai.hu Ügyintézési Segéd oldalán lévő űrlapról érkeznek.'));
+        : el('p', { class: 'note' }, 'Még nincs megrendelés. A my-ai.hu Tanítható chatbot oldalán lévő űrlapról érkeznek.'));
   }
 
   async function openCustomer(id) {

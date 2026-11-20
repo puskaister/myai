@@ -50,13 +50,13 @@ if ($state === 'form' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Telepítés – Ügyintézési Segéd</title>
+<title>Telepítés – Tanítható chatbot</title>
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="plain">
 <main class="narrow">
   <div class="card">
-    <h1>Ügyintézési Segéd – admin telepítése</h1>
+    <h1>Tanítható chatbot – admin telepítése</h1>
     <?php if ($state !== 'noconfig' && table_prefix() !== ''): ?><p class="muted">Táblanév-előtag: <code><?= h(table_prefix()) ?></code></p><?php endif; ?>
     <?php if ($state === 'noconfig'): ?>
       <p>Hiányzik az <code>api/config.php</code>. GitHub-os deploynál a workflow a secretekből automatikusan elkészíti.</p>

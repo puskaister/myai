@@ -57,7 +57,7 @@ function db(): mysqli {
     return $mysqli;
 }
 
-// Nálunk üzemeltetett foglalónál a havi díj nyilvántartása az Ügyintézési Segéd adatbázis-táblájában
+// Nálunk üzemeltetett foglalónál a havi díj nyilvántartása a Tanítható chatbot adatbázis-táblájában
 // van (config 'hosting' => ['table' => 'seged_hosting', 'key' => <mappa>], a deploy írja; ÁSZF 14.).
 // Felfüggesztve: kézzel, vagy ha a fizetett időszak vége után 15 nappal (a hónap 5-i határidő + 10 nap)
 // sincs befizetés. Ugyanez a szabály: apps/ugyintezes/api/lib/hosting.php hosting_status().

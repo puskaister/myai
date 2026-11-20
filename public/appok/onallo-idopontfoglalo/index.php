@@ -1,7 +1,7 @@
 <?php
 // Önálló időpontfoglaló – részletes oldal (my-ai.hu/appok/onallo-idopontfoglalo/).
 // A csomag személyes letöltőkóddal tölthető le (/ugyintezes/letoltes.php); a kódot
-// az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni.
+// a Tanítható chatbot admin „Letöltőkódok” fülén lehet kiadni.
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';

@@ -118,7 +118,7 @@
         "látogatószámláló",
         "statisztika"
       ],
-      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel\n- Bevásárlólista: szóbeli bevitellel, közös lista\n- Látogatószámláló: saját webstatisztika, ingyenesen letölthető\n- Ügyintézési Segéd: ez a chatbot\nRészletek és élő demók: my-ai.hu/appok/"
+      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel\n- Bevásárlólista: szóbeli bevitellel, közös lista\n- Látogatószámláló: saját webstatisztika, ingyenesen letölthető\n- Tanítható chatbot: ez a chatbot\nRészletek és élő demók: my-ai.hu/appok/"
     },
     {
       "id": "webshop",
@@ -177,7 +177,7 @@
         "widget",
         "beépít"
       ],
-      "answer": "Az Ügyintézési Segéd egy ingyenes, szabályalapú chatbot: a te témáidból és válaszaidból felel, és egyetlen sorral beépíthető bármely weboldalba.\nRészletek: my-ai.hu/appok/ugyintezesi-seged/"
+      "answer": "A Tanítható chatbot egy ingyenes, szabályalapú chatbot: a te témáidból és válaszaidból felel, és egyetlen sorral beépíthető bármely weboldalba.\nRészletek: my-ai.hu/appok/tanithato-chatbot/"
     },
     {
       "id": "modositas",

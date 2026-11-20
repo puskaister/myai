@@ -7,7 +7,7 @@ return [
     'prefix' => '${1:-}',
     'session_name' => 'idopont_test_${1:-none}',
     'smtp' => [],
-    // havi díj nyilvántartás (élesben az Ügyintézési Segéd seged_hosting táblája); amíg nincs tábla, nincs felfüggesztés
+    // havi díj nyilvántartás (élesben a Tanítható chatbot seged_hosting táblája); amíg nincs tábla, nincs felfüggesztés
     'hosting' => ['table' => 'kozos_hosting', 'key' => 'teszt'],
 ];
 PHP

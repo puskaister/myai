@@ -25,7 +25,7 @@
         "pénz",
         "forint"
       ],
-      "answer": "Áraink:\n- Online időpontfoglaló nálunk üzemeltetve: 29 990 Ft + ÁFA egyszeri beállítás (bruttó 38 087 Ft) + 2 990 Ft + ÁFA / hó üzemeltetési díj (bruttó 3 797 Ft), és minden üzemeltetési gond a miénk\n- Önálló időpontfoglaló a saját tárhelyedre: egyszeri 29 990 Ft + ÁFA (bruttó 38 087 Ft); igény szerint telepítjük: egyszeri 19 000 Ft + ÁFA\n- Ügyintézési Segéd (chatbot): 5 000 Ft + ÁFA / hó (bruttó 6 350 Ft), havonta lemondható\n- Évfordulók, Bevásárlólista, Látogatószámláló: ingyenesen letölthető\n- Egyedi weboldal, app vagy rendszer: a feladattól függ, rövid egyeztetés után pontos árajánlatot adunk\nAjánlatkérés: E-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
+      "answer": "Áraink:\n- Online időpontfoglaló nálunk üzemeltetve: 29 990 Ft + ÁFA egyszeri beállítás (bruttó 38 087 Ft) + 2 990 Ft + ÁFA / hó üzemeltetési díj (bruttó 3 797 Ft), és minden üzemeltetési gond a miénk\n- Önálló időpontfoglaló a saját tárhelyedre: egyszeri 29 990 Ft + ÁFA (bruttó 38 087 Ft); igény szerint telepítjük: egyszeri 19 000 Ft + ÁFA\n- Tanítható chatbot: 5 000 Ft + ÁFA / hó (bruttó 6 350 Ft), havonta lemondható\n- Évfordulók, Bevásárlólista, Látogatószámláló: ingyenesen letölthető\n- Egyedi weboldal, app vagy rendszer: a feladattól függ, rövid egyeztetés után pontos árajánlatot adunk\nAjánlatkérés: E-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
       "elsobbseg": 1
     },
     {
@@ -42,7 +42,7 @@
         "termék",
         "szolgáltatás"
       ],
-      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, szépségszalon, rendelő, szerviz – 29 990 Ft + ÁFA beállítás + 2 990 Ft + ÁFA / hó\n- Önálló időpontfoglaló a saját tárhelyedre – egyszeri 29 990 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
+      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, szépségszalon, rendelő, szerviz – 29 990 Ft + ÁFA beállítás + 2 990 Ft + ÁFA / hó\n- Önálló időpontfoglaló a saját tárhelyedre – egyszeri 29 990 Ft + ÁFA\n- Tanítható chatbot: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
     },
     {
       "id": "egyedi",
@@ -398,22 +398,24 @@
         "megnéz",
         "minta"
       ],
-      "answer": "Ezeket próbálhatod ki most:\n- Időpontfoglaló: my-ai.hu/foglalas/ (Minta Gumiszerviz)\n- Évfordulók: my-ai.hu/evfordulok/\n- Bevásárlólista: my-ai.hu/bevasarlas/\n- Ügyintézési Segéd: my-ai.hu/ugyintezes/ – de ez a chat is az\nAz időpontfoglaló admin felületét kérésre adminként is megmutatjuk."
+      "answer": "Ezeket próbálhatod ki most:\n- Időpontfoglaló: my-ai.hu/foglalas/ (Minta Gumiszerviz)\n- Évfordulók: my-ai.hu/evfordulok/\n- Bevásárlólista: my-ai.hu/bevasarlas/\n- Tanítható chatbot: my-ai.hu/ugyintezes/ – de ez a chat is az\nAz időpontfoglaló admin felületét kérésre adminként is megmutatjuk."
     },
     {
       "id": "chatbot",
-      "title": "Ügyintézési Segéd (chatbot)",
+      "title": "Tanítható chatbot",
       "keys": [
         "chatbot",
         "chat",
         "ügyintézési segéd",
+        "tanítható chatbot",
+        "tanítható",
         "ügyfélszolgálat",
         "gyik",
         "widget",
         "buborék",
         "weboldalamra"
       ],
-      "answer": "Az Ügyintézési Segéd egy szabályalapú chatbot a weboldaladra: a te témáidból és válaszaidból felel, éjjel-nappal, AI-díj nélkül.\nHavidíja 5 000 Ft + ÁFA (bruttó 6 350 Ft), havonta lemondható. Benne van:\n- A tudásbázist a te kérdéseidből és válaszaidból mi állítjuk össze\n- A chat-buborékot mi építjük be a weboldaladba (WordPress, Wix, Shopify vagy saját oldal)\n- Saját név és szín, a témák frissítése kérésre\n- Saját belépés, ahol te is taníthatod\nMegrendelés: my-ai.hu/appok/ugyintezesi-seged/"
+      "answer": "A Tanítható chatbot egy szabályalapú chatbot a weboldaladra: a te témáidból és válaszaidból felel, éjjel-nappal, AI-díj nélkül.\nHavidíja 5 000 Ft + ÁFA (bruttó 6 350 Ft), havonta lemondható. Benne van:\n- A tudásbázist a te kérdéseidből és válaszaidból mi állítjuk össze\n- A chat-buborékot mi építjük be a weboldaladba (WordPress, Wix, Shopify vagy saját oldal)\n- Saját név és szín, a témák frissítése kérésre\n- Saját belépés, ahol te is taníthatod\nMegrendelés: my-ai.hu/appok/tanithato-chatbot/"
     },
     {
       "id": "megrendeles",
@@ -425,7 +427,7 @@
         "igénylés",
         "rendel"
       ],
-      "answer": "Így rendelheted meg az Ügyintézési Segédet:\n1. Töltsd ki a megrendelő űrlapot: my-ai.hu/appok/ugyintezesi-seged/#megrendeles\n2. Felvesszük veled a kapcsolatot, és egyeztetjük a chat témáit és válaszait\n3. Elküldjük a díjbekérőt\n4. Az első befizetés után indul a chat, a beépítést is mi végezzük",
+      "answer": "Így rendelheted meg a Tanítható chatbotot:\n1. Töltsd ki a megrendelő űrlapot: my-ai.hu/appok/tanithato-chatbot/#megrendeles\n2. Felvesszük veled a kapcsolatot, és egyeztetjük a chat témáit és válaszait\n3. Elküldjük a díjbekérőt\n4. Az első befizetés után indul a chat, a beépítést is mi végezzük",
       "elsobbseg": 1
     },
     {
@@ -445,7 +447,7 @@
         "fiók",
         "chatbotom"
       ],
-      "answer": "Az Ügyintézési Segéd ügyfeleként saját belépést kapsz, és magad is taníthatod a chatbotodat:\n- Témákat, kulcsszavakat és válaszokat adhatsz hozzá és módosíthatsz\n- Kipróbálhatod, mit válaszolna egy kérdésre\n- Mentés után a chat azonnal az új tudással válaszol\nBelépés: my-ai.hu/ugyintezes/fiok/ (a megrendeléskor megadott email címmel). Jelszót az „Elfelejtett jelszó / még nincs jelszavam” linkkel állíthatsz be.",
+      "answer": "A Tanítható chatbot ügyfeleként saját belépést kapsz, és magad is taníthatod a chatbotodat:\n- Témákat, kulcsszavakat és válaszokat adhatsz hozzá és módosíthatsz\n- Kipróbálhatod, mit válaszolna egy kérdésre\n- Mentés után a chat azonnal az új tudással válaszol\nBelépés: my-ai.hu/ugyintezes/fiok/ (a megrendeléskor megadott email címmel). Jelszót az „Elfelejtett jelszó / még nincs jelszavam” linkkel állíthatsz be.",
       "elsobbseg": 1
     },
     {
@@ -460,7 +462,7 @@
         "bankkártya",
         "kártyával"
       ],
-      "answer": "Az Ügyintézési Segéd díját előre fizeted, díjbekérő alapján, banki átutalással, 1, 3 vagy 12 hónapra. A befizetésről számlát állítunk ki.\nAz időpontfoglaló egyszeri díjáról az árajánlatban egyeztetünk.",
+      "answer": "A Tanítható chatbot díját előre fizeted, díjbekérő alapján, banki átutalással, 1, 3 vagy 12 hónapra. A befizetésről számlát állítunk ki.\nAz időpontfoglaló egyszeri díjáról az árajánlatban egyeztetünk.",
       "elsobbseg": 1
     },
     {
@@ -476,7 +478,7 @@
         "nem fizet",
         "visszatérít"
       ],
-      "answer": "Az Ügyintézési Segéd előfizetéséről:\n- A lejárat előtt 7 és 1 nappal emailben emlékeztetünk\n- Ha a díj nem érkezik meg, a chat automatikusan szünetel, befizetés után újra működik\n- Bármikor lemondhatod emailben (info@my-ai.hu), a kifizetett időszak végén szűnik meg\n- A megkezdett időszak díját nem térítjük vissza\nRészletek: my-ai.hu/aszf/",
+      "answer": "A Tanítható chatbot előfizetéséről:\n- A lejárat előtt 7 és 1 nappal emailben emlékeztetünk\n- Ha a díj nem érkezik meg, a chat automatikusan szünetel, befizetés után újra működik\n- Bármikor lemondhatod emailben (info@my-ai.hu), a kifizetett időszak végén szűnik meg\n- A megkezdett időszak díját nem térítjük vissza\nRészletek: my-ai.hu/aszf/",
       "elsobbseg": 2
     },
     {
@@ -490,7 +492,7 @@
         "ai díj",
         "robot"
       ],
-      "answer": "Az Ügyintézési Segéd szabályalapú: a kérdésben lévő kulcsszavak alapján, előre megírt válaszokból felel. Nem használ mesterséges intelligenciát, ezért nem talál ki semmit, mindig azt mondja, amit beleírtál, és nincs AI-díj.\nHa egyedi igényed van, írj, és megbeszéljük."
+      "answer": "A Tanítható chatbot szabályalapú: a kérdésben lévő kulcsszavak alapján, előre megírt válaszokból felel. Nem használ mesterséges intelligenciát, ezért nem talál ki semmit, mindig azt mondja, amit beleírtál, és nincs AI-díj.\nHa egyedi igényed van, írj, és megbeszéljük."
     },
     {
       "id": "ceg",
@@ -552,7 +554,7 @@
         "felelősség",
         "panasz"
       ],
-      "answer": "Az Ügyintézési Segéd szolgáltatás általános szerződési feltételei: my-ai.hu/aszf/\nA legfontosabbak:\n- A szolgáltatás vállalkozásoknak, egyéni vállalkozóknak és szervezeteknek szól\n- A díj előre fizetendő, havonta lemondható\n- A válaszok tartalmáért a megrendelő felel, a chat azt mondja, amit beleírtunk\n- Kérdést, panaszt az info@my-ai.hu címen jelezhetsz, 8 munkanapon belül válaszolunk"
+      "answer": "A Tanítható chatbot szolgáltatás általános szerződési feltételei: my-ai.hu/aszf/\nA legfontosabbak:\n- A szolgáltatás vállalkozásoknak, egyéni vállalkozóknak és szervezeteknek szól\n- A díj előre fizetendő, havonta lemondható\n- A válaszok tartalmáért a megrendelő felel, a chat azt mondja, amit beleírtunk\n- Kérdést, panaszt az info@my-ai.hu címen jelezhetsz, 8 munkanapon belül válaszolunk"
     },
     {
       "id": "biztonsag",

@@ -1,5 +1,5 @@
 <?php
-// Általános Szerződési Feltételek (my-ai.hu/aszf/) — Ügyintézési Segéd előfizetés.
+// Általános Szerződési Feltételek (my-ai.hu/aszf/) — Tanítható chatbot előfizetés.
 // A szolgáltató adatai lent; a hatály dátumát frissítsd, ha a tartalom változik.
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ header('Content-Type: text/html; charset=utf-8');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ÁSZF – my-ai.hu</title>
-<meta name="description" content="Az Ügyintézési Segéd havidíjas chatbot-szolgáltatás, a nálunk üzemeltetett online időpontfoglaló és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
+<meta name="description" content="A Tanítható chatbot havidíjas chatbot-szolgáltatás, a nálunk üzemeltetett online időpontfoglaló és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
 <meta name="theme-color" content="#4f46e5">
 <style>
   :root { --bg: #fff; --text: #0f172a; --muted: #5b6477; --border: #e6e8f0; --soft: #f5f6fb; --accent: #4f46e5; color-scheme: light; }
@@ -69,9 +69,9 @@ header('Content-Type: text/html; charset=utf-8');
 
 <main class="wrap">
   <h1>Általános Szerződési Feltételek</h1>
-  <p class="muted">Ügyintézési Segéd · online időpontfoglaló · Hatályos: <?= $e($updated) ?></p>
+  <p class="muted">Tanítható chatbot · online időpontfoglaló · Hatályos: <?= $e($updated) ?></p>
 
-  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Ügyintézési Segéd chatbot-szolgáltatás igénybevételének, az önálló időpontfoglaló szoftvercsomag megvásárlásának és használatának (13. pont), valamint a Szolgáltató által üzemeltetett online időpontfoglaló havidíjas szolgáltatásnak (14. pont) a feltételeit. A 3–7. pont az Ügyintézési Segédre vonatkozik; a többi pont minden szolgáltatásra. A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
+  <p>Ez az Általános Szerződési Feltételek (a továbbiakban: ÁSZF) tartalmazza a my-ai.hu weboldalon megrendelhető Tanítható chatbot szolgáltatás igénybevételének, az önálló időpontfoglaló szoftvercsomag megvásárlásának és használatának (13. pont), valamint a Szolgáltató által üzemeltetett online időpontfoglaló havidíjas szolgáltatásnak (14. pont) a feltételeit. A 3–7. pont a Tanítható chatbotra vonatkozik; a többi pont minden szolgáltatásra. A megrendeléssel a Megrendelő elfogadja az ÁSZF-et.</p>
 
   <h2>1. A szolgáltató</h2>
   <table>
@@ -91,7 +91,7 @@ header('Content-Type: text/html; charset=utf-8');
   <p>2.3. Az ÁSZF-ben nem szabályozott kérdésekben a magyar jog, különösen a Polgári Törvénykönyvről szóló 2013. évi V. törvény (Ptk.) és az elektronikus kereskedelmi szolgáltatásokról szóló 2001. évi CVIII. törvény rendelkezései az irányadók.</p>
 
   <h2>3. A szolgáltatás tartalma</h2>
-  <p>3.1. Az Ügyintézési Segéd szabályalapú ügyfélszolgálati chatbot, amely a Megrendelő weboldalán egy beépített chat-ablakban válaszol a látogatók kérdéseire, kizárólag a Megrendelővel egyeztetett témákból és válaszokból álló tudásbázis alapján. A szolgáltatás nem használ mesterséges intelligenciát, és nem fogalmaz meg a tudásbázison kívüli válaszokat.</p>
+  <p>3.1. A Tanítható chatbot szabályalapú ügyfélszolgálati chatbot, amely a Megrendelő weboldalán egy beépített chat-ablakban válaszol a látogatók kérdéseire, kizárólag a Megrendelővel egyeztetett témákból és válaszokból álló tudásbázis alapján. A szolgáltatás nem használ mesterséges intelligenciát, és nem fogalmaz meg a tudásbázison kívüli válaszokat.</p>
   <p>3.2. A havidíj tartalmazza:</p>
   <ul>
     <li>a tudásbázis összeállítását a Megrendelő által megadott információk alapján, és havonta észszerű mértékű módosítását;</li>
@@ -103,7 +103,7 @@ header('Content-Type: text/html; charset=utf-8');
   <p>3.4. A Szolgáltató a folyamatos elérhetőségre törekszik, de nem garantálja a megszakítás nélküli működést. Karbantartás, a tárhelyszolgáltató hibája vagy külső ok miatti rövid kiesés nem jelent szerződésszegést.</p>
 
   <h2>4. A szerződés létrejötte</h2>
-  <p>4.1. A megrendelés a <a href="/appok/ugyintezesi-seged/#megrendeles">megrendelő űrlapon</a> történik. Az elküldés előtt a Megrendelő az adatait az űrlapon ellenőrizheti és javíthatja; a megrendelést az ÁSZF elfogadásával küldheti el.</p>
+  <p>4.1. A megrendelés a <a href="/appok/tanithato-chatbot/#megrendeles">megrendelő űrlapon</a> történik. Az elküldés előtt a Megrendelő az adatait az űrlapon ellenőrizheti és javíthatja; a megrendelést az ÁSZF elfogadásával küldheti el.</p>
   <p>4.2. A Szolgáltató a megrendelés beérkezését automatikus emailben igazolja vissza. Ez a visszaigazolás a megrendelés megérkezését jelzi, nem a megrendelés elfogadását.</p>
   <p>4.3. A szerződés akkor jön létre, amikor a Szolgáltató a megrendelést emailben elfogadja, vagy elküldi az első díjbekérőt. A Szolgáltató a megrendelést indoklás nélkül elutasíthatja.</p>
   <p>4.4. A chatbot az első díj beérkezése és a tudásbázis elkészülte után indul.</p>

@@ -1,5 +1,5 @@
 /*
- * Ügyintézési Segéd – beépíthető chat-buborék (my-ai.hu)
+ * Tanítható chatbot – beépíthető chat-buborék (my-ai.hu)
  *
  * Beépítés bármely weboldalba, a </body> elé:
  *   <script src="https://my-ai.hu/ugyintezes/widget.js" data-ugyfel="minta" defer></script>

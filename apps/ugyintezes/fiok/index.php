@@ -1,5 +1,5 @@
 <?php
-// Ügyintézési Segéd – ügyfél-fiók: az előfizető itt tanítja a saját chatbotját
+// Tanítható chatbot – ügyfél-fiók: az előfizető itt tanítja a saját chatbotját
 // (csak a sajátját látja). Belépés: a megrendeléskor megadott email cím + jelszó;
 // a jelszót az adminból küldött vagy az „Elfelejtett jelszó” linken állítja be.
 declare(strict_types=1);
@@ -20,7 +20,7 @@ header('Cache-Control: no-store');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Chatbot tanítása – Ügyintézési Segéd</title>
+<title>Chatbot tanítása – Tanítható chatbot</title>
 <meta name="theme-color" content="#4f46e5">
 <link rel="stylesheet" href="<?= $v('assets/style.css') ?>">
 <style>
@@ -32,7 +32,7 @@ header('Cache-Control: no-store');
 <header class="topbar wide">
   <div class="topbar-inner">
     <div>
-      <div class="brand">Ügyintézési Segéd</div>
+      <div class="brand">Tanítható chatbot</div>
       <div class="tagline" id="who">A chatbotod tanítása</div>
     </div>
     <span class="spacer"></span>

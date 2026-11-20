@@ -1,4 +1,4 @@
-// Ügyintézési Segéd – tanító szerkesztő (admin: bármely chatbot; ügyfél-fiók: a sajátja).
+// Tanítható chatbot – tanító szerkesztő (admin: bármely chatbot; ügyfél-fiók: a sajátja).
 // A chatbot témái (kulcsszavak → válasz) szerkesztése és kipróbálása. Az egyeztetés
 // ugyanaz, mint a chat.html-ben — ha ott változik, itt is kövesd.
 (function () {

@@ -259,7 +259,7 @@ code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px
 .bev-row.done s { background: #16a34a; border-color: #16a34a; }
 .bev-row.done b { text-decoration: line-through; color: #9ca3af; font-weight: 500; }
 
-/* Ügyintézési Segéd makett */
+/* Tanítható chatbot makett */
 .ugy-top { background: #4f46e5; color: #fff; padding: 44px 16px 14px; }
 .ugy-top b { display: block; font-size: 1rem; }
 .ugy-top span { font-size: .72rem; opacity: .95; display: flex; align-items: center; gap: 6px; }
@@ -275,7 +275,7 @@ code { background: var(--bg-soft); border: 1px solid var(--border); padding: 1px
 .ugy-input { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 10px; color: #9ca3af; }
 .ugy-input i { font-style: normal; background: #4f46e5; color: #fff; border-radius: 8px; width: 24px; height: 24px; display: grid; place-items: center; font-size: .7rem; }
 
-/* Megrendelő űrlap (Ügyintézési Segéd) */
+/* Megrendelő űrlap (Tanítható chatbot) */
 .card.form { display: grid; gap: 12px; }
 .card.form label { display: grid; gap: 6px; font-weight: 600; font-size: .94rem; }
 .card.form input:not([type=checkbox]), .card.form textarea {

@@ -1,4 +1,4 @@
-// Ügyintézési Segéd – közös felületi segédek (admin és ügyfél-fiók).
+// Tanítható chatbot – közös felületi segédek (admin és ügyfél-fiók).
 (function () {
   'use strict';
 

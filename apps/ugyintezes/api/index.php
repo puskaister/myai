@@ -64,7 +64,7 @@ function send_portal_link(array $c, bool $invite): void {
         [(int) $c['id'], hash('sha256', $token), date('Y-m-d H:i:s', time() + ($invite ? 7 * 86400 : 3600))]);
     $link = app_base_url() . '/fiok/?token=' . $token;
     $o = get_options();
-    $ok = send_app_email(mail_cfg(), (string) $c['email'], $invite ? 'Belépés a chatbotod tanításához – Ügyintézési Segéd' : 'Jelszó beállítása – Ügyintézési Segéd',
+    $ok = send_app_email(mail_cfg(), (string) $c['email'], $invite ? 'Belépés a chatbotod tanításához – Tanítható chatbot' : 'Jelszó beállítása – Tanítható chatbot',
         "Kedves {$c['contact_name']}!\n\n"
         . ($invite ? "Mostantól te is taníthatod a(z) {$c['name']} chatbotját: témákat, kulcsszavakat és válaszokat adhatsz hozzá, módosíthatsz, és ki is próbálhatod, mit válaszolna.\n\nA jelszavadat ezen a linken állíthatod be (7 napig érvényes):\n\n"
                    : "Új jelszót ezen a linken állíthatsz be (1 óráig érvényes):\n\n")
@@ -136,9 +136,9 @@ try {
                 . "\nWeboldal: " . str_in($in, 'website', 255) . "\nSzámlázási név: " . (str_in($in, 'billing_name', 150) ?: $name)
                 . "\nSzámlázási cím: " . str_in($in, 'billing_address', 255) . "\nAdószám: " . str_in($in, 'tax_number', 40)
                 . (str_in($in, 'message', 3000) !== '' ? "\n\nÜzenet:\n" . str_in($in, 'message', 3000) : '');
-            notify_admin("Új megrendelés: Ügyintézési Segéd – $name", "Új megrendelés érkezett.\n\n$details\n\nDíj: " . price_text() . "\nAzonosító: $slug\n\nAdmin: " . app_base_url() . "/admin/#c$id");
-            send_app_email(mail_cfg(), $email, 'Megrendelés visszaigazolása – Ügyintézési Segéd',
-                "Kedves $contact!\n\nKöszönjük, megkaptuk az Ügyintézési Segéd megrendelését.\n\nA havidíj: " . price_text() . ".\n"
+            notify_admin("Új megrendelés: Tanítható chatbot – $name", "Új megrendelés érkezett.\n\n$details\n\nDíj: " . price_text() . "\nAzonosító: $slug\n\nAdmin: " . app_base_url() . "/admin/#c$id");
+            send_app_email(mail_cfg(), $email, 'Megrendelés visszaigazolása – Tanítható chatbot',
+                "Kedves $contact!\n\nKöszönjük, megkaptuk a Tanítható chatbot megrendelését.\n\nA havidíj: " . price_text() . ".\n"
                 . "Hamarosan felvesszük Önnel a kapcsolatot: egyeztetjük a chatbot témáit és válaszait, és elküldjük a díjbekérőt.\n"
                 . 'A chatbot az első befizetés után indul, és a beépítést is mi végezzük.'
                 . "\nA szerződési feltételek: https://my-ai.hu/aszf/\n\nA megadott adatok:\n$details\n\nKérdés esetén írjon: " . ($o['admin_email'] ?: 'info@my-ai.hu') . "\n\nmy-ai.hu");
@@ -171,7 +171,7 @@ try {
                 $token = bin2hex(random_bytes(32));
                 q_exec('DELETE FROM {password_resets} WHERE admin_id = ? OR expires_at < NOW()', [(int) $a['id']]);
                 q_exec('INSERT INTO {password_resets} (admin_id, token_hash, expires_at) VALUES (?, ?, ?)', [(int) $a['id'], hash('sha256', $token), date('Y-m-d H:i:s', time() + 3600)]);
-                send_app_email(mail_cfg(), $a['email'], 'Jelszó visszaállítása – Ügyintézési Segéd admin',
+                send_app_email(mail_cfg(), $a['email'], 'Jelszó visszaállítása – Tanítható chatbot admin',
                     "Kedves {$a['name']}!\n\nÚj jelszót ezen a linken állíthatsz be (1 óráig érvényes):\n\n" . app_base_url() . "/admin/?reset=$token\n\nHa nem te kérted, hagyd figyelmen kívül ezt a levelet.");
             }
             respond(['ok' => true]);

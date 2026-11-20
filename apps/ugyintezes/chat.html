@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Ügyintézési Segéd</title>
+<title>Tanítható chatbot</title>
 <!-- A widget.js ezt az oldalt tölti be iframe-be: chat.html?u=<ügyfél-azonosító>.
      A tudásbázist a kb.php adja (azonos domain, nincs CORS): a demót és a my-ai.hu
      saját buborékát mindig, egy ügyfélét csak érvényes előfizetésnél. -->
@@ -42,18 +42,18 @@ button.send{font:600 .9rem var(--f);background:var(--accent);color:var(--accent-
 </style>
 </head>
 <body>
-<div class="head" id="head"><b id="name">Ügyintézési Segéd</b><button class="close" id="close" aria-label="Bezárás" hidden>×</button></div>
+<div class="head" id="head"><b id="name">Tanítható chatbot</b><button class="close" id="close" aria-label="Bezárás" hidden>×</button></div>
 <div class="log" id="log" aria-live="polite"></div>
 <div class="chips" id="chips"></div>
 <form id="ask"><input id="q" autocomplete="off" placeholder="Írja be a kérdését…" aria-label="Kérdés"><button class="send" type="submit">Küldés</button></form>
-<div class="foot"><a href="https://my-ai.hu/appok/ugyintezesi-seged/" target="_blank" rel="noopener">Ügyintézési Segéd · my-ai.hu</a></div>
+<div class="foot"><a href="https://my-ai.hu/appok/tanithato-chatbot/" target="_blank" rel="noopener">Tanítható chatbot · my-ai.hu</a></div>
 <script>
 (function(){
   var log=document.getElementById('log');
   var cfg={temak:[]};
   // A chatablak feliratai a tudásbázis nyelvén (kb.nyelv: hu, en vagy de; alapból magyar).
   var L={
-    hu:{q:'Írja be a kérdését…',qLabel:'Kérdés',send:'Küldés',close:'Bezárás',rel:'Kapcsolódó: ',none:'Ezt sajnos nem értettem. Válasszon az alábbi témák közül.',hello:'Jó napot kívánok! Miben segíthetek?',off:'A chat jelenleg nem elérhető.',err:'A tudásbázis most nem érhető el. Kérjük, próbálja később.',foot:'Ügyintézési Segéd · my-ai.hu',title:'Ügyintézési Segéd'},
+    hu:{q:'Írja be a kérdését…',qLabel:'Kérdés',send:'Küldés',close:'Bezárás',rel:'Kapcsolódó: ',none:'Ezt sajnos nem értettem. Válasszon az alábbi témák közül.',hello:'Jó napot kívánok! Miben segíthetek?',off:'A chat jelenleg nem elérhető.',err:'A tudásbázis most nem érhető el. Kérjük, próbálja később.',foot:'Tanítható chatbot · my-ai.hu',title:'Tanítható chatbot'},
     en:{q:'Type your question…',qLabel:'Question',send:'Send',close:'Close',rel:'Related: ',none:'Sorry, I didn\'t understand that. Please choose one of the topics below.',hello:'Hello! How can I help?',off:'The chat is currently unavailable.',err:'The knowledge base is not available right now. Please try again later.',foot:'Assistant · my-ai.hu',title:'Assistant'},
     de:{q:'Ihre Frage …',qLabel:'Frage',send:'Senden',close:'Schließen',rel:'Verwandt: ',none:'Das habe ich leider nicht verstanden. Bitte wählen Sie eines der Themen unten.',hello:'Guten Tag! Wie kann ich helfen?',off:'Der Chat ist derzeit nicht verfügbar.',err:'Die Wissensbasis ist gerade nicht erreichbar. Bitte versuchen Sie es später.',foot:'Assistent · my-ai.hu',title:'Assistent'}
   };

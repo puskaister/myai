@@ -110,10 +110,10 @@ header('Content-Type: text/html; charset=utf-8');
   </table>
   <div class="box">Ha egy vállalkozás a saját időpontfoglalóját vagy chatbotját üzemelteti nálunk (pl. <em>my-ai.hu/cégnév</em> címen), az ott megadott adatok kezelője <strong>az adott vállalkozás</strong>; mi adatfeldolgozóként, az ő megbízásából tároljuk az adatokat. Ilyen esetben a vállalkozás adatkezelési tájékoztatója az irányadó.</div>
 
-  <h3>2.4. Ügyintézési Segéd (chatbot)</h3>
-  <p>A weboldalon és az ügyfeleink weboldalán működő Ügyintézési Segéd szabályalapú chatbot: a kérdésben szereplő kulcsszavak alapján, előre megírt válaszokból felel. A kérdések feldolgozása a látogató böngészőjében történik — <strong>a beírt kérdéseket nem tároljuk, és nem továbbítjuk sem nekünk, sem harmadik félnek</strong>, mesterséges intelligencia szolgáltatást nem használ. Kérjük, ne adj meg a chatben személyes adatot.</p>
+  <h3>2.4. Tanítható chatbot</h3>
+  <p>A weboldalon és az ügyfeleink weboldalán működő Tanítható chatbot egy szabályalapú chatbot: a kérdésben szereplő kulcsszavak alapján, előre megírt válaszokból felel. A kérdések feldolgozása a látogató böngészőjében történik — <strong>a beírt kérdéseket nem tároljuk, és nem továbbítjuk sem nekünk, sem harmadik félnek</strong>, mesterséges intelligencia szolgáltatást nem használ. Kérjük, ne adj meg a chatben személyes adatot.</p>
 
-  <h3>2.5. Megrendelés, előfizetés és vásárlás (Ügyintézési Segéd, önálló időpontfoglaló)</h3>
+  <h3>2.5. Megrendelés, előfizetés és vásárlás (Tanítható chatbot, önálló időpontfoglaló)</h3>
   <table>
     <tr><th>Adatok</th><td>Cég / vállalkozás neve, kapcsolattartó neve, email cím, telefonszám, weboldal címe, számlázási név és cím, adószám, a megrendeléskor megadott üzenet, a befizetések és az előfizetés érvényessége, valamint a tanító felület belépési adatai (email cím, a jelszó csak visszafejthetetlen, hash formában) és a chatbot tudásbázisa. Az önálló időpontfoglaló vásárlásakor a vásárló neve, email címe, a letöltőkód és a letöltések száma és ideje.</td></tr>
     <tr><th>Cél</th><td>A megrendelés teljesítése, a szolgáltatás beállítása, díjbekérő és számla kiállítása, a lejárat előtti emlékeztetők küldése.</td></tr>

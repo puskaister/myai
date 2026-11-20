@@ -99,7 +99,7 @@ echo $smtp['host'] !== '' && $smtp['username'] !== '' && $smtp['password'] !== '
     ? "::notice title=Levelezés::SMTP beállítva: {$smtp['host']}:{$smtp['port']}, felhasználó: {$smtp['username']}, feladó: " . ($smtp['from'] ?: $smtp['username']) . "\n"
     : "::warning title=Levelezés::Nincs SMTP beállítva (SMTP_HOST / SMTP_USER / SMTP_PASS secret) — az appok a PHP mail()-lel küldenek, ami gyakran spambe kerül vagy nem érkezik meg.\n";
 
-// A nálunk üzemeltetett foglalók havi díját az Ügyintézési Segéd admin tartja nyilván
+// A nálunk üzemeltetett foglalók havi díját a Tanítható chatbot admin tartja nyilván
 // ({seged_}hosting tábla, ÁSZF 14.): a foglaló innen olvassa, hogy fel van-e függesztve,
 // az admin pedig a foglalók listáját kapja. A letölthető önálló csomagban ez nincs benne.
 $readList = fn (string $a) => is_file("$root/deploy/$a.json") ? (array) (json_decode((string) file_get_contents("$root/deploy/$a.json"), true)['instances'] ?? []) : [];
@@ -169,7 +169,7 @@ foreach ($downloads as $name => $d) {
     echo "  letöltés → /letoltes/files/$name.zip (" . round(filesize("$dist/letoltes/files/$name.zip") / 1024) . " KB)\n";
 }
 // Fizetős csomagok: csak személyes letöltőkóddal tölthetők le (ugyintezes/letoltes.php,
-// a kódokat az Ügyintézési Segéd admin „Letöltőkódok” fülén lehet kiadni).
+// a kódokat a Tanítható chatbot admin „Letöltőkódok” fülén lehet kiadni).
 // A zip egy .php fájlba kerül egy kilépő PHP-sor és __halt_compiler() mögé: közvetlenül
 // megnyitva a szerver lefuttatja és üres 404-et ad — nginx alatt is (ott a .htaccess nem véd);
 // a __halt_compiler() miatt a PHP a zip bájtjait nem is próbálja értelmezni.

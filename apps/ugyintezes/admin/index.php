@@ -1,5 +1,5 @@
 <?php
-// Ügyintézési Segéd – admin felület (megrendelések, előfizetések, tudásbázisok).
+// Tanítható chatbot – admin felület (megrendelések, előfizetések, tudásbázisok).
 declare(strict_types=1);
 
 require dirname(__DIR__) . '/api/lib/core.php';
@@ -18,7 +18,7 @@ header('Cache-Control: no-store');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Ügyintézési Segéd – admin</title>
+<title>Tanítható chatbot – admin</title>
 <meta name="theme-color" content="#17695f">
 <link rel="stylesheet" href="<?= $v('assets/style.css') ?>">
 <style>
@@ -34,7 +34,7 @@ header('Cache-Control: no-store');
 <header class="topbar wide">
   <div class="topbar-inner">
     <div>
-      <div class="brand">Ügyintézési Segéd</div>
+      <div class="brand">Tanítható chatbot</div>
       <div class="tagline">Megrendelések és előfizetések</div>
     </div>
     <span class="spacer"></span>

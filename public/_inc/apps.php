@@ -48,8 +48,8 @@ const APPS = [
         'mockup'  => 'mockup_bevasarlolista',
         'for'     => 'Család, pár, lakótársak',
     ],
-    'ugyintezesi-seged' => [
-        'name'    => 'Ügyintézési Segéd',
+    'tanithato-chatbot' => [
+        'name'    => 'Tanítható chatbot',
         'short'   => 'Chatbot a weboldaladra, ami a te válaszaidból felel az érdeklődők kérdéseire — éjjel-nappal, AI-díj nélkül. A beállítást és a beépítést mi végezzük.',
         'badge'   => '5 000 Ft + ÁFA / hó',
         'mockup'  => 'mockup_ugyintezes',

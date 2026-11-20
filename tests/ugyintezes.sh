@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Végponttól végpontig teszt az Ügyintézési Segédhez: demó és chat (statikus),
+# Végponttól végpontig teszt a Tanítható chatbothoz: demó és chat (statikus),
 # megrendelés, előfizetés-kezelés, tudásbázis csak érvényes előfizetésnél,
 # lejárati emlékeztetők. A levelek a MAIL_LOG fájlba mennek.
 set -u
@@ -9,7 +9,7 @@ MAIL_LOG="${MAIL_LOG:?MAIL_LOG kell}"
 J="$(mktemp)"
 FAILS=0
 pass() { echo "  ok  $1"; }
-fail() { echo "  HIBA $1"; echo "::error title=Ügyintézési Segéd teszt hiba::$1"; FAILS=$((FAILS + 1)); }
+fail() { echo "  HIBA $1"; echo "::error title=Tanítható chatbot teszt hiba::$1"; FAILS=$((FAILS + 1)); }
 check() { if eval "$2"; then pass "$1"; else fail "$1"; fi; }
 get()  { curl -s "$BASE/api/?r=$1" -b "$J" -c "$J"; }
 post() { curl -s -w '\n%{http_code}' "$BASE/api/?r=$1" -b "$J" -c "$J" -H 'X-Requested-With: fetch' -H 'Content-Type: application/json' -d "$2"; }
@@ -174,4 +174,4 @@ check "a táblában a foglaló ezt olvassa" '[ "$(SQL "SELECT mode FROM seged_ho
 
 echo
 if [ "$FAILS" -gt 0 ]; then echo "$FAILS teszt HIBÁS"; exit 1; fi
-echo "Ügyintézési Segéd: minden teszt rendben."
+echo "Tanítható chatbot: minden teszt rendben."

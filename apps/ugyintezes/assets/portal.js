@@ -1,4 +1,4 @@
-// Ügyintézési Segéd – ügyfél-fiók: belépés, jelszó beállítása, a saját chatbot tanítása.
+// Tanítható chatbot – ügyfél-fiók: belépés, jelszó beállítása, a saját chatbot tanítása.
 (function () {
   'use strict';
   const { el, fill, toast, field, huDate, fail } = window.Ugy;
