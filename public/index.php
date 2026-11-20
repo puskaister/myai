@@ -15,12 +15,12 @@ page_start(
   <section class="hero">
     <div class="wrap">
       <div>
-        <span class="eyebrow">Egyedi web- és appfejlesztés</span>
+        <span class="eyebrow">Web- és appfejlesztés 1999 óta</span>
         <h1>Saját app a vállalkozásodnak, <span class="grad">telefonon és weben.</span></h1>
         <p class="lead">Egyedi webes és alkalmazásigényeket fejlesztünk, rövid határidővel, a te arculatoddal és a te működésedre szabva. Az ügyfeleid böngészőből nyitják meg, vagy egy koppintással a telefonjuk kezdőképernyőjére teszik, App Store és letöltés nélkül.</p>
         <div class="cta">
-          <a class="btn btn-primary" href="<?= e(SITE['demoUrl']) ?>">Próbáld ki az időpontfoglalót →</a>
-          <a class="btn btn-ghost" href="#fejlesztes">Egyedi fejlesztés</a>
+          <a class="btn btn-primary" href="#kapcsolat">Ajánlatot kérek →</a>
+          <a class="btn btn-ghost" href="/appok/">Kész appjaink</a>
         </div>
         <div class="platforms" aria-label="Támogatott eszközök">
           <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1.1-2.8-4.3zM14 5.3c.7-.8 1.2-2 1-3.2-1 .1-2.3.7-3 1.5-.7.8-1.2 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.4z"/></svg>iPhone és iPad</span>
@@ -29,7 +29,16 @@ page_start(
         </div>
       </div>
 
-      <?php mockup_booking(); ?>
+      <div class="since-card" aria-label="Szolgáltatásaink">
+        <div class="since-head"><span class="since-year">1999</span><span class="since-txt">óta fejlesztünk<br><small>weboldalakat, appokat és üzleti rendszereket</small></span></div>
+        <ul class="since-list">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 18v3"/></svg><span><b>Weboldal-fejlesztés</b>bemutatkozó oldalak, céges portálok</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><span><b>Appfejlesztés</b>iPhone, Android és web egyetlen fejlesztéssel</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h15l-1.5 8H7.5z"/><path d="M6 7L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg><span><b>Webshopok</b>online értékesítés, rendeléskezelés</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span><b>Üzleti rendszerek</b>nyilvántartás, admin felületek, ügyfélkapuk</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg><span><b>Üzemeltetés</b>tárhely, frissítés, karbantartás</span></li>
+        </ul>
+      </div>
     </div>
   </section>
 
