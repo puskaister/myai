@@ -5,11 +5,11 @@
 declare(strict_types=1);
 
 const APPS = [
-    'idopontfoglalo' => [
-        'name'    => 'Online időpontfoglaló',
-        'short'   => 'Az ügyfeleid pár koppintással foglalnak, te egy helyen látsz mindent — a vállalkozásod saját arculatával.',
+    'gumiszerviz' => [
+        'name'    => 'Gumiszerviz időpontfoglaló',
+        'short'   => 'Az ügyfeleid pár koppintással foglalnak gumicserére, centírozásra vagy defektjavításra, te egy helyen látsz mindent — a szervized saját arculatával.',
         'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
-        'mockup'  => 'mockup_booking',
+        'mockup'  => 'mockup_gumiszerviz',
         'for'     => 'Gumiszerviz',
     ],
     'szepsegszalon' => [

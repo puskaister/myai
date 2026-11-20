@@ -15,7 +15,7 @@ app_hero('onallo-idopontfoglalo', 'Egyszeri 49 000 Ft + ÁFA · a saját tárhel
   <section class="soft">
     <div class="wrap">
       <h2>Saját foglalási rendszer, a saját weboldaladon</h2>
-      <p class="lead" style="margin-top:12px">Ugyanaz az időpontfoglaló, mint a <a href="/appok/idopontfoglalo/">nálunk üzemeltetett változat</a> — csak a teljes rendszert megkapod, és a saját tárhelyedre telepíted.</p>
+      <p class="lead" style="margin-top:12px">Ugyanaz az időpontfoglaló, mint a <a href="/appok/gumiszerviz/">nálunk üzemeltetett változat</a> — csak a teljes rendszert megkapod, és a saját tárhelyedre telepíted.</p>
       <div style="margin-top:22px">
         <ul class="checks feature-list">
           <li>A teljes rendszer telepítőcsomagja: foglalási oldal, admin felület, email-értesítések</li>
@@ -39,7 +39,7 @@ app_hero('onallo-idopontfoglalo', 'Egyszeri 49 000 Ft + ÁFA · a saját tárhel
         <div class="card"><h3>HTTPS a domainen</h3><p>SSL-tanúsítvány (pl. ingyenes Let's Encrypt) a biztonságos belépéshez és a telefonos telepítéshez.</p></div>
         <div class="card"><h3>Email küldés</h3><p>A visszaigazoló leveleket a tárhely küldi; ha kell, egy postafiók SMTP adataival megbízhatóbb.</p></div>
         <div class="card"><h3>Hozzáférés a weboldaladhoz</h3><p>Ahol be tudod illeszteni a kódot: WordPressben pl. egy „Egyéni HTML” blokkban.</p></div>
-        <div class="card"><h3>Nincs tárhelyed?</h3><p>Válaszd a <a href="/appok/idopontfoglalo/">nálunk üzemeltetett változatot</a> (30 000 Ft + ÁFA) — ott mi futtatjuk, neked semmit nem kell telepítened.</p></div>
+        <div class="card"><h3>Nincs tárhelyed?</h3><p>Válaszd a <a href="/appok/gumiszerviz/">nálunk üzemeltetett változatot</a> (30 000 Ft + ÁFA) — ott mi futtatjuk, neked semmit nem kell telepítened.</p></div>
       </div>
     </div>
   </section>

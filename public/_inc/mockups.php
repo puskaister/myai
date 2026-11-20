@@ -158,3 +158,9 @@ function mockup_szepsegszalon(): void { ?>
 <img src="/assets/szepsegszalon.jpg" width="1200" height="669" alt="" loading="lazy"
   style="display:block;width:100%;max-width:620px;height:auto;margin:0 auto;border-radius:16px;box-shadow:0 24px 50px -24px rgba(4,12,20,.6)">
 <?php }
+
+// Gumiszerviz: a „Online gumiszerviz időpontfoglalás” plakátkép.
+function mockup_gumiszerviz(): void { ?>
+<img src="/assets/gumiszerviz.jpg" width="1200" height="669" alt="" loading="lazy"
+  style="display:block;width:100%;max-width:620px;height:auto;margin:0 auto;border-radius:16px;box-shadow:0 24px 50px -24px rgba(4,12,20,.6)">
+<?php }
