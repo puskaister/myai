@@ -29,6 +29,30 @@ app_hero('onallo-idopontfoglalo', 'Egyszeri 29 990 Ft + ÁFA · a saját tárhel
     </div>
   </section>
 
+  <section>
+    <div class="wrap">
+      <h2>Kinek jó?</h2>
+      <p class="lead" style="margin-top:12px">Mindenkinek, aki időpontra fogadja az ügyfeleit. Telepítéskor szakmai kiinduló csomagot választhatsz (gumiszerviz, fodrászat, autószerelő műhely, fogászat, rendelő vagy általános) — szolgáltatásokkal, nyitvatartással és űrlapmezőkkel előre kitöltve, amit utána szabadon átírhatsz.</p>
+      <p style="margin-top:12px"><strong>A te szakmád nincs a listán? Arra alakítjuk, amire szükséged van</strong> — saját szolgáltatásokkal, űrlapmezőkkel és szabályokkal. <a href="#kapcsolat">Írj nekünk →</a></p>
+      <div class="platforms" style="margin-top:20px">
+          <span class="chip">Fodrászat, szépségszalon</span>
+          <span class="chip">Kozmetika, műkörmös</span>
+          <span class="chip">Fogorvos, fogászat</span>
+          <span class="chip">Orvosi rendelő</span>
+          <span class="chip">Gyógytornász, masszőr</span>
+          <span class="chip">Pszichológus, coach</span>
+          <span class="chip">Autószerelő műhely</span>
+          <span class="chip">Gumiszerviz</span>
+          <span class="chip">Személyi edző, jóga</span>
+          <span class="chip">Oktató, korrepetálás</span>
+          <span class="chip">Tanácsadó, ügyvéd, könyvelő</span>
+          <span class="chip">Fotós, stúdió</span>
+          <span class="chip">Állatorvos, kutyakozmetika</span>
+          <span class="chip">Szerelő, karbantartó</span>
+      </div>
+    </div>
+  </section>
+
   <section id="mire-van-szukseg">
     <div class="wrap">
       <h2>Mire van szükség?</h2>

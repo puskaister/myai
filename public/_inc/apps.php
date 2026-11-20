@@ -24,7 +24,7 @@ const APPS = [
         'short'   => 'Az időpontfoglaló teljes rendszere a saját tárhelyedre: megveszed, elviszed, és egy sorral a weboldaladba építed — havidíj nélkül.',
         'badge'   => '29 990 Ft + ÁFA, egyszeri',
         'mockup'  => 'mockup_onallo',
-        'for'     => 'Saját weboldallal és tárhellyel rendelkező vállalkozások',
+        'for'     => 'Fodrász, kozmetikus, fogorvos, rendelő, autószerviz, edző, tanácsadó… – arra alakítjuk, amire szükséged van',
     ],
     'followup' => [
         'name'    => 'Followup – napi teendők',

@@ -11,7 +11,7 @@ function mockup_booking(): void { ?>
       <div class="app-top"><b>Minta Gumiszerviz</b><span>Online időpontfoglalás</span></div>
       <div class="app-body">
         <div class="app-card">
-          <div class="t">Szezonális gumicsere · 30 perc</div>
+          <div class="t">Konzultáció · 45 perc</div>
           <div class="mini-cal">
             <i>H</i><i>K</i><i>Sze</i><i>Cs</i><i>P</i><i>Szo</i><i>V</i>
             <s class="off">6</s><s>7</s><s>8</s><s class="sel">9</s><s>10</s><s>11</s><s class="off">12</s>
@@ -120,11 +120,11 @@ function mockup_ugyintezes(): void { ?>
 function mockup_onallo(): void { ?>
 <div aria-hidden="true">
   <div class="browser site-mock">
-    <div class="browser-bar"><i></i><i></i><i></i><span>kovacs-gumiszerviz.hu</span></div>
+    <div class="browser-bar"><i></i><i></i><i></i><span>a-te-weboldalad.hu</span></div>
     <div class="site-page">
-      <div class="site-nav"><b>Kovács Gumiszerviz</b><span>Szolgáltatások</span><span>Árak</span><span>Kapcsolat</span></div>
+      <div class="site-nav"><b>Minta Vállalkozás</b><span>Szolgáltatások</span><span>Árak</span><span>Kapcsolat</span></div>
       <div class="site-hero">
-        <div class="site-h">Gumicsere, centírozás,<br>tárolás Budapesten</div>
+        <div class="site-h">Foglalj időpontot<br>pár kattintással</div>
         <div class="site-l" style="width:78%"></div><div class="site-l" style="width:64%"></div><div class="site-l" style="width:70%"></div>
         <div class="site-cta">Szolgáltatásaink</div>
       </div>
