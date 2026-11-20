@@ -458,13 +458,13 @@
     // iPhone-on és belső böngészőben nincs telepítő ablak, ott az útmutató segít.
     if (b.ios || b.inapp) btn.hidden = false;
     btn.addEventListener('click', async () => {
-      if (deferred) {
+      if (b.ios || b.inapp) {
+        showInstallGuide(b);
+      } else if (deferred) {
         deferred.prompt();
         await deferred.userChoice;
         deferred = null;
         btn.hidden = true;
-      } else {
-        showInstallGuide(b);
       }
     });
   }

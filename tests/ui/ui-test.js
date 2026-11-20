@@ -81,7 +81,7 @@ const flows = {
       await p.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
       await p.goto(BASE + '/', { waitUntil: 'networkidle0' });
       await p.waitForSelector('#install-btn:not([hidden])', { timeout: 5000 });
-      await p.click('#install-btn');
+      await p.$eval('#install-btn', (b) => b.click());
       await p.waitForSelector('.ig-sheet', { timeout: 5000 });
       const t = await p.evaluate(() => document.querySelector('.ig-sheet').innerText);
       if (!t.includes(expect)) bad('telepítési útmutató (' + label + '): nincs benne „' + expect + '”: ' + t.replace(/\s+/g, ' '));
