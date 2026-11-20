@@ -156,5 +156,5 @@ function mockup_followup(): void { ?>
 // Szépségszalon: fotó a szalonról, kezében a telefonos foglalóval.
 function mockup_szepsegszalon(): void { ?>
 <img src="/assets/szepsegszalon.jpg" width="1200" height="669" alt="" loading="lazy"
-  style="display:block;width:100%;max-width:560px;margin:0 auto;aspect-ratio:4/3;object-fit:cover;object-position:18% center;border-radius:16px;box-shadow:0 24px 50px -24px rgba(4,12,20,.6)">
+  style="display:block;width:100%;max-width:620px;height:auto;margin:0 auto;border-radius:16px;box-shadow:0 24px 50px -24px rgba(4,12,20,.6)">
 <?php }
