@@ -25,7 +25,7 @@
         "pénz",
         "forint"
       ],
-      "answer": "Áraink:\n- Online időpontfoglaló nálunk üzemeltetve: egyszeri 30 000 Ft + ÁFA (bruttó 38 100 Ft)\n- Önálló időpontfoglaló a saját tárhelyedre: egyszeri 49 000 Ft + ÁFA (bruttó 62 230 Ft)\n- Ügyintézési Segéd (chatbot): 5 000 Ft + ÁFA / hó (bruttó 6 350 Ft), havonta lemondható\n- Évfordulók, Bevásárlólista, Látogatószámláló: ingyenesen letölthető\n- Egyedi weboldal, app vagy rendszer: a feladattól függ, rövid egyeztetés után pontos árajánlatot adunk\nAjánlatkérés: E-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
+      "answer": "Áraink:\n- Online időpontfoglaló nálunk üzemeltetve: 30 000 Ft + ÁFA egyszeri beállítás (bruttó 38 100 Ft) + 3 000 Ft + ÁFA / hó (bruttó 3 810 Ft)\n- Önálló időpontfoglaló a saját tárhelyedre: egyszeri 49 000 Ft + ÁFA (bruttó 62 230 Ft)\n- Ügyintézési Segéd (chatbot): 5 000 Ft + ÁFA / hó (bruttó 6 350 Ft), havonta lemondható\n- Évfordulók, Bevásárlólista, Látogatószámláló: ingyenesen letölthető\n- Egyedi weboldal, app vagy rendszer: a feladattól függ, rövid egyeztetés után pontos árajánlatot adunk\nAjánlatkérés: E-mail: info@my-ai.hu · Telefon: +36 30 584 5937",
       "elsobbseg": 1
     },
     {
@@ -42,7 +42,7 @@
         "termék",
         "szolgáltatás"
       ],
-      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, fodrászat, rendelő, szerviz – egyszeri 30 000 Ft + ÁFA\n- Önálló időpontfoglaló a saját tárhelyedre – egyszeri 49 000 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
+      "answer": "Kész appjaink, a te arculatodra szabva:\n- Online időpontfoglaló: gumiszerviz, szépségszalon, rendelő, szerviz – 30 000 Ft + ÁFA beállítás + 3 000 Ft + ÁFA / hó\n- Önálló időpontfoglaló a saját tárhelyedre – egyszeri 49 000 Ft + ÁFA\n- Ügyintézési Segéd: chatbot a weboldaladra – 5 000 Ft + ÁFA / hó\n- Évfordulók: születésnapok, névnapok emailes emlékeztetővel – ingyenesen letölthető\n- Bevásárlólista: szóbeli bevitellel, közös lista – ingyenesen letölthető\n- Látogatószámláló: saját webstatisztika – ingyenesen letölthető\nRészletek és élő demók: my-ai.hu/appok/"
     },
     {
       "id": "egyedi",
@@ -282,7 +282,7 @@
         "kozmetik",
         "naptár"
       ],
-      "answer": "Online időpontfoglaló vállalkozásoknak, két változatban:\n- Nálunk üzemeltetve: egyszeri 30 000 Ft + ÁFA\n- Önálló, a saját tárhelyedre: egyszeri 49 000 Ft + ÁFA\nTudása:\n- Csak a valóban szabad időpontok foglalhatók, dupla foglalás nélkül\n- Párhuzamos helyek (pl. 2 emelő, 3 szék) és ebédszünet\n- Automatikus vagy kézi jóváhagyás, email visszaigazolással\n- Az ügyfél online lemondhatja és a naptárába mentheti\n- Saját mezők az űrlapon, pl. rendszám, gumiméret\n- Telefonos foglalások rögzítése, keresés az admin felületen\nA te nevedet, logódat és színeidet kapja. Élő demó: my-ai.hu/foglalas/",
+      "answer": "Online időpontfoglaló vállalkozásoknak, két változatban:\n- Nálunk üzemeltetve: 30 000 Ft + ÁFA egyszeri beállítás + 3 000 Ft + ÁFA / hó\n- Önálló, a saját tárhelyedre: egyszeri 49 000 Ft + ÁFA\nTudása:\n- Csak a valóban szabad időpontok foglalhatók, dupla foglalás nélkül\n- Párhuzamos helyek (pl. 2 emelő, 3 szék) és ebédszünet\n- Automatikus vagy kézi jóváhagyás, email visszaigazolással\n- Az ügyfél online lemondhatja és a naptárába mentheti\n- Saját mezők az űrlapon, pl. rendszám, gumiméret\n- Telefonos foglalások rögzítése, keresés az admin felületen\nA te nevedet, logódat és színeidet kapja. Élő demó: my-ai.hu/foglalas/",
       "elsobbseg": 1
     },
     {

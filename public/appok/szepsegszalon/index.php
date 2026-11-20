@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Szépségszalon időpontfoglaló – my-ai.hu', 'Online időpontfoglaló szépségszalonoknak: a vendég a telefonjáról foglal, csak a szabad időpontok választhatók, email visszaigazolás. Egyszeri 30 000 Ft + ÁFA-tól, havidíj nélkül.', 'appok');
-app_hero('szepsegszalon', 'Egyszeri díj, havidíj nélkül · szépségszalonoknak',
+page_start('Szépségszalon időpontfoglaló – my-ai.hu', 'Online időpontfoglaló szépségszalonoknak: a vendég a telefonjáról foglal, csak a szabad időpontok választhatók, email visszaigazolás. Nálunk üzemeltetve 30 000 Ft + ÁFA beállítás és 3 000 Ft + ÁFA / hó, vagy önálló változat egyszeri 49 000 Ft + ÁFA.', 'appok');
+app_hero('szepsegszalon', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó · szépségszalonoknak',
     'Szépségszalonoknak: a vendégeid akkor foglalnak, amikor eszükbe jut — este a kanapéról is —, te pedig nem a telefont nyomkodod vendég közben.',
     [['#arak', 'Árak és változatok'], ['#kapcsolat', 'Ajánlatot kérek']]);
 ?>
@@ -69,12 +69,14 @@ app_hero('szepsegszalon', 'Egyszeri díj, havidíj nélkül · szépségszalonok
 
   <section id="arak">
     <div class="wrap">
-      <h2>Két változat, egyszeri díjjal</h2>
+      <h2>Két változat: havidíjjal nálunk, vagy egyszeri díjjal a saját tárhelyeden</h2>
       <div class="grid two" style="margin-top:22px">
         <div class="card">
           <h3>Nálunk üzemeltetve</h3>
           <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 100 Ft)</p>
+          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 100 Ft)</p>
+          <p style="font-weight:700;margin:0 0 2px">+ 3 000 Ft + ÁFA / hó</p>
+          <p class="muted" style="margin:0 0 12px">üzemeltetés, tárhely, frissítések (bruttó 3 810 Ft / hó)</p>
           <ul class="checks">
             <li>Mi állítjuk be a szalonod arculatával</li>
             <li>A my-ai.hu-n fut (pl. my-ai.hu/szalonneved), tárhely nélkül</li>

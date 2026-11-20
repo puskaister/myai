@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/_inc/layout.php';
 
-page_start('Gumiszerviz időpontfoglaló – my-ai.hu', 'Online időpontfoglaló gumiszervizeknek, egyszeri 30 000 Ft + ÁFA, vagy önálló változat a saját tárhelyre 49 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
-app_hero('gumiszerviz', 'Egyszeri díj, havidíj nélkül · gumiszervizeknek',
+page_start('Gumiszerviz időpontfoglaló – my-ai.hu', 'Online időpontfoglaló gumiszervizeknek, nálunk üzemeltetve 30 000 Ft + ÁFA beállítás és 3 000 Ft + ÁFA / hó, vagy önálló változat a saját tárhelyre 49 000 Ft + ÁFA: az ügyfél pár koppintással foglal, csak a szabad időpontok választhatók, email visszaigazolás, admin felület. Saját arculattal, telefonon is.', 'appok');
+app_hero('gumiszerviz', '30 000 Ft + ÁFA beállítás, 3 000 Ft + ÁFA / hó · gumiszervizeknek',
     'Az ügyfél pár koppintással foglal gumicserére, centírozásra vagy defektjavításra, te pedig egy helyen látsz mindent.',
     [[SITE['demoUrl'], 'Élő demó megnyitása →'], ['#arak', 'Árak és változatok']]);
 ?>
@@ -67,12 +67,14 @@ app_hero('gumiszerviz', 'Egyszeri díj, havidíj nélkül · gumiszervizeknek',
 
   <section id="arak">
     <div class="wrap">
-      <h2>Két változat, egyszeri díjjal</h2>
+      <h2>Két változat: havidíjjal nálunk, vagy egyszeri díjjal a saját tárhelyeden</h2>
       <div class="grid two" style="margin-top:22px">
         <div class="card">
           <h3>Nálunk üzemeltetve</h3>
           <p style="font-size:1.6rem;font-weight:800;margin:6px 0 2px">30 000 Ft + ÁFA</p>
-          <p class="muted" style="margin:0 0 12px">egyszeri díj (bruttó 38 100 Ft)</p>
+          <p class="muted" style="margin:0 0 2px">egyszeri beállítási díj (bruttó 38 100 Ft)</p>
+          <p style="font-weight:700;margin:0 0 2px">+ 3 000 Ft + ÁFA / hó</p>
+          <p class="muted" style="margin:0 0 12px">üzemeltetés, tárhely, frissítések (bruttó 3 810 Ft / hó)</p>
           <ul class="checks">
             <li>Mi állítjuk be a te arculatoddal</li>
             <li>A my-ai.hu-n fut (pl. my-ai.hu/cegneved), tárhely nélkül</li>

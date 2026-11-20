@@ -8,14 +8,14 @@ const APPS = [
     'gumiszerviz' => [
         'name'    => 'Gumiszerviz időpontfoglaló',
         'short'   => 'Az ügyfeleid pár koppintással foglalnak gumicserére, centírozásra vagy defektjavításra, te egy helyen látsz mindent — a szervized saját arculatával.',
-        'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
+        'badge'   => '30 000 Ft + ÁFA beállítás + 3 000 Ft/hó',
         'mockup'  => 'mockup_gumiszerviz',
         'for'     => 'Gumiszerviz',
     ],
     'szepsegszalon' => [
         'name'    => 'Szépségszalon időpontfoglaló',
         'short'   => 'A vendégeid a telefonjukról foglalnak arckezelésre, hajra vagy manikűrre, te pedig egy helyen látod a napod — a szalonod nevével és színeivel.',
-        'badge'   => '30 000 Ft + ÁFA-tól, egyszeri',
+        'badge'   => '30 000 Ft + ÁFA beállítás + 3 000 Ft/hó',
         'mockup'  => 'mockup_szepsegszalon',
         'for'     => 'Szépségszalon',
     ],
