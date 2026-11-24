@@ -29,6 +29,17 @@ if ($file !== '') {
         echo 'A kért csomag nem található.';
         exit;
     }
+    // Letöltésszámláló: az Ügyintézés app adatbázisába (/ugyintezes/, admin „Letöltések” fül).
+    // Személyes adatot nem tárol; ha a számláló nem érhető el, a letöltés akkor is megy.
+    $counter = dirname(__DIR__) . '/ugyintezes/api/lib/core.php';
+    if (is_file($counter)) {
+        try {
+            require_once $counter;
+            if (app_installed()) count_download($file);
+        } catch (Throwable $e) {
+            error_log('[letöltésszámláló] ' . $e->getMessage());
+        }
+    }
     header('Content-Type: application/zip');
     header('Content-Disposition: attachment; filename="' . $file . '.zip"');
     header('Content-Length: ' . filesize($path));

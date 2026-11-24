@@ -8,6 +8,7 @@
 //        admin/customer/invite: belépési link az ügyfélnek,
 //        admin/licenses, admin/license/create|toggle|send: letöltőkódok a fizetős csomagokhoz
 //        admin/hosting, admin/hosting/save|pay: a nálunk üzemeltetett foglalók havi díja, felfüggesztés
+//        admin/downloads: letöltésszámláló (melyik appot hányszor töltötték le)
 // Ügyfél (fiok/): portal/login, logout, me, forgot, password, kb, kb/save — csak a saját chatbotja
 declare(strict_types=1);
 
@@ -103,7 +104,7 @@ try {
     if (strpos($route, 'portal/') === 0 && !in_array($route, ['portal/login', 'portal/logout', 'portal/me', 'portal/forgot', 'portal/password'], true) && !current_customer()) {
         throw new AppError('Bejelentkezés szükséges.', 401);
     }
-    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'admin/licenses', 'admin/hosting', 'portal/me', 'portal/kb'];
+    $getOnly = ['price', 'me', 'admin/customers', 'admin/customer', 'admin/settings', 'admin/kb', 'admin/licenses', 'admin/hosting', 'admin/downloads', 'portal/me', 'portal/kb'];
     if (!in_array($route, $getOnly, true) && !$isPost) throw new AppError('Method not allowed', 405);
 
     switch ($route) {
@@ -319,6 +320,9 @@ try {
         }
 
         // ------------------------------------------------------------- nálunk üzemeltetett foglalók
+        case 'admin/downloads':
+            respond(['today' => date('Y-m-d')] + download_stats(date('Y-m-d')));
+
         case 'admin/hosting':
             respond(['today' => date('Y-m-d'), 'price' => HOSTING_PRICE, 'rows' => hosting_rows(date('Y-m-d'))]);
 

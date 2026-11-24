@@ -281,3 +281,12 @@ body.plain .card { margin-top: 0; }
 .teach > * + * { margin-top: 14px; }
 .badge.active { background: color-mix(in srgb, var(--success) 15%, var(--card)); color: var(--success); }
 .badge.expired, .badge.paused { background: color-mix(in srgb, var(--danger) 13%, var(--card)); color: var(--danger); }
+
+/* Letöltésszámláló */
+.dl-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.dl-table th, .dl-table td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.dl-table th:first-child, .dl-table td:first-child { text-align: left; white-space: normal; }
+.dl-table th { font-size: .8rem; color: var(--muted); font-weight: 700; }
+.dl-chart { display: flex; align-items: flex-end; gap: 3px; height: 140px; padding-top: 8px; border-bottom: 1px solid var(--border); }
+.dl-bar { flex: 1; min-width: 4px; background: var(--primary, #4f46e5); border-radius: 3px 3px 0 0; opacity: .85; }
+.dl-bar:hover { opacity: 1; }

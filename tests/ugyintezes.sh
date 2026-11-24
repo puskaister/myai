@@ -119,6 +119,16 @@ check "a letöltések száma korlátozott" '[ "$(curl -s -o /dev/null -w "%{http
 r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Másik","buyer_email":"masik@example.com"}'); C2=$(body "$r" | jq -r .code)
 post admin/license/toggle "{\"id\":$(get admin/licenses | jq '.licenses[0].id')}" >/dev/null
 check "letiltott kód: 403" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/letoltes.php?kod=$C2")" = 403 ]'
+echo "== Letöltésszámláló"
+UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15'
+check "eddig csak robot-letöltés volt (curl): nincs számolva" 'get admin/downloads | jq -e "([.products[].total] | add) == 0 and (.daily | length) == 30" >/dev/null'
+r=$(post admin/license/create '{"product":"idopontfoglalo","buyer_name":"Számláló","buyer_email":"szamlalo@example.com","max_downloads":5}'); C3=$(body "$r" | jq -r .code)
+curl -s -o /dev/null -A "$UA" "$BASE/letoltes.php?kod=$C3"
+curl -s -o /dev/null -A "$UA" "$BASE/letoltes.php?kod=$C3"
+curl -s -o /dev/null -A "facebookexternalhit/1.1" "$BASE/letoltes.php?kod=$C3"
+check "böngészős letöltés számol, linkelőnézet nem" 'get admin/downloads | jq -e "(.products[] | select(.id == \"idopontfoglalo\") | .today == 2 and .total == 2 and .d7 == 2) and .daily[-1].total == 2" >/dev/null'
+check "ingyenes appok a listán (0-val)" 'get admin/downloads | jq -e "[.products[].id] | contains([\"latogatoszamlalo\",\"evfordulok\",\"bevasarlolista\"])" >/dev/null'
+check "számláló belépés nélkül nem érhető el" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/api/?r=admin/downloads")" = 401 ]'
 check "ügyfél nem éri el a kódokat" '[ "$(curl -s -o /dev/null -w "%{http_code}" -b "$J2" "$BASE/api/?r=admin/licenses")" = 401 ]'
 
 echo "== Lejárati kör"

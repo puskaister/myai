@@ -5,7 +5,7 @@
 
   const root = document.getElementById('admin');
   const STATUS = { pending: 'Megrendelve', active: 'Aktív', paused: 'Szüneteltetve' };
-  const state = { tab: 'customers', list: null, settings: null, teach: null, licenses: null, hosting: null };
+  const state = { tab: 'customers', list: null, settings: null, teach: null, licenses: null, hosting: null, downloads: null };
 
   // ---------------------------------------------------------------- segédek (assets/common.js)
   const { el, fill, toast, field, huDate, copy, fail } = window.Ugy;
@@ -74,10 +74,10 @@
   }
 
   // ---------------------------------------------------------------- keret
-  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['licenses', 'Letöltőkódok'], ['hosting', 'Foglalók'], ['settings', 'Beállítások'], ['account', 'Fiók']];
+  const TABS = [['customers', 'Ügyfelek'], ['teach', 'Tanítás'], ['licenses', 'Letöltőkódok'], ['hosting', 'Foglalók'], ['downloads', 'Letöltések'], ['settings', 'Beállítások'], ['account', 'Fiók']];
   function render() {
     const tabs = el('nav', { class: 'tabs' }, TABS.map(([k, l]) => el('button', { class: state.tab === k ? 'on' : '', type: 'button', onclick: () => go(k) }, l)));
-    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, licenses: viewLicenses, hosting: viewHosting, settings: viewSettings, account: viewAccount }[state.tab]());
+    fill(root, tabs, { customers: viewCustomers, teach: viewTeach, licenses: viewLicenses, hosting: viewHosting, downloads: viewDownloads, settings: viewSettings, account: viewAccount }[state.tab]());
   }
   async function go(tab) {
     if (state.tab === 'teach' && tab !== 'teach' && state.teach?.dirty && !confirm('A tanítás nem mentett változásai elvesznek. Továbblépsz?')) return;
@@ -88,6 +88,7 @@
       if (tab === 'settings' || tab === 'account') state.settings = await api('admin/settings');
       if (tab === 'licenses') state.licenses = await api('admin/licenses');
       if (tab === 'hosting') state.hosting = await api('admin/hosting');
+      if (tab === 'downloads') state.downloads = await api('admin/downloads');
     } catch (e) { fail(e); }
     render();
   }
@@ -332,6 +333,32 @@
             el('button', { class: 'btn small ghost', type: 'button', onclick: () => hostingModal(h) }, 'Szerkesztés')));
       })) : el('p', { class: 'muted' }, 'Nincs foglaló a deploy/idopontfoglalo.json-ban.'));
     return el('div', {}, info, list);
+  }
+
+  // ---------------------------------------------------------------- letöltésszámláló
+  function viewDownloads() {
+    const d = state.downloads;
+    if (!d) return el('p', { class: 'muted' }, 'Betöltés…');
+    const num = (n) => Number(n).toLocaleString('hu-HU');
+    const table = el('div', { class: 'card form' },
+      el('div', { class: 'row between' }, el('h2', { style: 'margin:0' }, 'Letöltések appok szerint'),
+        el('button', { class: 'btn small ghost', type: 'button', onclick: async () => { try { state.downloads = await api('admin/downloads'); render(); } catch (e) { fail(e); } } }, 'Frissítés')),
+      el('p', { class: 'muted', style: 'margin:0' }, d.since ? 'Számlálás kezdete: ' + huDate(d.since) + '. Robotok és linkelőnézetek nélkül, személyes adat nélkül.' : 'Még nem volt letöltés. Robotok és linkelőnézetek nem számítanak.'),
+      el('div', { style: 'overflow-x:auto' }, el('table', { class: 'dl-table' },
+        el('thead', {}, el('tr', {}, el('th', {}, 'App'), el('th', {}, 'Ma'), el('th', {}, '7 nap'), el('th', {}, '30 nap'), el('th', {}, 'Összesen'), el('th', {}, 'Utoljára'))),
+        el('tbody', {}, d.products.map((p) => el('tr', {},
+          el('td', {}, p.name), el('td', {}, num(p.today)), el('td', {}, num(p.d7)), el('td', {}, num(p.d30)),
+          el('td', {}, el('strong', {}, num(p.total))), el('td', {}, p.last ? huDate(p.last) : '–')))))));
+    const max = Math.max(1, ...d.daily.map((x) => x.total));
+    const names = Object.fromEntries(d.products.map((p) => [p.id, p.name]));
+    const chart = el('div', { class: 'card form' },
+      el('h2', {}, 'Az utolsó 30 nap'),
+      el('div', { class: 'dl-chart', role: 'img', 'aria-label': 'Napi letöltések az utolsó 30 napban' }, d.daily.map((x) => el('div', {
+        class: 'dl-bar', style: 'height:' + Math.max(x.total ? 6 : 2, Math.round((x.total / max) * 100)) + '%',
+        title: huDate(x.day) + ': ' + x.total + ' letöltés' + (x.total ? ' (' + Object.entries(x.by).map(([k, v]) => (names[k] || k) + ' ' + v).join(', ') + ')' : ''),
+      }))),
+      el('div', { class: 'row between muted', style: 'font-size:.8rem' }, el('span', {}, huDate(d.daily[0].day)), el('span', {}, 'ma')));
+    return el('div', {}, table, chart);
   }
 
   // ---------------------------------------------------------------- beállítások
