@@ -39,10 +39,25 @@
     const opts = { headers: { 'X-Requested-With': 'fetch' }, credentials: 'same-origin' };
     if (body) { opts.method = 'POST'; opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
     let res, data;
-    try {
-      res = await fetch('api/?' + qs.toString(), opts);
-      data = await res.json();
-    } catch (e) { throw Object.assign(new Error('Nem sikerült kapcsolódni. Ellenőrizd az internetkapcsolatot.'), { status: 0 }); }
+    // Egy pillanatnyi akadásnál (pl. a telefon épp felébredt, hálózatot váltott) egyszer csendben újrapróbáljuk;
+    // csak akkor írunk „nincs internet”-et, ha a készülék tényleg offline.
+    for (let attempt = 1; ; attempt++) {
+      try {
+        res = await fetch('api/?' + qs.toString(), opts);
+      } catch (e) {
+        // írást (pl. új tétel) nem ismétlünk, mert lehet, hogy már megérkezett; olvasást és belépést igen
+        if (attempt < 2 && (!body || route === 'login')) { await new Promise((r) => setTimeout(r, 1200)); continue; }
+        throw Object.assign(new Error(navigator.onLine === false ? 'Nincs internetkapcsolat.' : 'Nem sikerült elérni a szervert. Próbáld újra pár másodperc múlva.'), { status: 0 });
+      }
+      try {
+        data = await res.json();
+        break;
+      } catch (e) {
+        // nem JSON válasz (a tárhely átmeneti hibaoldala): ez nem internethiba
+        if (attempt < 2 && !body) { await new Promise((r) => setTimeout(r, 1200)); continue; }
+        throw Object.assign(new Error('A szerver most nem válaszolt rendesen (' + res.status + '). Próbáld újra pár másodperc múlva.'), { status: res.status >= 500 ? 0 : res.status });
+      }
+    }
     if (res.status === 401 && !['login', 'me'].includes(route)) { showLogin(); throw Object.assign(new Error(''), { silent: true }); }
     if (!res.ok) throw Object.assign(new Error(data.error || 'Hiba történt.'), { status: res.status });
     return data;
@@ -83,7 +98,12 @@
     who.textContent = 'Fontos dátumok, időben';
     const f = el('form', { class: 'form', onsubmit: async (e) => {
       e.preventDefault();
-      try { const r = await api('login', {}, { email: f.email.value, password: f.password.value }); state.user = r.user; openMain(); } catch (err) { fail(err); }
+      try { const r = await api('login', {}, { email: f.email.value, password: f.password.value }); state.user = r.user; openMain(); } catch (err) {
+        fail(err);
+        // gyakori ok: a my-ai.hu-n több app van, és a böngésző egy másik app mentett jelszavát tölti ki
+        if (err.status === 401 && !f.querySelector('.login-hint')) f.append(el('p', { class: 'note login-hint' },
+          'Tipp: ha a böngésző töltötte ki a jelszót, lehet, hogy a my-ai.hu egy másik appjának jelszavát ajánlotta fel. Írd be kézzel, vagy kérj új jelszót az „Elfelejtett jelszó?” gombbal.'));
+      }
     } },
     field('Email', el('input', { name: 'email', type: 'email', required: true, autocomplete: 'username' })),
     field('Jelszó', el('input', { name: 'password', type: 'password', required: true, autocomplete: 'current-password' })),
@@ -110,7 +130,7 @@
       e.preventDefault();
       try {
         await api('forgot', {}, { email: f.email.value });
-        fill(f, el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes).'),
+        fill(f, el('p', { class: 'ok' }, 'Ha ezzel az email címmel van fiók, elküldtük a jelszó-visszaállító linket (1 óráig érvényes). Nézd meg a Spam / Promóciók mappát is. Ha nem jön meg, az app adminja tud új jelszót adni.'),
           el('button', { class: 'btn ghost block', type: 'button', onclick: showLogin }, 'Vissza a belépéshez'));
       } catch (err) { fail(err); }
     } },
@@ -381,12 +401,22 @@
         try { await api('admin/users/save', {}, { name: add.name.value, email: add.email.value, password: add.password.value }); toast('Hozzáadva'); render(); } catch (err) { fail(err); }
       });
       fill(box, el('h2', {}, 'Felhasználók (admin)'),
+d.mail_error && d.mail_error.at ? el('div', { class: 'note', style: 'border-left:4px solid var(--danger, #dc2626)' },
+          el('strong', {}, 'Levélküldési hiba (' + d.mail_error.at + ', ' + d.mail_error.kind + '): '), d.mail_error.error || 'ismeretlen ok',
+          ' — a levelezés (SMTP) beállítását érdemes ellenőrizni. Addig az „Új jelszó” gombbal adhatsz jelszót. ',
+          el('button', { class: 'link-btn', type: 'button', onclick: async () => { try { await api('admin/mail-error/clear', {}, {}); toast('Törölve'); } catch (err) { fail(err); } } }, 'Jelzés törlése')) : null,
         el('div', { class: 'list' }, d.users.map((x) => el('div', { class: 'item', style: 'grid-template-columns:1fr auto;cursor:default' },
           el('div', {}, el('div', { class: 'who' }, x.name + (x.is_admin ? ' (admin)' : '')), el('div', { class: 'what' }, x.email + ' · ' + x.events + ' alkalom')),
-          x.id === state.user.id ? el('span', { class: 'muted' }, 'te') : el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
+          x.id === state.user.id ? el('span', { class: 'muted' }, 'te') : el('div', { class: 'row', style: 'gap:6px' },
+            el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
+              const pw = prompt('Új jelszó ' + x.name + ' részére (min. 8 karakter). Közöld vele személyesen vagy telefonon:');
+              if (pw === null) return;
+              try { await api('admin/users/password', {}, { id: x.id, password: pw }); toast('Az új jelszó beállítva'); } catch (err) { fail(err); }
+            } }, 'Új jelszó'),
+            el('button', { class: 'btn small ghost', type: 'button', onclick: async () => {
             if (!confirm('Törlöd ' + x.name + ' fiókját és összes alkalmát?')) return;
             try { await api('admin/users/delete', {}, { id: x.id }); render(); } catch (err) { fail(err); }
-          } }, 'Törlés')))),
+          } }, 'Törlés'))))),
         el('hr'), el('h3', {}, 'Új felhasználó'), add,
         el('hr'), el('h3', {}, 'Beállítások'), opts,
         el('hr'), el('h3', {}, 'Napi emlékeztető-kör'),

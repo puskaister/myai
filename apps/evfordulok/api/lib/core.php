@@ -65,7 +65,7 @@ function table_prefix(): string {
 }
 
 function sql_tables(string $sql): string {
-    return preg_replace_callback('/\{(settings|users|events|sent_reminders|rate_limits|password_resets)\}/', fn ($m) => table_prefix() . $m[1], $sql);
+    return preg_replace_callback('/\{(settings|users|events|sent_reminders|rate_limits|password_resets|remember_tokens)\}/', fn ($m) => table_prefix() . $m[1], $sql);
 }
 
 // Paraméterezett lekérdezés; a típusokat az értékekből állapítja meg.

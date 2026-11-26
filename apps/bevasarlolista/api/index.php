@@ -58,6 +58,80 @@ function create_user(string $name, string $email, string $password, bool $admin)
 function login_user(int $id): void {
     session_regenerate_id(true);
     $_SESSION['user_id'] = $id;
+    remember_issue($id);
+}
+
+const REMEMBER_DAYS = 180;
+
+// „Bejelentkezve maradok”: a PHP-munkamenetet a tárhely rövid tétlenség után törölheti (a közös
+// session-tárat a többi oldal is takarítja), ezért belépéskor egy hosszú életű, az adatbázisban
+// tárolt azonosítót is adunk. Ha a munkamenet elveszett, ezzel csendben újra beléptetjük — így
+// nem kell indokolatlanul újra jelszót megadni. A sütiben véletlen azonosító van, az adatbázisban
+// csak a hash-e; jelszóváltáskor és kijelentkezéskor töröljük.
+const REMEMBER_SQL = "CREATE TABLE IF NOT EXISTS {remember_tokens} (
+    selector CHAR(24) NOT NULL PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    validator_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+function remember_cookie_name(): string {
+    return preg_replace('/[^A-Za-z0-9_]/', '', (string) (app_config()['session_name'] ?? 'app')) . '_rm';
+}
+
+function remember_cookie_params(int $expires): array {
+    return ['expires' => $expires, 'path' => session_get_cookie_params()['path'] ?: '/',
+            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off', 'httponly' => true, 'samesite' => 'Lax'];
+}
+
+function remember_issue(int $userId): void {
+    try {
+        db()->query(sql_tables(REMEMBER_SQL));
+        q_exec('DELETE FROM {remember_tokens} WHERE expires_at < ?', [date('Y-m-d H:i:s')]);
+        $selector = bin2hex(random_bytes(12));
+        $validator = bin2hex(random_bytes(32));
+        $expires = time() + REMEMBER_DAYS * 86400;
+        q_exec('INSERT INTO {remember_tokens} (selector, user_id, validator_hash, expires_at) VALUES (?, ?, ?, ?)',
+            [$selector, $userId, hash('sha256', $validator), date('Y-m-d H:i:s', $expires)]);
+        setcookie(remember_cookie_name(), "$selector:$validator", remember_cookie_params($expires));
+    } catch (Throwable $e) {
+        error_log('[remember] ' . $e->getMessage()); // a belépés enélkül is működik
+    }
+}
+
+// Elveszett munkamenet visszaállítása a sütiből (session_start() után hívjuk).
+function remember_restore(): void {
+    if (!empty($_SESSION['user_id'])) return;
+    $raw = (string) ($_COOKIE[remember_cookie_name()] ?? '');
+    if (!preg_match('/^([a-f0-9]{24}):([a-f0-9]{64})$/', $raw, $m)) return;
+    try {
+        $row = q_one('SELECT * FROM {remember_tokens} WHERE selector = ?', [$m[1]]);
+    } catch (Throwable $e) {
+        return; // még nincs tábla
+    }
+    if ($row && $row['expires_at'] >= date('Y-m-d H:i:s') && hash_equals((string) $row['validator_hash'], hash('sha256', $m[2]))
+        && q_one('SELECT id FROM {users} WHERE id = ?', [(int) $row['user_id']])) {
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = (int) $row['user_id'];
+        return;
+    }
+    setcookie(remember_cookie_name(), '', remember_cookie_params(time() - 3600));
+}
+
+// Kijelentkezés: csak ezt az eszközt; jelszóváltás/visszaállítás: a felhasználó minden eszközét.
+function remember_forget(?int $allOfUser = null): void {
+    try {
+        if ($allOfUser !== null) {
+            q_exec('DELETE FROM {remember_tokens} WHERE user_id = ?', [$allOfUser]);
+        } elseif (preg_match('/^([a-f0-9]{24}):/', (string) ($_COOKIE[remember_cookie_name()] ?? ''), $m)) {
+            q_exec('DELETE FROM {remember_tokens} WHERE selector = ?', [$m[1]]);
+        }
+    } catch (Throwable $e) {
+        // nincs tábla: nincs mit törölni
+    }
+    setcookie(remember_cookie_name(), '', remember_cookie_params(time() - 3600));
 }
 
 function create_list(int $userId, string $name): int {
@@ -83,7 +157,9 @@ try {
     session_name(app_config()['session_name'] ?? 'bevasarlolista_session');
     session_set_cookie_params(['lifetime' => 60 * 60 * 24 * 180, 'path' => dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/api/index.php')) ?: '/',
         'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off', 'httponly' => true, 'samesite' => 'Lax']);
+    ini_set('session.gc_maxlifetime', (string) (REMEMBER_DAYS * 86400)); // ahol a tárhely engedi
     session_start();
+    remember_restore();
 
     $route = (string) ($_GET['r'] ?? '');
     $isPost = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
@@ -119,6 +195,7 @@ try {
         }
 
         case 'logout':
+            remember_forget();
             $_SESSION = [];
             session_destroy();
             respond(['ok' => true]);
@@ -134,8 +211,11 @@ try {
                 q_exec('DELETE FROM {password_resets} WHERE user_id = ? OR expires_at < NOW()', [(int) $u['id']]);
                 q_exec('INSERT INTO {password_resets} (user_id, token_hash, expires_at) VALUES (?, ?, ?)',
                     [(int) $u['id'], hash('sha256', $token), date('Y-m-d H:i:s', time() + 3600)]);
-                send_app_email(app_config() ?? [], $u['email'], 'Jelszó visszaállítása – ' . get_options()['app_name'],
+                $sent = send_app_email(app_config() ?? [], $u['email'], 'Jelszó visszaállítása – ' . get_options()['app_name'],
                     "Kedves {$u['name']}!\n\nÚj jelszót ezen a linken állíthatsz be (1 óráig érvényes):\n\n" . app_base_url() . "/?reset=$token\n\nHa nem te kérted, hagyd figyelmen kívül ezt a levelet.");
+                // A levél sikertelenségét (a válaszban nem áruljuk el, létezik-e a fiók) az admin látja.
+                if (!$sent) set_setting_value('mail_error', json_encode(['at' => date('Y-m-d H:i'), 'kind' => 'jelszó-emlékeztető',
+                    'error' => (string) (($GLOBALS['mail_last']['transport'] ?? '') . ': ' . ($GLOBALS['mail_last']['error'] ?? ''))], JSON_UNESCAPED_UNICODE));
             }
             respond(['ok' => true]);
         }
@@ -150,6 +230,7 @@ try {
             if (!$row) throw new AppError('A link érvénytelen vagy lejárt. Kérj újat az „Elfelejtett jelszó?” linkkel.');
             if (strlen((string) ($in['password'] ?? '')) < 8) throw new AppError('A jelszó legalább 8 karakter legyen.');
             q_exec('UPDATE {users} SET password_hash = ? WHERE id = ?', [password_hash((string) $in['password'], PASSWORD_DEFAULT), (int) $row['user_id']]);
+            remember_forget((int) $row['user_id']); // a régi jelszóval belépett eszközök kijelentkeznek
             q_exec('UPDATE {password_resets} SET used_at = NOW() WHERE id = ?', [(int) $row['id']]);
             respond(['ok' => true]);
         }
@@ -303,18 +384,34 @@ try {
             if (!password_verify((string) ($in['current'] ?? ''), (string) $me['password_hash'])) throw new AppError('A jelenlegi jelszó hibás.');
             if (strlen((string) ($in['new'] ?? '')) < 8) throw new AppError('Az új jelszó legalább 8 karakter legyen.');
             q_exec('UPDATE {users} SET password_hash = ? WHERE id = ?', [password_hash((string) $in['new'], PASSWORD_DEFAULT), $uid]);
+            remember_forget($uid); // a többi eszköz kijelentkezik…
+            remember_issue($uid);  // …ez bejelentkezve marad
             respond(['ok' => true]);
         }
 
         // ------------------------------------------------------------- admin
         case 'admin/users':
-            respond(['users' => q_all('SELECT u.id, u.name, u.email, u.is_admin, u.created_at FROM {users} u ORDER BY u.id'), 'options' => get_options()]);
+            respond(['mail_error' => json_decode((string) setting_value('mail_error'), true), 'users' => q_all('SELECT u.id, u.name, u.email, u.is_admin, u.created_at FROM {users} u ORDER BY u.id'), 'options' => get_options()]);
 
         case 'admin/users/save': {
             $in = input();
             create_user(str_in($in, 'name', 120), str_in($in, 'email', 190), (string) ($in['password'] ?? ''), !empty($in['is_admin']));
             respond(['ok' => true]);
         }
+
+        case 'admin/users/password': { // új jelszó megadása egy felhasználónak (ha az emlékeztető levél nem érkezik meg)
+            $in = input();
+            $id = (int) ($in['id'] ?? 0);
+            if (strlen((string) ($in['password'] ?? '')) < 8) throw new AppError('A jelszó legalább 8 karakter legyen.');
+            if (!q_one('SELECT id FROM {users} WHERE id = ?', [$id])) throw new AppError('Nincs ilyen felhasználó.', 404);
+            q_exec('UPDATE {users} SET password_hash = ? WHERE id = ?', [password_hash((string) $in['password'], PASSWORD_DEFAULT), $id]);
+            remember_forget($id);
+            respond(['ok' => true]);
+        }
+
+        case 'admin/mail-error/clear':
+            set_setting_value('mail_error', '');
+            respond(['ok' => true]);
 
         case 'admin/users/delete': {
             $id = (int) (input()['id'] ?? 0);

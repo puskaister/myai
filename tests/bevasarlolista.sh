@@ -64,6 +64,29 @@ r=$(post "$J2" lists/delete "{\"id\":$LID}"); check "tag törlése = kilépés" 
 r=$(post "$J1" lists/save '{"name":"Barkácsbolt"}'); L2=$(body "$r" | jq .id); check "új lista" '[ "$L2" -gt 0 ] 2>/dev/null'
 r=$(post "$J1" lists/delete "{\"id\":$L2}"); check "tulajdonos törli a listát" '[ "$(status "$r")" = 200 ] && [ "$(curl -s -o /dev/null -w "%{http_code}" -b "$J1" "$BASE/api/?r=list&id=$L2")" = 404 ]'
 
+echo "== Bejelentkezve marad (a tárhely törölheti a munkamenetet), admin új jelszó"
+SESS=bevasarlolista_test
+JR=$(mktemp)
+dropsess() { awk -v s="$SESS" -F'\t' '$6 != s' "$JR" > "$JR.x" && mv "$JR.x" "$JR"; }
+r=$(post "$JR" login '{"email":"anna@example.com","password":"titkos123"}')
+check "belépéskor hosszú életű azonosító süti" '[ "$(status "$r")" = 200 ] && grep -q "${SESS}_rm" "$JR"'
+dropsess
+check "elveszett munkamenet után is belépve marad" 'get "$JR" me | jq -e ".user.email == \"anna@example.com\"" >/dev/null'
+post "$JR" logout '{}' >/dev/null
+dropsess
+check "kijelentkezés után nem lép be magától" 'get "$JR" me | jq -e ".user == null" >/dev/null'
+check "admin: a levélküldési hiba mező elérhető" 'get "$J1" admin/users | jq -e "has(\"mail_error\") and (.users | length) >= 1" >/dev/null'
+check "admin új jelszó: rövid jelszó elutasítva" '[ "$(status "$(post "$J1" admin/users/password "{\"id\":1,\"password\":\"rovid\"}")")" = 400 ]'
+check "admin új jelszó: ismeretlen felhasználó 404" '[ "$(status "$(post "$J1" admin/users/password "{\"id\":999999,\"password\":\"ujjelszo123\"}")")" = 404 ]'
+OID=$(get "$J1" admin/users | jq '[.users[] | select(.email != "anna@example.com")][0].id // empty')
+if [ -n "$OID" ]; then
+  OEMAIL=$(get "$J1" admin/users | jq -r ".users[] | select(.id == $OID) | .email")
+  r=$(post "$J1" admin/users/password "{\"id\":$OID,\"password\":\"adminadta123\"}")
+  J9=$(mktemp)
+  check "admin által adott új jelszóval a felhasználó belép" '[ "$(status "$r")" = 200 ] && [ "$(status "$(post "$J9" login "{\"email\":\"$OEMAIL\",\"password\":\"adminadta123\"}")")" = 200 ]'
+fi
+check "nem admin nem adhat jelszót" '[ "$(status "$(post "$JR" admin/users/password "{\"id\":1,\"password\":\"ujjelszo123\"}")")" != 200 ]'
+
 echo
 if [ "$FAILS" -gt 0 ]; then echo "$FAILS teszt HIBÁS"; exit 1; fi
 echo "Bevásárlólista: minden teszt rendben."
