@@ -1,6 +1,8 @@
-# my-ai.hu – a tárhely korábbi alapértelmezett robots.txt-je (változatlanul), kiegészítve az oldaltérképpel.
+# my-ai.hu – a tárhely korábbi alapértelmezett robots.txt-je (változatlanul), kiegészítve az oldaltérképpel és az appok háttércímeinek (/api/) tiltásával.
+# (A Googlebot és a Bingbot saját csoportja miatt a * csoportot nem olvassák, ezért náluk is szerepel.)
 User-agent: *
 Disallow: /*/amp
+Disallow: /*/api/
 Disallow: /cgi-bin/
 Disallow: /wp-admin/
 Disallow: /wp-includes/
@@ -10,9 +12,11 @@ Disallow: /wp-content/themes/
 
 User-agent: Googlebot
 Allow: /*/amp
+Disallow: /*/api/
 
 User-agent: Bingbot
 Allow: /*/amp
+Disallow: /*/api/
 
 User-agent: Google-InspectionTool
 Allow: /
