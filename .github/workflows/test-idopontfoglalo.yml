@@ -232,6 +232,13 @@ jobs:
           DB_PASS: tesztjelszo
         run: |
           php deploy/build.php
+          # oldaltérkép: érvényes XML, benne a fő oldalak, a régi átirányító és a belépős címek nélkül
+          xmllint --noout dist/sitemap.xml 2>/dev/null || php -r 'simplexml_load_file("dist/sitemap.xml") or exit(1);' || { echo "::error::a sitemap.xml nem érvényes XML"; exit 1; }
+          for u in / /appok/ /appok/gumiszerviz/ /appok/szepsegszalon/ /appok/onallo-idopontfoglalo/ /appok/tanithato-chatbot/ /aszf/; do
+            grep -q "<loc>https://my-ai.hu$u</loc>" dist/sitemap.xml || { echo "::error::a sitemap.xml-ből hiányzik: $u"; exit 1; }
+          done
+          if grep -qE "appok/(idopontfoglalo|ugyintezesi-seged)/|followup|my-ai.hu/evfordulok/|my-ai.hu/bevasarlas/|ugyintezes/fiok" dist/sitemap.xml; then echo "::error::a sitemap.xml-ben átirányító, külső vagy belépős cím van"; exit 1; fi
+          grep -q "^Sitemap: https://my-ai.hu/sitemap.xml" dist/robots.txt || { echo "::error::a robots.txt nem hivatkozik az oldaltérképre"; exit 1; }
           Z=dist/letoltes/files/latogatoszamlalo.zip
           unzip -l "$Z" | grep -q "latogatoszamlalo/install.php"
           unzip -l "$Z" | grep -q "latogatoszamlalo/TELEPITES.md"

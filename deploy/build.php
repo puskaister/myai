@@ -76,6 +76,22 @@ function zip_vendor(string $vendorDir, string $zipPath): string {
 
 copy_tree("$root/public", $dist);
 
+// Oldaltérkép a keresőknek (my-ai.hu/sitemap.xml, a robots.txt hivatkozik rá). A nyilvános oldalak:
+// főoldal, Appok, minden app saját aloldala (_inc/apps.php; a külső oldalra mutatók nélkül), Rólunk,
+// ÁSZF, adatkezelés. Az átirányító régi címek és a belépős app-oldalak (noindex) nincsenek benne.
+require "$root/public/_inc/apps.php";
+$pages = ['/' => '1.0', '/appok/' => '0.9'];
+foreach (APPS as $slug => $a) if (empty($a['url'])) $pages["/appok/$slug/"] = '0.8';
+$pages += ['/rolunk/' => '0.5', '/aszf/' => '0.3', '/adatkezeles/' => '0.3'];
+$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+foreach ($pages as $path => $prio) {
+    $src = $path === '/' ? "$root/public/index.php" : "$root/public" . rtrim($path, '/') . '/index.php';
+    if (!is_file($src)) fail("Oldaltérkép: hiányzó oldal $path");
+    $xml .= "  <url><loc>https://my-ai.hu$path</loc><priority>$prio</priority></url>\n";
+}
+file_put_contents("$dist/sitemap.xml", $xml . "</urlset>\n");
+echo '  oldaltérkép → /sitemap.xml (' . count($pages) . " oldal)\n";
+
 $db = [
     'host' => getenv('DB_HOST') ?: '172.30.50.11', // DiMa: a MySQL külön szerveren van
     'name' => (string) getenv('DB_NAME'),
