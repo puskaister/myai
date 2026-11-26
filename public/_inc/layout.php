@@ -18,6 +18,17 @@ require_once __DIR__ . '/mockups.php';
     exit;
 })();
 
+// www.my-ai.hu → my-ai.hu (egy hivatalos cím a keresőknek; a canonical is erre mutat)
+if (strtolower((string) ($_SERVER['HTTP_HOST'] ?? '')) === 'www.my-ai.hu' && ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET') {
+    header('Location: https://my-ai.hu' . ($_SERVER['REQUEST_URI'] ?? '/'), true, 301);
+    exit;
+}
+
+// Az oldal hivatalos címe (canonical): mindig https://my-ai.hu + útvonal, lekérdezés nélkül.
+function canonical_url(): string {
+    return 'https://my-ai.hu' . (strtok((string) ($_SERVER['REQUEST_URI'] ?? '/'), '?') ?: '/');
+}
+
 
 const SITE = [
     'name'    => 'my-ai.hu',
@@ -55,6 +66,7 @@ function page_start(string $title, string $description, string $active = '', arr
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($description) ?>">
+<link rel="canonical" href="<?= e(canonical_url()) ?>">
 <meta property="og:title" content="<?= e($og['title'] ?? $title) ?>">
 <meta property="og:description" content="<?= e($og['description'] ?? $description) ?>">
 <meta property="og:type" content="website">

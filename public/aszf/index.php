@@ -3,6 +3,8 @@
 // A szolgáltató adatai lent; a hatály dátumát frissítsd, ha a tartalom változik.
 declare(strict_types=1);
 
+if (strtolower((string) ($_SERVER['HTTP_HOST'] ?? '')) === 'www.my-ai.hu') { header('Location: https://my-ai.hu/aszf/', true, 301); exit; }
+
 // http → https (a böngészőben megnyitott oldalakon; helyi gépen / IP-címen nem)
 (function (): void {
     $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
@@ -35,6 +37,7 @@ header('Content-Type: text/html; charset=utf-8');
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ÁSZF – my-ai.hu</title>
 <meta name="description" content="A Tanítható chatbot havidíjas chatbot-szolgáltatás, a nálunk üzemeltetett online időpontfoglaló és az önálló időpontfoglaló szoftvercsomag általános szerződési feltételei.">
+<link rel="canonical" href="https://my-ai.hu/aszf/">
 <meta name="theme-color" content="#4f46e5">
 <style>
   :root { --bg: #fff; --text: #0f172a; --muted: #5b6477; --border: #e6e8f0; --soft: #f5f6fb; --accent: #4f46e5; color-scheme: light; }

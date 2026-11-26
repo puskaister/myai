@@ -3,6 +3,8 @@
 // itt kell kitölteni; a módosítás dátumát frissítsd, ha a tartalom változik.
 declare(strict_types=1);
 
+if (strtolower((string) ($_SERVER['HTTP_HOST'] ?? '')) === 'www.my-ai.hu') { header('Location: https://my-ai.hu/adatkezeles/', true, 301); exit; }
+
 // http → https (a böngészőben megnyitott oldalakon; helyi gépen / IP-címen nem)
 (function (): void {
     $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
@@ -33,6 +35,7 @@ header('Content-Type: text/html; charset=utf-8');
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Adatkezelési tájékoztató – my-ai.hu</title>
 <meta name="description" content="Hogyan kezeli a my-ai.hu a látogatók és ügyfelek személyes adatait.">
+<link rel="canonical" href="https://my-ai.hu/adatkezeles/">
 <meta name="theme-color" content="#4f46e5">
 <style>
   :root { --bg: #fff; --text: #0f172a; --muted: #5b6477; --border: #e6e8f0; --soft: #f5f6fb; --accent: #4f46e5; color-scheme: light; }

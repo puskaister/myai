@@ -204,6 +204,10 @@ jobs:
           P=$(curl -s http://127.0.0.1:8009/appok/tanithato-chatbot/)
           if grep -q "Beépítés bármely weboldalba" <<<"$P"; then echo "::error::a Tanítható chatbot oldalán még ott a beépítési leírás"; exit 1; fi
           grep -q "5 000 Ft + ÁFA" <<<"$P" && grep -q 'id="order-form"' <<<"$P" && grep -q 'href="/aszf/"' <<<"$P" || { echo "::error::a Tanítható chatbot oldalán nincs ár / megrendelő űrlap"; exit 1; }
+          for u in / /appok/gumiszerviz/ /aszf/ /adatkezeles/; do
+            curl -s "http://127.0.0.1:8009$u" | grep -q "<link rel=\"canonical\" href=\"https://my-ai.hu$u\">" || { echo "::error::$u: hiányzik vagy hibás a canonical"; exit 1; }
+          done
+          test "$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: www.my-ai.hu' http://127.0.0.1:8009/appok/?x=1)" = 301 || { echo "::error::a www.my-ai.hu nem irányít át"; exit 1; }
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/appok/ugyintezesi-seged/)" = 301 || { echo "::error::a régi /appok/ugyintezesi-seged/ nem irányít át"; exit 1; }
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/appok/idopontfoglalo/)" = 301 || { echo "::error::a régi /appok/idopontfoglalo/ nem irányít át"; exit 1; }
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8009/letoltes/)" = 301 || { echo "::error::a /letoltes/ nem irányít át"; exit 1; }
