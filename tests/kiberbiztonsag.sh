@@ -25,6 +25,9 @@ check "a főoldal menüjében ott a Kiberbiztonság" 'curl -s "$BASE/" | grep -q
 check "stíluslap és szkript elérhető" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/kiberbiztonsag/assets/kiber.css")" = 200 ] && [ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/kiberbiztonsag/assets/gyorsellenorzes.js")" = 200 ]'
 check "a _inc mappa kívülről tiltott (.htaccess létezik)" 'grep -q "Require all denied" public/_inc/.htaccess'
 
+H=$(curl -s -D - -o /dev/null "$BASE/kiberbiztonsag/")
+check "biztonsági fejlécek a saját oldalakon" 'grep -qi "^x-content-type-options: nosniff" <<<"$H" && grep -qi "^x-frame-options: sameorigin" <<<"$H" && grep -qi "^referrer-policy:" <<<"$H"'
+
 echo "== Domain API – bemenet"
 r=$(api ''); check "üres domain → 400" '[ "$(status "$r")" = 400 ] && jq -e .error <<<"$(body "$r")" >/dev/null'
 r=$(api 'nem%20domain'); check "hibás domain → 400" '[ "$(status "$r")" = 400 ]'
