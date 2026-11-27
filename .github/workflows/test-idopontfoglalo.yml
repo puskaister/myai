@@ -1,4 +1,4 @@
-name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló, évfordulók, bevásárlólista)
+name: Appok tesztjei (időpontfoglaló, chatbot, látogatószámláló, évfordulók, bevásárlólista, kiberbiztonság)
 
 # Valódi PHP + MySQL környezetben végigpróbálja a telepítést, a foglalást és az admin műveleteket.
 # A deploy workflow minden feltöltés előtt meghívja; hibás teszt esetén nincs feltöltés.
@@ -451,3 +451,43 @@ jobs:
         run: |
           cat seged-server.log; tail -60 "$RUNNER_TEMP/mails.log"
           echo "::error title=Tanítható chatbot szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' seged-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
+
+  kiberbiztonsag:
+    name: Kiberbiztonság – oldalak, domain-vizsgálat (valódi DNS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, intl, mbstring, openssl
+
+      - name: PHP és JS szintaxis
+        run: |
+          for f in public/_inc/domaincheck.php public/_inc/kiber-questions.php public/kiberbiztonsag/index.php public/kiberbiztonsag/gyorsellenorzes/index.php public/kiberbiztonsag/api/domain.php; do php -l "$f"; done
+          node --check public/kiberbiztonsag/assets/gyorsellenorzes.js
+
+      - name: Szerver indítása
+        run: |
+          php -d display_errors=1 -d opcache.enable_cli=0 -S 127.0.0.1:8010 -t public > kiber-server.log 2>&1 &
+          sleep 1
+
+      - name: Tesztek
+        env:
+          BASE: http://127.0.0.1:8010
+        run: bash tests/kiberbiztonsag.sh
+
+      - name: Böngészős ellenőrzés (Chrome) – a gyorsellenőrzés szkriptje lefut, nincs "null"/"[object"
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          "$CHROME" --headless=new --disable-gpu --no-sandbox --virtual-time-budget=5000 --dump-dom http://127.0.0.1:8010/kiberbiztonsag/gyorsellenorzes/ > dom.html 2>/dev/null
+          grep -q "Összpontszám: –" dom.html || { echo "::error::a gyorsellenőrzés szkriptje nem futott le"; head -c 3000 dom.html; exit 1; }
+          if grep -qE "\[object [A-Z]|>null<|>undefined<|NaN" dom.html; then echo "::error::megjelenítési hiba a gyorsellenőrzésen"; exit 1; fi
+          echo "A gyorsellenőrzés oldala hibátlanul renderelődik."
+
+      - name: Napló (hiba esetén)
+        if: failure()
+        run: |
+          cat kiber-server.log
+          echo "::error title=Kiberbiztonság szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[400\]\|\[405\]\|\[429\]' kiber-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

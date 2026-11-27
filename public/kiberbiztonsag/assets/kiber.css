@@ -1,0 +1,119 @@
+/* my-ai.hu – Kiberbiztonság oldalak (a site.css változóira épül) */
+:root { --kb-good: #15803d; --kb-mid: #b45309; --kb-bad: #dc2626; }
+@media (prefers-color-scheme: dark) { :root { --kb-good: #4ade80; --kb-mid: #fbbf24; --kb-bad: #f87171; } }
+
+.kb-muted { color: var(--muted); font-size: .95rem; }
+.kb-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.kb-section { padding-top: 24px; }
+.kb-layout { display: grid; gap: 24px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 980px) { .kb-layout { grid-template-columns: minmax(0, 1fr) 340px; } .kb-side { position: sticky; top: 84px; } }
+.kb-main { display: grid; gap: 24px; min-width: 0; }
+.kb-main h2 { font-size: 1.35rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.kb-num { width: 30px; height: 30px; border-radius: 50%; display: inline-grid; place-items: center; font-size: .95rem; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); flex: 0 0 auto; }
+
+/* domain */
+.kb-domain-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.kb-domain-row input { flex: 1 1 220px; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; min-height: 48px; }
+.kb-domain-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.kb-domain-row .btn { border: 0; cursor: pointer; font: inherit; font-weight: 650; }
+.kb-domain-row .btn:disabled { opacity: .6; cursor: wait; }
+.kb-err { color: var(--kb-bad); margin-top: 14px; }
+.kb-loading { margin-top: 14px; }
+.kb-domain-head { display: flex; justify-content: space-between; align-items: baseline; margin: 20px 0 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.kb-domain-head span { font-weight: 800; font-size: 1.1rem; }
+.kb-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.kb-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.kb-item:last-child { border-bottom: 0; }
+.kb-item p { color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
+.kb-dot { flex: 0 0 12px; height: 12px; border-radius: 50%; margin-top: 7px; background: var(--muted); }
+.kb-item.ok .kb-dot { background: var(--kb-good); }
+.kb-item.warn .kb-dot { background: var(--kb-mid); }
+.kb-item.bad .kb-dot { background: var(--kb-bad); }
+
+/* kérdések */
+.kb-cat { border: 0; padding: 0; margin: 24px 0 0; min-width: 0; }
+.kb-cat legend { font-weight: 800; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); padding: 0; margin-bottom: 4px; }
+.kb-q { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.kb-cat:last-child .kb-q:last-child { border-bottom: 0; }
+.kb-q-text { font-weight: 600; }
+.kb-q-hint { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+.kb-opts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.kb-opt { position: relative; cursor: pointer; }
+.kb-opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.kb-opt span { display: inline-block; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); font-size: .92rem; font-weight: 600; color: var(--muted); transition: background .15s, color .15s, border-color .15s; }
+.kb-opt:hover span { border-color: var(--accent); }
+.kb-opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.kb-opt-igen input:checked + span { background: var(--kb-good); border-color: var(--kb-good); color: #fff; }
+.kb-opt-reszben input:checked + span { background: var(--kb-mid); border-color: var(--kb-mid); color: #fff; }
+.kb-opt-nem input:checked + span { background: var(--kb-bad); border-color: var(--kb-bad); color: #fff; }
+.kb-opt-nemtudom input:checked + span { background: var(--muted); border-color: var(--muted); color: var(--bg); }
+@media (prefers-color-scheme: dark) { .kb-opt input:checked + span { color: #0b0e17; } }
+
+/* pontszám */
+.kb-score { text-align: center; }
+.kb-gauge { --c: var(--accent); width: 150px; height: 150px; margin: 4px auto 12px; border-radius: 50%; display: grid; place-content: center; position: relative;
+  background: conic-gradient(var(--c) calc(var(--p) * 1%), var(--border) 0); }
+.kb-gauge::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--card); }
+.kb-gauge span, .kb-gauge small { position: relative; line-height: 1; }
+.kb-gauge span { font-size: 2.6rem; font-weight: 800; }
+.kb-gauge small { color: var(--muted); font-size: .85rem; margin-top: 4px; }
+.kb-score.good .kb-gauge { --c: var(--kb-good); }
+.kb-score.mid .kb-gauge { --c: var(--kb-mid); }
+.kb-score.bad .kb-gauge { --c: var(--kb-bad); }
+.kb-level { font-weight: 700; }
+.kb-score.good .kb-level { color: var(--kb-good); }
+.kb-score.mid .kb-level { color: var(--kb-mid); }
+.kb-score.bad .kb-level { color: var(--kb-bad); }
+.kb-progress { color: var(--muted); font-size: .88rem; margin-top: 4px; }
+.kb-sub { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 18px; }
+.kb-sub div { background: var(--bg-soft); border-radius: 12px; padding: 8px; display: grid; }
+.kb-sub span { font-size: .78rem; color: var(--muted); }
+.kb-sub b { font-size: 1.2rem; }
+.kb-score h3 { font-size: 1rem; text-align: left; margin-bottom: 8px; }
+.kb-top { text-align: left; margin: 0 0 16px; padding-left: 20px; display: grid; gap: 8px; font-size: .94rem; }
+.kb-top li.kb-muted { list-style: none; margin-left: -20px; }
+.kb-full-link { width: 100%; justify-content: center; }
+.kb-pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: .74rem; font-weight: 800; color: #fff; vertical-align: 1px; white-space: nowrap; }
+.kb-pill.now { background: var(--kb-bad); }
+.kb-pill.soon { background: var(--kb-mid); }
+.kb-pill.later { background: var(--muted); }
+@media (prefers-color-scheme: dark) { .kb-pill { color: #0b0e17; } }
+
+/* teendőlista */
+.kb-report-section { margin-top: 40px; }
+.kb-report-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 8px; }
+.kb-actions .btn { border: 0; cursor: pointer; font: inherit; font-weight: 650; }
+.kb-actions .btn-ghost { border: 1px solid var(--border); }
+.kb-copy-msg { min-height: 1.4em; margin: 6px 0 0; }
+.kb-group { font-size: 1.05rem; margin: 26px 0 12px; display: flex; align-items: center; gap: 10px; }
+.kb-todos { display: grid; gap: 10px; }
+.kb-todo { padding: 0; }
+.kb-todo summary { cursor: pointer; padding: 16px 20px; display: flex; flex-direction: column; gap: 2px; list-style: none; }
+.kb-todo summary::-webkit-details-marker { display: none; }
+.kb-todo summary b::after { content: " +"; color: var(--accent); }
+.kb-todo[open] summary b::after { content: " –"; }
+.kb-todo summary small { color: var(--muted); font-size: .84rem; }
+.kb-todo ol { margin: 0; padding: 0 20px 18px 40px; display: grid; gap: 6px; color: var(--muted); font-size: .95rem; }
+.kb-note { color: var(--muted); font-size: .85rem; margin-top: 28px; max-width: 760px; }
+.kb-print-only { display: none; }
+
+/* bemutató oldal */
+.kb-threats .card h3 { display: flex; align-items: center; gap: 10px; }
+.kb-hero-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 28px; box-shadow: var(--shadow); }
+.kb-hero-card .kb-gauge { --p: 62; --c: var(--kb-mid); }
+.kb-mini { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; font-size: .94rem; }
+.kb-mini li { display: flex; gap: 10px; align-items: center; }
+.kb-mini .kb-dot { margin-top: 0; }
+.kb-mini .ok { background: var(--kb-good); } .kb-mini .warn { background: var(--kb-mid); } .kb-mini .bad { background: var(--kb-bad); }
+.kb-soon .badge { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+
+@media print {
+  .nav, footer, #kapcsolat, .page-head, .kb-section, .kb-actions, .kb-copy-msg, .myai-consent, [class*="ugyintezes"], iframe { display: none !important; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .soft { background: #fff; border: 0; }
+  .kb-report-section { margin: 0; padding: 0; }
+  .kb-print-only { display: block; }
+  .kb-todo { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .kb-todo summary b::after { content: ""; }
+  .kb-pill { border: 1px solid #000; color: #000 !important; background: #fff !important; }
+}

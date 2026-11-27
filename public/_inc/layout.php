@@ -46,13 +46,14 @@ function has_contact(): bool {
     return SITE['email'] !== '' || SITE['phone'] !== '';
 }
 
-// $active: a menüpont kulcsa, ami aktívként jelenik meg (fejlesztes, appok, hogyan, kapcsolat, adatkezeles)
+// $active: a menüpont kulcsa, ami aktívként jelenik meg (fejlesztes, appok, kiberbiztonsag, hogyan, kapcsolat, adatkezeles)
 function page_start(string $title, string $description, string $active = '', array $og = []): void {
     header('Content-Type: text/html; charset=utf-8');
     $css = '/assets/site.css?v=' . @filemtime(dirname(__DIR__) . '/assets/site.css');
     $nav = [
         'fejlesztes' => ['/#fejlesztes', 'Egyedi fejlesztés'],
         'appok'      => ['/appok/', 'Appok'],
+        'kiberbiztonsag' => ['/kiberbiztonsag/', 'Kiberbiztonság'],
         'hogyan'     => ['/#hogyan', 'Hogyan működik'],
         'kapcsolat'  => ['/#kapcsolat', 'Kapcsolat'],
         'adatkezeles'=> ['/adatkezeles/', 'Adatkezelés'],
@@ -124,6 +125,7 @@ function page_end(): void { ?>
     <span>© <?= date('Y') ?> <?= e(SITE['name']) ?></span>
     <span class="footer-links">
       <a href="/appok/">Appok</a>
+      <a href="/kiberbiztonsag/">Kiberbiztonság</a>
       <a href="/adatkezeles/">Adatkezelési tájékoztató</a>
       <a href="/aszf/">ÁSZF</a>
       <a href="/rolunk/">Rólunk és impresszum</a>
