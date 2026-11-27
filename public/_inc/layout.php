@@ -49,6 +49,10 @@ function has_contact(): bool {
 // $active: a menüpont kulcsa, ami aktívként jelenik meg (fejlesztes, appok, kiberbiztonsag, hogyan, kapcsolat, adatkezeles)
 function page_start(string $title, string $description, string $active = '', array $og = []): void {
     header('Content-Type: text/html; charset=utf-8');
+    // Biztonsági fejlécek a saját oldalakon (az appok widgetjei a saját mappájukat ágyazzák be, azt ez nem érinti).
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
     $css = '/assets/site.css?v=' . @filemtime(dirname(__DIR__) . '/assets/site.css');
     $nav = [
         'fejlesztes' => ['/#fejlesztes', 'Egyedi fejlesztés'],
