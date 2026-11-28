@@ -22,7 +22,7 @@ $controller = [
     'email'   => 'info@my-ai.hu',
     'phone'   => '+36 30 584 5937',
 ];
-$updated = '2026. október 18.';
+$updated = '2026. november 28.';
 
 $e = fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $v = fn (string $s): string => $s !== '' ? $e($s) : '<mark>[kitöltendő]</mark>';
@@ -72,7 +72,7 @@ header('Content-Type: text/html; charset=utf-8');
   <h1>Adatkezelési tájékoztató</h1>
   <p class="muted">Hatályos: <?= $e($updated) ?></p>
 
-  <p>Ez a tájékoztató leírja, milyen személyes adatokat kezelünk a my-ai.hu weboldalon és az itt működő alkalmazásokban (időpontfoglaló, chatbot), milyen célból, mennyi ideig, és milyen jogaid vannak. A tájékoztató az Európai Unió általános adatvédelmi rendelete (GDPR) és az információs önrendelkezési jogról szóló 2011. évi CXII. törvény alapján készült.</p>
+  <p>Ez a tájékoztató leírja, milyen személyes adatokat kezelünk a my-ai.hu weboldalon és az itt működő alkalmazásokban (időpontfoglaló, chatbot, kiberbiztonsági gyorsellenőrzés), milyen célból, mennyi ideig, és milyen jogaid vannak. A tájékoztató az Európai Unió általános adatvédelmi rendelete (GDPR) és az információs önrendelkezési jogról szóló 2011. évi CXII. törvény alapján készült.</p>
 
   <h2>1. Az adatkezelő</h2>
   <table>
@@ -122,6 +122,22 @@ header('Content-Type: text/html; charset=utf-8');
     <tr><th>Cél</th><td>A megrendelés teljesítése, a szolgáltatás beállítása, díjbekérő és számla kiállítása, a lejárat előtti emlékeztetők küldése.</td></tr>
     <tr><th>Jogalap</th><td>Szerződés teljesítése (GDPR 6. cikk (1) b) pont); a számlázási adatok tekintetében jogi kötelezettség teljesítése (GDPR 6. cikk (1) c) pont, a számvitelről szóló 2000. évi C. törvény).</td></tr>
     <tr><th>Időtartam</th><td>Az előfizetés megszűnéséig; a számviteli bizonylatok adatait a számviteli törvény szerint 8 évig őrizzük.</td></tr>
+  </table>
+
+  <h3 id="gyorsellenorzes">2.6. Kiberbiztonsági gyorsellenőrzés</h3>
+  <p>A <a href="/kiberbiztonsag/gyorsellenorzes/">gyorsellenőrzés</a> pontszáma és a domain-vizsgálat eredménye személyes adat megadása nélkül megjelenik. A kérdőív válaszait a böngésződ tárolja (localStorage), hozzánk csak akkor jutnak el, ha e-mailben kéred a teendőlistát.</p>
+  <table>
+    <tr><th>Adatok</th><td>Teendőlista kérésekor: e-mail-cím, a cég neve (ha megadod), a vizsgált domain, a kérdőív válaszai, a pontszám és a teendők száma, a kérés időpontja, valamint az IP-cím visszafejthetetlen kivonata (visszaélések kiszűrésére). A domain-vizsgálatnál a megadott domaint és az eredményt 15 percig, az IP-cím kivonatát (a vizsgálatok számának korlátozásához) legfeljebb 1 óráig tároljuk a szerver ideiglenes mappájában.</td></tr>
+    <tr><th>Cél</th><td>A kért teendőlista elküldése; a kitöltőkkel való kapcsolatfelvétel, ha segítséget kérnek a teendők elvégzéséhez (erre a levélre válaszolva).</td></tr>
+    <tr><th>Jogalap</th><td>A hozzájárulásod, amelyet a teendőlista kérésekor adsz meg (GDPR 6. cikk (1) a) pont).</td></tr>
+    <tr><th>Időtartam</th><td>A kéréstől számított 2 évig, vagy amíg nem kéred a törlést. Törölni a levél alján lévő linkkel vagy az info@my-ai.hu címen tudod.</td></tr>
+  </table>
+  <h3>2.7. Kiberbiztonsági hírlevél</h3>
+  <table>
+    <tr><th>Adatok</th><td>E-mail-cím, a feliratkozás és a megerősítés időpontja, valamint a cég neve, ha a gyorsellenőrzésnél megadtad.</td></tr>
+    <tr><th>Cél</th><td>Időnként levél a kiscégeket érintő kiberveszélyekről és a my-ai.hu új kiberbiztonsági eszközeiről.</td></tr>
+    <tr><th>Jogalap</th><td>A hozzájárulásod (GDPR 6. cikk (1) a) pont; a gazdasági reklámtevékenységről szóló 2008. évi XLVIII. törvény 6. §). Csak akkor küldünk ilyen levelet, ha a gyorsellenőrzésnél külön bejelölted, és a kapott levélben lévő linkkel meg is erősítetted.</td></tr>
+    <tr><th>Időtartam</th><td>A leiratkozásig. Minden levél alján található leiratkozó link, és a hozzájárulást az info@my-ai.hu címen is visszavonhatod. A visszavonás nem érinti a korábbi adatkezelés jogszerűségét.</td></tr>
   </table>
 
   <h2>3. Kik férhetnek hozzá az adatokhoz? (adatfeldolgozók)</h2>

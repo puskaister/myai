@@ -34,7 +34,7 @@ $hits[] = $now;
 
 set_time_limit(60);
 try {
-    out(200, dc_run($domain));
+    out(200, dc_run_cached($domain));
 } catch (Throwable $e) {
     error_log('[kiberbiztonsag] ' . $e->getMessage());
     out(500, ['error' => 'A vizsgálat nem sikerült. Próbáld újra később.']);

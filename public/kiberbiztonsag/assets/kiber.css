@@ -117,3 +117,24 @@
   .kb-todo summary b::after { content: ""; }
   .kb-pill { border: 1px solid #000; color: #000 !important; background: #fff !important; }
 }
+
+/* teendők száma (oldalsáv) */
+.kb-counts { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; text-align: left; }
+.kb-counts li { display: flex; justify-content: space-between; align-items: center; font-size: .95rem; }
+.kb-counts li b { font-size: 1.15rem; }
+
+/* teendőlista e-mailben */
+.kb-report-grid { display: grid; gap: 28px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 900px) { .kb-report-grid { grid-template-columns: 1fr 1fr; } }
+.kb-report-grid h2 { margin: 6px 0 10px; }
+.kb-lead2 { font-size: 1.02rem; margin-bottom: 18px; }
+.kb-report-checks { margin-bottom: 0; }
+.kb-mail-form .btn { width: 100%; justify-content: center; }
+.card.form label.kb-check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: .92rem; }
+.card.form label.kb-check input { margin-top: 4px; width: 18px; height: 18px; }
+.kb-opt-label { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.kb-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.kb-form-msg { min-height: 1.2em; font-size: .94rem; }
+.kb-form-msg.ok { background: color-mix(in srgb, var(--kb-good) 12%, var(--card)); color: var(--kb-good); padding: 12px 14px; border-radius: 10px; }
+.kb-form-msg.err { background: color-mix(in srgb, var(--kb-bad) 12%, var(--card)); color: var(--kb-bad); padding: 12px 14px; border-radius: 10px; }
+.kb-linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; }

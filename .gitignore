@@ -9,3 +9,4 @@ apps/*/composer.lock
 dist-vendor.zip
 tests/ui/node_modules/
 apps/ugyintezes/csomagok/
+public/_inc/kiber-config.php

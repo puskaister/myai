@@ -115,6 +115,14 @@ echo $smtp['host'] !== '' && $smtp['username'] !== '' && $smtp['password'] !== '
     ? "::notice title=Levelezés::SMTP beállítva: {$smtp['host']}:{$smtp['port']}, felhasználó: {$smtp['username']}, feladó: " . ($smtp['from'] ?: $smtp['username']) . "\n"
     : "::warning title=Levelezés::Nincs SMTP beállítva (SMTP_HOST / SMTP_USER / SMTP_PASS secret) — az appok a PHP mail()-lel küldenek, ami gyakran spambe kerül vagy nem érkezik meg.\n";
 
+// Kiberbiztonsági gyorsellenőrzés (public/kiberbiztonsag/): az érdeklődők tárolása és a
+// teendőlista-levél. A config a _inc mappába kerül (kívülről tiltott, lásd _inc/.htaccess).
+if ($hasDb) {
+    $kiber = ['db' => $db, 'smtp' => $smtp, 'prefix' => 'kiber_', 'notify' => 'info@my-ai.hu', 'secret' => hash('sha256', 'kiber-secret|' . $db['pass'])];
+    file_put_contents("$dist/_inc/kiber-config.php", "<?php\nreturn " . var_export($kiber, true) . ";\n");
+    echo "  kiberbiztonság → _inc/kiber-config.php (előtag: kiber_)\n";
+}
+
 // A nálunk üzemeltetett foglalók havi díját a Tanítható chatbot admin tartja nyilván
 // ({seged_}hosting tábla, ÁSZF 14.): a foglaló innen olvassa, hogy fel van-e függesztve,
 // az admin pedig a foglalók listáját kapja. A letölthető önálló csomagban ez nincs benne.

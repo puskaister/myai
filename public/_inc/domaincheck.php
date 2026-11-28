@@ -275,3 +275,15 @@ function dc_run(string $domain): array {
         'items' => $items,
     ];
 }
+
+// Ugyanaz, 15 perces gyorsítótárral (temp mappa): a teendőlista-levél így ugyanazt az
+// eredményt kapja, amit a látogató az oldalon látott, újabb hálózati vizsgálat nélkül.
+function dc_run_cached(string $domain, bool $onlyCache = false): ?array {
+    $file = sys_get_temp_dir() . '/myai-kiber-dc-' . substr(hash('sha256', $domain), 0, 24) . '.json';
+    $cached = @json_decode((string) @file_get_contents($file), true);
+    if (is_array($cached) && ($cached['_t'] ?? 0) > time() - 900) { unset($cached['_t']); return $cached; }
+    if ($onlyCache) return null;
+    $res = dc_run($domain);
+    @file_put_contents($file, json_encode($res + ['_t' => time()], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE), LOCK_EX);
+    return $res;
+}

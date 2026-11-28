@@ -21,7 +21,7 @@ page_start(
     <div class="wrap">
       <span class="eyebrow">Ingyenes gyorsellenőrzés</span>
       <h1>Mennyire védett a vállalkozásod?</h1>
-      <p class="lead">Válaszolj 15 kérdésre, és add meg a céged domainjét. Kb. 10 perc, regisztráció nélkül. Az eredmény egy 0–100-as pontszám és egy teendőlista, kezdve a legfontosabbal.</p>
+      <p class="lead">Válaszolj 15 kérdésre, és add meg a céged domainjét. Kb. 10 perc, regisztráció nélkül. Az eredményt rögtön látod, a részletes teendőlistát pedig e-mailben küldjük el.</p>
     </div>
   </section>
 
@@ -42,7 +42,7 @@ page_start(
 
         <div class="card kb-questions">
           <h2><span class="kb-num">2</span> Kérdések</h2>
-          <p class="kb-muted">Ha nem tudod a választ, nyugodtan jelöld a „Nem tudom”-ot: a teendőlistában leírjuk, mit kérdezz meg az informatikusodtól.</p>
+          <p class="kb-muted">Ha nem tudod a választ, nyugodtan jelöld a „Nem tudom”-ot: a teendőlistában leírjuk, mit kérdezz meg az informatikusodtól. A válaszaid ebben a böngészőben maradnak.</p>
 <?php $n = 0; foreach (KIBER_CATEGORIES as $cat => $catLabel): ?>
           <fieldset class="kb-cat">
             <legend><?= e($catLabel) ?></legend>
@@ -72,9 +72,9 @@ page_start(
             <div><span>Kérdőív</span><b id="kb-sub-q">–</b></div>
             <div><span>Domain</span><b id="kb-sub-d">–</b></div>
           </div>
-          <h3>A 3 legfontosabb teendő</h3>
-          <ol class="kb-top" id="kb-top"><li class="kb-muted">Itt jelennek meg, ahogy válaszolsz.</li></ol>
-          <a class="btn btn-ghost kb-full-link" href="#kb-report">Teljes teendőlista ↓</a>
+          <h3>Teendők</h3>
+          <ul class="kb-counts" id="kb-counts"><li class="kb-muted">Itt jelenik meg, hány teendőt találtunk.</li></ul>
+          <a class="btn btn-primary kb-full-link" href="#kb-report">Teendőlista e-mailben ↓</a>
         </div>
       </aside>
     </div>
@@ -82,21 +82,29 @@ page_start(
 
   <section class="soft kb-report-section" id="kb-report">
     <div class="wrap">
-      <div class="kb-report-head">
+      <div class="kb-report-grid">
         <div>
           <span class="eyebrow">Teendőlista</span>
-          <h2>Mit érdemes tenni, és milyen sorrendben?</h2>
-          <p class="kb-muted kb-print-only" id="kb-print-meta"></p>
+          <h2>Kérd e-mailben a részletes teendőlistát</h2>
+          <p class="kb-muted kb-lead2" id="kb-report-summary">Válaszolj legalább egy kérdésre, vagy vizsgáld meg a domaint, és összeállítjuk a teendőidet.</p>
+          <ul class="checks kb-report-checks">
+            <li>Minden teendő fontossági sorrendben: azonnal, 30 napon belül, később</li>
+            <li>Lépésenkénti útmutató, informatikai tudás nélkül is követhető</li>
+            <li>A domain-vizsgálat részletes eredménye</li>
+            <li>Továbbküldheted az informatikusodnak vagy a kollégáidnak</li>
+          </ul>
         </div>
-        <div class="cta kb-actions">
-          <button class="btn btn-primary" type="button" id="kb-copy">Jelentés másolása</button>
-          <button class="btn btn-ghost" type="button" id="kb-print">Nyomtatás / PDF</button>
-          <button class="btn btn-ghost" type="button" id="kb-reset">Újrakezdés</button>
-        </div>
+        <form class="card form kb-mail-form" id="kb-mail-form" novalidate>
+          <label>E-mail-cím<input type="email" name="email" id="kb-email" autocomplete="email" required placeholder="nev@cegem.hu"></label>
+          <label>Cég neve <span class="kb-opt-label">(nem kötelező)</span><input type="text" name="company" id="kb-company" autocomplete="organization" maxlength="120"></label>
+          <label class="kb-hp" aria-hidden="true">Weboldal<input type="text" name="website" id="kb-website" tabindex="-1" autocomplete="off"></label>
+          <label class="kb-check"><input type="checkbox" id="kb-consent" required><span>Elolvastam az <a href="/adatkezeles/#gyorsellenorzes" target="_blank">adatkezelési tájékoztatót</a>, és kérem a teendőlistát erre a címre.</span></label>
+          <label class="kb-check"><input type="checkbox" id="kb-newsletter"><span>Időnként írhattok a kiscégeket érintő kiberveszélyekről és az új eszközeitekről. <span class="kb-opt-label">(nem kötelező, bármikor leiratkozhatok)</span></span></label>
+          <button class="btn btn-primary" type="submit" id="kb-send">Kérem a teendőlistát</button>
+          <p class="kb-form-msg" id="kb-form-msg" aria-live="polite"></p>
+        </form>
       </div>
-      <p class="kb-muted kb-copy-msg" id="kb-copy-msg" aria-live="polite"></p>
-      <div id="kb-todo"><p class="kb-muted">Válaszolj legalább egy kérdésre, vagy vizsgáld meg a domaint.</p></div>
-      <p class="kb-note">A gyorsellenőrzés tájékoztató jellegű, nem helyettesíti a teljes biztonsági auditot. A kérdőív válaszai csak a te böngésződben tárolódnak, hozzánk nem jutnak el. A domain-vizsgálat csak nyilvános DNS- és weboldal-adatokat néz, és az eredményt nem tároljuk.</p>
+      <p class="kb-note">A gyorsellenőrzés tájékoztató jellegű, nem helyettesíti a teljes biztonsági auditot. A pontszámot és a domain-vizsgálat eredményét e-mail-cím nélkül is látod. A kérdőív válaszait csak akkor kapjuk meg, ha kéred a teendőlistát. <button type="button" class="kb-linkbtn" id="kb-reset">Válaszok törlése, újrakezdés</button></p>
     </div>
   </section>
 

@@ -453,41 +453,60 @@ jobs:
           echo "::error title=Tanítható chatbot szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[204\]\|\[302\]' seged-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"
 
   kiberbiztonsag:
-    name: Kiberbiztonság – oldalak, domain-vizsgálat (valódi DNS)
+    name: Kiberbiztonság – oldalak, domain-vizsgálat (valódi DNS), teendőlista e-mailben, admin
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: kiber
+          MYSQL_USER: kiber
+          MYSQL_PASSWORD: tesztjelszo
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
     steps:
       - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: curl, intl, mbstring, openssl
+          extensions: curl, intl, mbstring, openssl, mysqli
 
       - name: PHP és JS szintaxis
         run: |
-          for f in public/_inc/domaincheck.php public/_inc/kiber-questions.php public/kiberbiztonsag/index.php public/kiberbiztonsag/gyorsellenorzes/index.php public/kiberbiztonsag/api/domain.php; do php -l "$f"; done
+          for f in public/_inc/*.php public/kiberbiztonsag/*.php public/kiberbiztonsag/*/*.php public/adatkezeles/index.php; do php -l "$f"; done
           node --check public/kiberbiztonsag/assets/gyorsellenorzes.js
 
       - name: Szerver indítása
         run: |
-          php -d display_errors=1 -d opcache.enable_cli=0 -S 127.0.0.1:8010 -t public > kiber-server.log 2>&1 &
+          cat > public/_inc/kiber-config.php <<'PHP'
+          <?php
+          return ['db' => ['host' => '127.0.0.1', 'name' => 'kiber', 'user' => 'kiber', 'pass' => 'tesztjelszo'],
+                  'smtp' => [], 'prefix' => 'kibertest_', 'notify' => 'admin@example.com', 'secret' => 'teszt-titok'];
+          PHP
+          touch "$RUNNER_TEMP/kiber-mails.log"
+          php -d display_errors=1 -d opcache.enable_cli=0 -d "sendmail_path=cat >> $RUNNER_TEMP/kiber-mails.log" -S 127.0.0.1:8010 -t public > kiber-server.log 2>&1 &
           sleep 1
 
       - name: Tesztek
         env:
           BASE: http://127.0.0.1:8010
-        run: bash tests/kiberbiztonsag.sh
+          DB_PASS: tesztjelszo
+        run: MAIL_LOG="$RUNNER_TEMP/kiber-mails.log" bash tests/kiberbiztonsag.sh
 
       - name: Böngészős ellenőrzés (Chrome) – a gyorsellenőrzés szkriptje lefut, nincs "null"/"[object"
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           "$CHROME" --headless=new --disable-gpu --no-sandbox --virtual-time-budget=5000 --dump-dom http://127.0.0.1:8010/kiberbiztonsag/gyorsellenorzes/ > dom.html 2>/dev/null
-          grep -q "Összpontszám: –" dom.html || { echo "::error::a gyorsellenőrzés szkriptje nem futott le"; head -c 3000 dom.html; exit 1; }
+          grep -q 'data-kb="ready"' dom.html || { echo "::error::a gyorsellenőrzés szkriptje nem futott le"; head -c 3000 dom.html; exit 1; }
           if grep -qE "\[object [A-Z]|>null<|>undefined<|NaN" dom.html; then echo "::error::megjelenítési hiba a gyorsellenőrzésen"; exit 1; fi
           echo "A gyorsellenőrzés oldala hibátlanul renderelődik."
 
       - name: Napló (hiba esetén)
         if: failure()
         run: |
-          cat kiber-server.log
+          cat kiber-server.log; tail -80 "$RUNNER_TEMP/kiber-mails.log"
           echo "::error title=Kiberbiztonság szerver napló::$(grep -iv 'Accepted\|Closing\|\[200\]\|\[400\]\|\[405\]\|\[429\]' kiber-server.log | tail -c 3000 | sed ':a;N;$!ba;s/\n/%0A/g')"

@@ -29,7 +29,7 @@ page_start(
         </div>
         <div class="platforms">
           <span class="chip">10 perc</span>
-          <span class="chip">Regisztráció nélkül</span>
+          <span class="chip">Az eredmény azonnal</span>
           <span class="chip">Semmit nem kell telepíteni</span>
         </div>
       </div>
@@ -108,12 +108,12 @@ page_start(
         </div>
         <div class="card step">
           <h3>Pontszám és teendőlista</h3>
-          <p>0–100-as pontszám és teendők „Azonnal / 30 napon belül / Később” sorrendben, lépésenkénti útmutatóval. Kinyomtathatod vagy elküldheted az informatikusodnak.</p>
+          <p>A 0–100-as pontszámot rögtön látod. A részletes teendőlistát „Azonnal / 30 napon belül / Később” sorrendben, lépésenkénti útmutatóval e-mailben küldjük el, így továbbíthatod az informatikusodnak is.</p>
         </div>
       </div>
       <div class="center" style="margin-top:32px">
         <a class="btn btn-primary" href="/kiberbiztonsag/gyorsellenorzes/">Elkezdem az ellenőrzést →</a>
-        <p class="kb-muted" style="margin-top:12px">A kérdőív válaszai csak a te böngésződben maradnak. A domain-vizsgálat csak nyilvános adatokat néz.</p>
+        <p class="kb-muted" style="margin-top:12px">Az eredményhez nem kell e-mail-cím. A domain-vizsgálat csak nyilvános adatokat néz.</p>
       </div>
     </div>
   </section>
