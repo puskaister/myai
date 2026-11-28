@@ -84,8 +84,6 @@ r=$(report '{"email":"rossz","consent":true,"answers":{"mfa_email":"nem"}}'); ch
 r=$(report "{\"email\":\"$EMAIL\",\"consent\":false,\"answers\":$ANS}"); check "hozzájárulás nélkül → 400" '[ "$(status "$r")" = 400 ]'
 r=$(report "{\"email\":\"$EMAIL\",\"consent\":true,\"answers\":{\"mfa_email\":\"<script>\",\"kitalalt\":\"igen\"}}"); check "csak érvénytelen válaszok → 400" '[ "$(status "$r")" = 400 ]'
 check "GET → 405" '[ "$(curl -s -o /dev/null -w "%{http_code}" "$BASE/kiberbiztonsag/api/report.php")" = 405 ]'
-r=$(report "{\"email\":\"robot@example.com\",\"consent\":true,\"answers\":$ANS,\"website\":\"http://spam\"}")
-check "robotcsapda: látszólag ok, de nincs mentés" '[ "$(status "$r")" = 200 ] && [ "$(sql "SELECT COUNT(*) FROM kibertest_leads WHERE email=\"robot@example.com\"")" = 0 ]'
 
 echo "== Teendőlista – küldés"
 : > "$MAIL_LOG"
@@ -93,6 +91,9 @@ r=$(report "{\"email\":\"Teszt.Elek@Example.com\",\"company\":\"Teszt Kft.\",\"c
 check "200, ok (válasz: $(body "$r" | head -c 200))" '[ "$(status "$r")" = 200 ] && jq -e ".ok == true" <<<"$(body "$r")" >/dev/null'
 row=$(sql "SELECT email, company, domain, answered, newsletter, IFNULL(confirmed_at,'-'), mail_ok, todos > 0 FROM kibertest_leads WHERE email='$EMAIL'")
 check "mentve: kisbetűs e-mail, cég, normalizált domain, 4 válasz, hírlevél kérve, nincs megerősítve, levél ok ($row)" '[ "$row" = "$(printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" "$EMAIL" "Teszt Kft." my-ai.hu 4 1 - 1 1)" ]'
+# (a tábla az első valódi mentéskor jön létre, ezért a robotcsapda-próba csak ezután)
+r=$(report "{\"email\":\"robot@example.com\",\"consent\":true,\"answers\":$ANS,\"website\":\"http://spam\"}")
+check "robotcsapda: látszólag ok, de nincs mentés" '[ "$(status "$r")" = 200 ] && [ "$(sql "SELECT COUNT(*) FROM kibertest_leads WHERE email=\"robot@example.com\"")" = 0 ]'
 check "a levél a teendőkkel megérkezett" 'grep -q "Itt a teendőlistád" "$MAIL_LOG" && grep -q "Kétlépcsős azonosítás bekapcsolása az e-mail-fiókokon" "$MAIL_LOG" && grep -q "Először derítsd ki" "$MAIL_LOG" && grep -q "Részben már megvan" "$MAIL_LOG"'
 check "a „rendben” válasz nem teendő" '! grep -q "Szabály: új bankszámlaszámot" "$MAIL_LOG"'
 check "a domain-eredmény is a levélben (gyorsítótárból)" 'grep -q "Domain (my-ai.hu)" "$MAIL_LOG"'
